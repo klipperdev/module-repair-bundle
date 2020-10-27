@@ -1,4 +1,4 @@
-repair_sstatus:
+repair_status:
     -   value: waiting
         label: Waiting
         translations:
