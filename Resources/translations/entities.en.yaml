@@ -17,3 +17,9 @@ repair.fields.warranty_end_date: Warranty end date
 repair.fields.price: Price
 repair.associations.swapped_to_device: Swapped to device
 repair.associations.status: Status
+
+# Repair comment
+repair_comment.name: Repair comment
+repair_comment.name.plural: Repair comments
+repair_comment.fields.description: Description
+repair_comment.fields.public: Is public
