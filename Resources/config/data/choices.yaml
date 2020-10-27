@@ -1,0 +1,33 @@
+repair_sstatus:
+    -   value: waiting
+        label: Waiting
+        translations:
+            fr: { label: En attente }
+    -   value: received
+        label: Received
+        translations:
+            fr: { label: Réceptionné }
+    -   value: compliant
+        label: Compliant
+        translations:
+            fr: { label: Conforme }
+    -   value: improper
+        label: Improper
+        translations:
+            fr: { label: Non conforme }
+    -   value: unrepairable_recycling
+        label: Unrepairable - Recycling
+        translations:
+            fr: { label: Irréparable - Recyclage }
+    -   value: repaired
+        label: Repaired
+        translations:
+            fr: { label: Réparé }
+    -   value: swapped
+        label: Swapped
+        translations:
+            fr: { label: Echangé }
+    -   value: shipped
+        label: Shipped
+        translations:
+            fr: { label: Expédié }

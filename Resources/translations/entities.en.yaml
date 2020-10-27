@@ -6,3 +6,14 @@ breakdown.name.plural: Breakdowns
 repair_place.name: Repair place
 repair_place.name.plural: Repair places
 repair_place.fields.subContractor: Is a sub contractor
+
+# Repair
+repair.name: Repair
+repair.name.plural: Repair
+repair.fields.reference: Reference
+repair.fields.description: Description
+repair.fields.tray_reference: Tray reference
+repair.fields.warranty_end_date: Warranty end date
+repair.fields.price: Price
+repair.associations.swapped_to_device: Swapped to device
+repair.associations.status: Status
