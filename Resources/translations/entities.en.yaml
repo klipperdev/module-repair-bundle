@@ -23,3 +23,13 @@ repair_comment.name: Repair comment
 repair_comment.name.plural: Repair comments
 repair_comment.fields.description: Description
 repair_comment.fields.public: Is public
+
+# Repair history
+repair_history.name: Repair history
+repair_history.name.plural: Repair histories
+repair_history.fields.public: Is public
+repair_history.fields.swap: Is a swap
+repair.associations.previous_status: Previous status
+repair.associations.new_status: New status
+repair.associations.previous_device: Previous device
+repair.associations.new_device: New device
