@@ -33,3 +33,10 @@ repair_history.associations.previous_status: Statut précédent
 repair_history.associations.new_status: Nouveau statut
 repair_history.associations.previous_device: Device précédent
 repair_history.associations.new_device: Nouveau device
+
+# Repair item
+repair_item.name: Article de la réparation
+repair_item.name.plural: Articles de la réparation
+repair_item.fields.price: Prix
+repair_item.fields.internal_comment: Commentaire interne
+repair_item.fields.public_comment: Commentaire public
