@@ -1,3 +1,8 @@
 # Breakdown
 breakdown.name: Breakdown
 breakdown.name.plural: Breakdowns
+
+# Repair place
+repair_place.name: Repair place
+repair_place.name.plural: Repair places
+repair_place.fields.subContractor: Is a sub contractor
