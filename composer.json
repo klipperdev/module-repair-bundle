@@ -12,6 +12,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
+        "klipper/code-generator": "^2.0.0",
         "klipper/module-carrier-bundle": "^2.0.0",
         "klipper/module-device-bundle": "^2.0.0",
         "klipper/module-partner-bundle": "^2.0.0",

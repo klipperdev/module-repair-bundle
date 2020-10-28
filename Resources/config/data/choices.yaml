@@ -37,3 +37,20 @@ repair_status:
         label: Shipped
         translations:
             fr: { label: Expédié }
+
+coupon_status:
+    -   value: valid
+        label: Valid
+        color: '#5edb91'
+        translations:
+            fr: { label: Valide }
+    -   value: expired
+        label: Expired
+        color: '#fb920b'
+        translations:
+            fr: { label: Périmé }
+    -   value: used
+        label: Used
+        color: '#e61e35'
+        translations:
+            fr: { label: Utilisé }
