@@ -1,2 +1,19 @@
 # Repair Item Type
 repair_item.operation: Opération
+
+# Repair Module Type
+repair_module_type.flat_rate: Forfait
+repair_module_type.pay_as_you_go: Payez au fur et à mesure
+repair_module_type.coupon: Coupon
+
+# Repair Module Swap
+repair_module_swap.swap_after_receipt: Echange après la réception
+repair_module_swap.swap_before_receipt: Echange avant réception
+
+# Repair Module Identifier Type
+repair_module_identifier_type.imei: IMEI
+repair_module_identifier_type.serial_number: Numéro de série
+
+# Repair Module Price Calculation
+repair_module_price_calculation.sum: Somme
+repair_module_price_calculation.operation_highest_price: Prix le plus élevé d'une opération
