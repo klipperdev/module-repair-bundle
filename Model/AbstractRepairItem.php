@@ -47,9 +47,7 @@ abstract class AbstractRepairItem implements RepairItemInterface
      *     expression="!('operation' == this.getType() && (null == this.getProduct() || null == this.getProduct().getProductType() || 'operation' != this.getProduct().getProductType().getValue()))"
      * )
      *
-     * @Serializer\MaxDepth(depth=1)
      * @Serializer\Expose
-     * @Serializer\ReadOnly
      */
     protected ?ProductInterface $product = null;
 
