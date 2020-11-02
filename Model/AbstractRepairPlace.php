@@ -24,6 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Repair place model.
  *
  * @author François Pluchino <francois.pluchino@klipper.dev>
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 abstract class AbstractRepairPlace implements RepairPlaceInterface
 {

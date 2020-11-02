@@ -29,6 +29,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Repair module model.
  *
  * @author François Pluchino <francois.pluchino@klipper.dev>
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 abstract class AbstractRepairModule implements RepairModuleInterface
 {

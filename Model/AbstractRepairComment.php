@@ -22,6 +22,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Repair comment model.
  *
  * @author François Pluchino <francois.pluchino@klipper.dev>
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 abstract class AbstractRepairComment implements RepairCommentInterface
 {

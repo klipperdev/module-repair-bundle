@@ -25,6 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Comment model.
  *
  * @author François Pluchino <francois.pluchino@klipper.dev>
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 abstract class AbstractCoupon implements CouponInterface
 {

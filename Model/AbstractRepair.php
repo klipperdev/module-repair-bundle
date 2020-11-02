@@ -32,6 +32,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Repair model.
  *
  * @author François Pluchino <francois.pluchino@klipper.dev>
+ *
+ * @Serializer\ExclusionPolicy("all")
  */
 abstract class AbstractRepair implements RepairInterface
 {
