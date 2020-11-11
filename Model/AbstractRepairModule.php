@@ -55,7 +55,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="255")
+     * @Assert\Length(min=0, max=255)
      *
      * @Serializer\Expose
      */
@@ -65,7 +65,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="255")
+     * @Assert\Length(min=0, max=255)
      *
      * @Serializer\Expose
      */
@@ -76,7 +76,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @KlipperRepairAssert\RepairModuleTypeChoice
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      * @Assert\NotBlank
      *
      * @Serializer\Expose
@@ -88,7 +88,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @KlipperRepairAssert\RepairModuleSwapChoice
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      * @Assert\NotBlank
      *
      * @Serializer\Expose
@@ -100,7 +100,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @KlipperRepairAssert\RepairModuleIdentifierTypeChoice
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      * @Assert\NotBlank
      *
      * @Serializer\Expose
@@ -112,7 +112,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @KlipperRepairAssert\RepairModulePriceCalculationChoice
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      * @Assert\NotBlank
      *
      * @Serializer\Expose
@@ -180,7 +180,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="65535")
+     * @Assert\Length(min=0, max=65535)
      *
      * @Serializer\Expose
      */
@@ -190,7 +190,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="65535")
+     * @Assert\Length(min=0, max=65535)
      *
      * @Serializer\Expose
      */

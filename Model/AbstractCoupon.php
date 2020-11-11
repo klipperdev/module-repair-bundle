@@ -38,7 +38,7 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\Column(type="string", length=80, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="80")
+     * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
      */
@@ -48,7 +48,7 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\Column(type="string", length=128, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      *
      * @Serializer\Expose
      */
@@ -58,7 +58,7 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\Column(type="string", length=128, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="128")
+     * @Assert\Length(min=0, max=128)
      *
      * @Serializer\Expose
      */

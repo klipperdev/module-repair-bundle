@@ -50,7 +50,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\Column(type="string", length=80, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="80")
+     * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
      */
@@ -60,7 +60,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="65535")
+     * @Assert\Length(min=0, max=65535)
      *
      * @Serializer\Expose
      */
@@ -70,7 +70,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\Column(type="string", length=80, nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="80")
+     * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
      */

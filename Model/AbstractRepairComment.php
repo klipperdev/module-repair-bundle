@@ -47,7 +47,7 @@ abstract class AbstractRepairComment implements RepairCommentInterface
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min="0", max="65535")
+     * @Assert\Length(min=0, max=65535)
      * @Assert\NotBlank
      *
      * @Serializer\Expose
