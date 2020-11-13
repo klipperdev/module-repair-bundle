@@ -40,3 +40,32 @@ repair_item.name.plural: Articles de la réparation
 repair_item.fields.price: Prix
 repair_item.fields.internal_comment: Commentaire interne
 repair_item.fields.public_comment: Commentaire public
+
+# Repair module
+repair_module.name: Module de réparation
+repair_module.name.plural: Modules de réparation
+repair_module.fields.comment: Commentaire
+repair_module.fields.customer_reference: Référence du client
+repair_module.fields.excluded_scope: Périmètre exclus
+repair_module.fields.internal_contract_reference: Référence du contrat interne
+repair_module.fields.identifier_type: Type d'identification
+repair_module.fields.price_calculation: Calcul du prix
+repair_module.fields.repair_time_in_day: Durée de réparation (en jours)
+repair_module.fields.swap: Echange
+repair_module.fields.warranty_length_in_month: Durée de garantie (en mois)
+repair_module.associations.default_carrier: Transporteur par défaut
+repair_module.associations.default_invoice_address: Adresse de facturation par défaut
+repair_module.associations.default_shipping_address: Adresse d'expédition par défaut
+repair_module.associations.default_status: Statut par défaut
+
+# Coupon
+coupon.name: Coupon
+coupon.name.plural: Coupons
+coupon.fields.customer_reference: Référence du client
+coupon.fields.internal_contract_reference: Référence du contrat interne
+coupon.fields.reference: Référence
+coupon.fields.valid_until: Valable jusqu'au
+coupon.associations.invoice_address: Adresse de facturation
+coupon.associations.shipping_address: Adresse d'expédition
+coupon.associations.status: Statut
+coupon.associations.used_by_repair: Utilisé par la réparation
