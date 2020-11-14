@@ -5,7 +5,7 @@ breakdown.name.plural: Pannes
 # Repair place
 repair_place.name: Lieu de réparation
 repair_place.name.plural: Lieux de réparation
-repair_place.fields.subcontractor: Is a subcontractor
+repair_place.fields.subcontractor: Est un sous traitant
 
 # Repair
 repair.name: Réparation

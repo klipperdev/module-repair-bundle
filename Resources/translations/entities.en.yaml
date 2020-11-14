@@ -5,7 +5,7 @@ breakdown.name.plural: Breakdowns
 # Repair place
 repair_place.name: Repair place
 repair_place.name.plural: Repair places
-repair_place.fields.subContractor: Is a sub contractor
+repair_place.fields.subcontractor: Is a subcontractor
 
 # Repair
 repair.name: Repair
