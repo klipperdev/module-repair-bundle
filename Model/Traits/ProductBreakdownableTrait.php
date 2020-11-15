@@ -28,11 +28,11 @@ trait ProductBreakdownableTrait
      * )
      *
      * @Assert\Expression(
-     *     expression="!(!value && (null != this.getProductType() && 'operation' == this.getProductType().getName()))",
+     *     expression="!(!value && (null != this.getProductType() && 'operation' == this.getProductType().getValue()))",
      *     message="This value should not be blank."
      * )
      * @Assert\Expression(
-     *     expression="!(value && (null == this.getProductType() || 'operation' != this.getProductType().getName()))",
+     *     expression="!(value && (null == this.getProductType() || 'operation' != this.getProductType().getValue()))",
      *     message="This value should be blank."
      * )
      *
