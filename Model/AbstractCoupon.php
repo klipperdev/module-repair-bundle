@@ -49,6 +49,7 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @Assert\Type(type="string")
      * @Assert\Length(min=0, max=128)
+     * @Assert\NotBlank
      *
      * @Serializer\Expose
      */
@@ -70,6 +71,8 @@ abstract class AbstractCoupon implements CouponInterface
      *     fetch="EAGER"
      * )
      *
+     * @Assert\NotBlank
+     *
      * @Serializer\Expose
      */
     protected ?PartnerAddressInterface $invoiceAddress = null;
@@ -80,6 +83,8 @@ abstract class AbstractCoupon implements CouponInterface
      *     fetch="EAGER"
      * )
      *
+     * @Assert\NotBlank
+     *
      * @Serializer\Expose
      */
     protected ?PartnerAddressInterface $shippingAddress = null;
@@ -89,6 +94,8 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @EntityDoctrineChoice("coupon_status")
      *
+     * @Assert\NotBlank
+     *
      * @Serializer\Expose
      */
     protected ?ChoiceInterface $status = null;
@@ -97,6 +104,8 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\Column(type="datetime")
      *
      * @Assert\Type(type="datetime")
+     *
+     * @Assert\NotBlank
      *
      * @Serializer\Expose
      */
