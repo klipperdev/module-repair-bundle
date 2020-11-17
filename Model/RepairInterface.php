@@ -20,6 +20,7 @@ use Klipper\Component\Model\Traits\UserTrackableInterface;
 use Klipper\Component\Security\Model\UserInterface;
 use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
+use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableOptionalInterface;
@@ -109,6 +110,13 @@ interface RepairInterface extends
      * @return null|int|string
      */
     public function getRepairPlaceId();
+
+    /**
+     * @return static
+     */
+    public function setInvoiceAddress(?PartnerAddressInterface $invoiceAddress);
+
+    public function getInvoiceAddress(): ?PartnerAddressInterface;
 
     /**
      * @return static

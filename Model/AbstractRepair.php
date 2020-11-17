@@ -22,6 +22,7 @@ use Klipper\Component\Model\Traits\UserTrackableTrait;
 use Klipper\Component\Security\Model\UserInterface;
 use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
+use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalTrait;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableTrait;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableTrait;
@@ -116,6 +117,18 @@ abstract class AbstractRepair implements RepairInterface
      * @Serializer\Expose
      */
     protected ?RepairPlaceInterface $repairPlace = null;
+
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Assert\NotBlank
+     *
+     * @Serializer\Expose
+     */
+    protected ?PartnerAddressInterface $invoiceAddress = null;
 
     /**
      * @ORM\ManyToOne(
@@ -266,6 +279,18 @@ abstract class AbstractRepair implements RepairInterface
         return null !== $this->getRepairPlace()
             ? $this->getRepairPlace()->getId()
             : null;
+    }
+
+    public function setInvoiceAddress(?PartnerAddressInterface $invoiceAddress): self
+    {
+        $this->invoiceAddress = $invoiceAddress;
+
+        return $this;
+    }
+
+    public function getInvoiceAddress(): ?PartnerAddressInterface
+    {
+        return $this->invoiceAddress;
     }
 
     public function setShipping(?ShippingInterface $shipping): self
