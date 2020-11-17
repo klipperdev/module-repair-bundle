@@ -53,6 +53,7 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
+     * @Serializer\ReadOnly
      */
     protected ?string $reference = null;
 
@@ -131,12 +132,14 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @EntityDoctrineChoice("repair_status")
      *
+     * @Assert\NotBlank
+     *
      * @Serializer\Expose
      */
     protected ?ChoiceInterface $status = null;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      *
      * @Assert\Type(type="datetime")
      *
