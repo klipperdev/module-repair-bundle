@@ -28,10 +28,13 @@ trait RepairModuleableTrait
      * )
      * @ORM\JoinColumn(
      *     name="repair_module_id",
-     *     referencedColumnName="id"
+     *     referencedColumnName="id",
+     *     onDelete="SET NULL",
+     *     nullable=true
      * )
      *
      * @Serializer\Expose
+     * @Serializer\Groups({"Details"})
      */
     protected ?RepairModuleInterface $repairModule = null;
 

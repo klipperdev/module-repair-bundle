@@ -22,6 +22,7 @@ use Klipper\Module\CarrierBundle\Model\CarrierInterface;
 use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableTrait;
+use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 use Klipper\Module\RepairBundle\Validator\Constraints as KlipperRepairAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -217,6 +218,17 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      */
     protected ?int $warrantyLengthInMonth = null;
 
+    public function setAccount(?AccountInterface $account): self
+    {
+        $this->account = $account;
+
+        if ($account instanceof RepairModuleableInterface) {
+            $account->setRepairModule($this);
+        }
+
+        return $this;
+    }
+
     public function setInternalContractReference(?string $internalContractReference): self
     {
         $this->internalContractReference = $internalContractReference;
@@ -250,7 +262,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     public function getType(): ?string
     {
-        return $this;
+        return $this->type;
     }
 
     public function setSwap(?string $swap): self
