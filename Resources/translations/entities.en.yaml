@@ -10,11 +10,13 @@ repair_place.fields.subcontractor: Is a subcontractor
 # Repair
 repair.name: Repair
 repair.name.plural: Repair
+repair.fields.declared_breakdown_by_customer: Declared breakdown by customer
 repair.fields.reference: Reference
 repair.fields.description: Description
 repair.fields.tray_reference: Tray reference
 repair.fields.warranty_end_date: Warranty end date
 repair.fields.price: Price
+repair.fields.receipted_at: Receipted at
 repair.associations.swapped_to_device: Swapped to device
 repair.associations.status: Status
 repair.associations.repairer: Repairer

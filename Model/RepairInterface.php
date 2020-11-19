@@ -22,6 +22,7 @@ use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalInterface;
+use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\SelectPriceListableInterface;
@@ -33,6 +34,7 @@ use Klipper\Module\ProductBundle\Model\Traits\SelectPriceListableInterface;
  */
 interface RepairInterface extends
     AccountableOptionalInterface,
+    ContactableOptionalInterface,
     CurrencyableInterface,
     IdInterface,
     OrganizationalRequiredInterface,
@@ -150,4 +152,18 @@ interface RepairInterface extends
     public function setPrice(?float $price);
 
     public function getPrice(): ?float;
+
+    /**
+     * @return static
+     */
+    public function setReceiptedAt(?\DateTimeInterface $receiptedAt);
+
+    public function getReceiptedAt(): ?\DateTimeInterface;
+
+    /**
+     * @return static
+     */
+    public function setDeclaredBreakdownByCustomer(?string $declaredBreakdownByCustomer);
+
+    public function getDeclaredBreakdownByCustomer(): ?string;
 }

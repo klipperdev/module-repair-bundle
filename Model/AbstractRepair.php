@@ -24,6 +24,7 @@ use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalTrait;
+use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalTrait;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableTrait;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableTrait;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableTrait;
@@ -39,6 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 abstract class AbstractRepair implements RepairInterface
 {
     use AccountableOptionalTrait;
+    use ContactableOptionalTrait;
     use CurrencyableTrait;
     use OrganizationalRequiredTrait;
     use ProductableTrait;
@@ -168,6 +170,25 @@ abstract class AbstractRepair implements RepairInterface
      * @Serializer\Expose
      */
     protected ?float $price = null;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @Assert\Type(type="datetime")
+     *
+     * @Serializer\Expose
+     */
+    protected ?\DateTimeInterface $receiptedAt = null;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     *
+     * @Assert\Type(type="string")
+     * @Assert\Length(min=0, max=65535)
+     *
+     * @Serializer\Expose
+     */
+    protected ?string $declaredBreakdownByCustomer = null;
 
     public function setReference(?string $reference): self
     {
@@ -346,5 +367,29 @@ abstract class AbstractRepair implements RepairInterface
     public function getPrice(): ?float
     {
         return $this->price;
+    }
+
+    public function setReceiptedAt(?\DateTimeInterface $receiptedAt): self
+    {
+        $this->receiptedAt = $receiptedAt;
+
+        return $this;
+    }
+
+    public function getReceiptedAt(): ?\DateTimeInterface
+    {
+        return $this->receiptedAt;
+    }
+
+    public function setDeclaredBreakdownByCustomer(?string $declaredBreakdownByCustomer): self
+    {
+        $this->declaredBreakdownByCustomer = $declaredBreakdownByCustomer;
+
+        return $this;
+    }
+
+    public function getDeclaredBreakdownByCustomer(): ?string
+    {
+        return $this->declaredBreakdownByCustomer;
     }
 }
