@@ -42,6 +42,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
+     *     inversedBy="repairModule",
      *     fetch="EAGER"
      * )
      *
