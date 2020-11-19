@@ -50,6 +50,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotNull
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?AccountInterface $account = null;
 
@@ -130,6 +131,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?RepairPlaceInterface $repairPlace = null;
 
@@ -142,6 +144,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?PartnerAddressInterface $defaultInvoiceAddress = null;
 
@@ -154,6 +157,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?PartnerAddressInterface $defaultShippingAddress = null;
 
@@ -166,6 +170,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?CarrierInterface $defaultCarrier = null;
 
@@ -175,6 +180,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @EntityDoctrineChoice("repair_status")
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?ChoiceInterface $defaultStatus = null;
 

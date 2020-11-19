@@ -33,6 +33,7 @@ trait ProductBreakdownableTrait
      * )
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
      */
     protected ?BreakdownInterface $operationBreakdown = null;
 
