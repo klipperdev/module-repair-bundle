@@ -134,6 +134,18 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Assert\NotBlank
+     *
+     * @Serializer\Expose
+     */
+    protected ?PartnerAddressInterface $shippingAddress = null;
+
+    /**
+     * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
      *     fetch="EAGER"
      * )
@@ -312,6 +324,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getInvoiceAddress(): ?PartnerAddressInterface
     {
         return $this->invoiceAddress;
+    }
+
+    public function setShippingAddress(?PartnerAddressInterface $shippingAddress): self
+    {
+        $this->shippingAddress = $shippingAddress;
+
+        return $this;
+    }
+
+    public function getShippingAddress(): ?PartnerAddressInterface
+    {
+        return $this->shippingAddress;
     }
 
     public function setShipping(?ShippingInterface $shipping): self

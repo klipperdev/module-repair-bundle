@@ -123,6 +123,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setShippingAddress(?PartnerAddressInterface $shippingAddress);
+
+    public function getShippingAddress(): ?PartnerAddressInterface;
+
+    /**
+     * @return static
+     */
     public function setShipping(?ShippingInterface $shipping);
 
     public function getShipping(): ?ShippingInterface;
