@@ -34,6 +34,7 @@ trait RepairModuleableTrait
      * )
      *
      * @Serializer\Expose
+     * @Serializer\ReadOnly
      * @Serializer\MaxDepth(2)
      * @Serializer\Groups({"View"})
      */
