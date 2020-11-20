@@ -7,8 +7,8 @@ repair_module_type.pay_as_you_go: Payez au fur et à mesure
 repair_module_type.coupon: Coupon
 
 # Repair Module Swap
-repair_module_swap.swap_after_receipt: Echange après la réception
-repair_module_swap.swap_before_receipt: Echange avant réception
+repair_module_swap.standard: Standard
+repair_module_swap.fast: Rapide
 
 # Repair Module Identifier Type
 repair_module_identifier_type.imei: IMEI
