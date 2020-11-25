@@ -16,6 +16,7 @@ use Klipper\Component\Model\Traits\IdInterface;
 use Klipper\Component\Model\Traits\OrganizationalRequiredInterface;
 use Klipper\Component\Model\Traits\TimestampableInterface;
 use Klipper\Component\Model\Traits\UserTrackableInterface;
+use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 
 /**
@@ -82,4 +83,11 @@ interface RepairHistoryInterface extends
     public function setNewStatus(?ChoiceInterface $newStatus);
 
     public function getNewStatus(): ?ChoiceInterface;
+
+    /**
+     * @return static
+     */
+    public function setShipping(?ShippingInterface $shipping);
+
+    public function getShipping(): ?ShippingInterface;
 }

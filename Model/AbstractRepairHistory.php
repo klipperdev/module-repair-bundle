@@ -18,6 +18,7 @@ use Klipper\Component\DoctrineChoice\Validator\Constraints\EntityDoctrineChoice;
 use Klipper\Component\Model\Traits\OrganizationalRequiredTrait;
 use Klipper\Component\Model\Traits\TimestampableTrait;
 use Klipper\Component\Model\Traits\UserTrackableTrait;
+use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -103,6 +104,16 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
      * @Serializer\Expose
      */
     protected ?DeviceInterface $newDevice = null;
+
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Serializer\Expose
+     */
+    protected ?ShippingInterface $shipping = null;
 
     public function setRepair(?RepairInterface $repair): self
     {
@@ -193,5 +204,17 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
     public function getNewDevice(): ?DeviceInterface
     {
         return $this->newDevice;
+    }
+
+    public function setShipping(?ShippingInterface $shipping): self
+    {
+        $this->shipping = $shipping;
+
+        return $this;
+    }
+
+    public function getShipping(): ?ShippingInterface
+    {
+        return $this->shipping;
     }
 }
