@@ -112,12 +112,21 @@ abstract class AbstractCoupon implements CouponInterface
     protected ?\DateTimeInterface $validUntil = null;
 
     /**
-     * @ORM\ManyToOne(
+     * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
+     *     mappedBy="usedCoupon",
      *     fetch="EAGER"
+     * )
+     * @ORM\JoinColumn(
+     *     name="used_by_repair_id",
+     *     referencedColumnName="id",
+     *     onDelete="SET NULL",
+     *     nullable=true
      * )
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\Groups({"View"})
      */
     protected ?RepairInterface $usedByRepair = null;
 

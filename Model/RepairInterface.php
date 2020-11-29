@@ -173,4 +173,11 @@ interface RepairInterface extends
     public function setDeclaredBreakdownByCustomer(?string $declaredBreakdownByCustomer);
 
     public function getDeclaredBreakdownByCustomer(): ?string;
+
+    /**
+     * @return static
+     */
+    public function setUsedCoupon(?CouponInterface $usedCoupon);
+
+    public function getUsedCoupon(): ?CouponInterface;
 }

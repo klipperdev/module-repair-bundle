@@ -202,6 +202,18 @@ abstract class AbstractRepair implements RepairInterface
      */
     protected ?string $declaredBreakdownByCustomer = null;
 
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
+     *     inversedBy="usedByRepair",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     */
+    protected ?CouponInterface $usedCoupon = null;
+
     public function setReference(?string $reference): self
     {
         $this->reference = $reference;
@@ -415,5 +427,17 @@ abstract class AbstractRepair implements RepairInterface
     public function getDeclaredBreakdownByCustomer(): ?string
     {
         return $this->declaredBreakdownByCustomer;
+    }
+
+    public function setUsedCoupon(?CouponInterface $usedCoupon): self
+    {
+        $this->usedCoupon = $usedCoupon;
+
+        return $this;
+    }
+
+    public function getUsedCoupon(): ?CouponInterface
+    {
+        return $this->usedCoupon;
     }
 }
