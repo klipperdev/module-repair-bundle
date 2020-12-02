@@ -22,6 +22,7 @@ use Klipper\Component\Model\Traits\UserTrackableTrait;
 use Klipper\Component\Security\Model\UserInterface;
 use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
+use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalTrait;
 use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalTrait;
@@ -48,6 +49,17 @@ abstract class AbstractRepair implements RepairInterface
     use PriceListableTrait;
     use TimestampableTrait;
     use UserTrackableTrait;
+
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(3)
+     */
+    protected ?AccountInterface $account = null;
 
     /**
      * @ORM\Column(type="string", length=80, nullable=true)
