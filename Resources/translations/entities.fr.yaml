@@ -21,6 +21,7 @@ repair.associations.swapped_to_device: Échangé vers le device
 repair.associations.status: Statut
 repair.associations.repairer: Technicien
 repair.associations.invoice_address: Adresse de facturation
+repair.associations.shipping_address: Adresse de livraison
 
 # Repair comment
 repair_comment.name: Commentaire de la réparation

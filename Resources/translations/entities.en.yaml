@@ -21,6 +21,7 @@ repair.associations.swapped_to_device: Swapped to device
 repair.associations.status: Status
 repair.associations.repairer: Repairer
 repair.associations.invoice_address: Invoice address
+repair.associations.shipping_address: Shipping address
 
 # Repair comment
 repair_comment.name: Repair comment
