@@ -144,7 +144,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
-     * @Serializer\MaxDepth(1)
+     * @Serializer\MaxDepth(2)
      */
     protected ?PartnerAddressInterface $defaultInvoiceAddress = null;
 
@@ -157,7 +157,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      * @Assert\NotBlank
      *
      * @Serializer\Expose
-     * @Serializer\MaxDepth(1)
+     * @Serializer\MaxDepth(2)
      */
     protected ?PartnerAddressInterface $defaultShippingAddress = null;
 
