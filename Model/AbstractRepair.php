@@ -11,6 +11,8 @@
 
 namespace Klipper\Module\RepairBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
@@ -225,6 +227,18 @@ abstract class AbstractRepair implements RepairInterface
      * @Serializer\MaxDepth(1)
      */
     protected ?CouponInterface $usedCoupon = null;
+
+    /**
+     * @var null|Collection|RepairItemInterface[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairItemInterface",
+     *     mappedBy="repair",
+     *     fetch="EXTRA_LAZY",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected ?Collection $repairItems = null;
 
     public function setReference(?string $reference): self
     {
@@ -451,5 +465,10 @@ abstract class AbstractRepair implements RepairInterface
     public function getUsedCoupon(): ?CouponInterface
     {
         return $this->usedCoupon;
+    }
+
+    public function getRepairItems(): Collection
+    {
+        return $this->repairItems ?: $this->repairItems = new ArrayCollection();
     }
 }

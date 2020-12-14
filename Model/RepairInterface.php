@@ -11,6 +11,7 @@
 
 namespace Klipper\Module\RepairBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
 use Klipper\Component\Model\Traits\CurrencyableInterface;
 use Klipper\Component\Model\Traits\IdInterface;
@@ -180,4 +181,9 @@ interface RepairInterface extends
     public function setUsedCoupon(?CouponInterface $usedCoupon);
 
     public function getUsedCoupon(): ?CouponInterface;
+
+    /**
+     * @return Collection|RepairItemInterface[]
+     */
+    public function getRepairItems(): Collection;
 }

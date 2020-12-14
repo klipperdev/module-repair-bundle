@@ -54,7 +54,8 @@ abstract class AbstractRepairItem implements RepairItemInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     fetch="EAGER"
+     *     fetch="EAGER",
+     *     inversedBy="repairItems"
      * )
      *
      * @Assert\NotBlank
