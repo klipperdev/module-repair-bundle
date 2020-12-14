@@ -15,6 +15,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
+use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 
 /**
@@ -49,6 +50,12 @@ class RepairSubscriber implements EventSubscriber
         if ($object instanceof RepairInterface) {
             if (null === $object->getReference()) {
                 $object->setReference($this->generator->generate());
+            }
+
+            $account = $object->getAccount();
+
+            if (null === $object->getPriceList() && null !== $account && $account instanceof PriceListableInterface) {
+                $object->setPriceList($account->getPriceList());
             }
         }
     }
