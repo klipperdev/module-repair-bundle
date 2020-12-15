@@ -12,10 +12,15 @@
 namespace Klipper\Module\RepairBundle\Doctrine\Listener;
 
 use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
+use Klipper\Component\DoctrineExtra\Util\ClassUtils;
+use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
+use Klipper\Module\RepairBundle\Model\RepairHistoryInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 
 /**
@@ -25,9 +30,14 @@ class RepairSubscriber implements EventSubscriber
 {
     private CodeGenerator $generator;
 
-    public function __construct(CodeGenerator $generator)
-    {
+    private ObjectFactoryInterface $objectFactory;
+
+    public function __construct(
+        CodeGenerator $generator,
+        ObjectFactoryInterface $objectFactory
+    ) {
         $this->generator = $generator;
+        $this->objectFactory = $objectFactory;
     }
 
     public function getSubscribedEvents(): array
@@ -35,6 +45,7 @@ class RepairSubscriber implements EventSubscriber
         return [
             Events::prePersist,
             Events::preUpdate,
+            Events::onFlush,
         ];
     }
 
@@ -56,6 +67,59 @@ class RepairSubscriber implements EventSubscriber
 
             if (null === $object->getPriceList() && null !== $account && $account instanceof PriceListableInterface) {
                 $object->setPriceList($account->getPriceList());
+            }
+        }
+    }
+
+    public function onFlush(OnFlushEventArgs $event): void
+    {
+        $em = $event->getEntityManager();
+        $uow = $em->getUnitOfWork();
+
+        foreach ($uow->getScheduledEntityInsertions() as $object) {
+            $this->saveRepairHistory($em, $object, true);
+        }
+
+        foreach ($uow->getScheduledEntityUpdates() as $object) {
+            $this->saveRepairHistory($em, $object);
+        }
+    }
+
+    private function saveRepairHistory(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if ($create || isset($changeSet['status'])) {
+                /** @var RepairHistoryInterface $history */
+                $history = $this->objectFactory->create(RepairHistoryInterface::class);
+                $history->setRepair($object);
+                $history->setPublic(true);
+                $history->setNewStatus($object->getStatus());
+
+                if (isset($changeSet['status'])) {
+                    $history->setPreviousStatus($changeSet['status'][0]);
+                }
+
+                if (($create && null !== $object->getSwappedToDevice()) || isset($changeSet['swappedToDevice'])) {
+                    $history->setSwap(true);
+                    $history->setNewDevice($object->getSwappedToDevice());
+
+                    if (isset($changeSet['swappedToDevice'])) {
+                        $history->setPreviousDevice($changeSet['swappedToDevice'][0]);
+                    }
+                }
+
+                if (($create && null !== $object->getShipping()) || isset($changeSet['shipping'])) {
+                    if (isset($changeSet['shipping'])) {
+                        $history->setShipping($object->getShipping());
+                    }
+                }
+
+                $em->persist($history);
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($history));
+                $uow->computeChangeSet($classMetadata, $history);
             }
         }
     }

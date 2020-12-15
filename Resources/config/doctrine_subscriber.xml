@@ -9,6 +9,7 @@
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairSubscriber">
             <tag name="doctrine.event_subscriber" />
             <argument type="service" id="klipper_repair.generator.repair_reference"/>
+            <argument type="service" id="klipper_resource.object_factory"/>
         </service>
 
         <service id="klipper_repair.generator.repair_reference" class="Klipper\Component\CodeGenerator\CodeGenerator">
