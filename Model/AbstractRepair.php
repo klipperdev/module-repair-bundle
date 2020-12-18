@@ -493,4 +493,9 @@ abstract class AbstractRepair implements RepairInterface
     {
         return $this->repairItems ?: $this->repairItems = new ArrayCollection();
     }
+
+    public function getRepairBreakdowns(): Collection
+    {
+        return $this->repairBreakdowns ?: $this->repairBreakdowns = new ArrayCollection();
+    }
 }
