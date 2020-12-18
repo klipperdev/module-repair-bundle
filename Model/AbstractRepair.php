@@ -240,6 +240,8 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @Serializer\Expose
      * @Serializer\ReadOnly
+     * @Serializer\MaxDepth(3)
+     * @Serializer\Groups({"View"})
      */
     protected ?Collection $repairItems = null;
 
@@ -255,6 +257,8 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @Serializer\Expose
      * @Serializer\ReadOnly
+     * @Serializer\MaxDepth(3)
+     * @Serializer\Groups({"View"})
      */
     protected ?Collection $repairBreakdowns = null;
 
