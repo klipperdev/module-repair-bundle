@@ -237,8 +237,26 @@ abstract class AbstractRepair implements RepairInterface
      *     fetch="EXTRA_LAZY",
      *     cascade={"persist", "remove"}
      * )
+     *
+     * @Serializer\Expose
+     * @Serializer\ReadOnly
      */
     protected ?Collection $repairItems = null;
+
+    /**
+     * @var null|Collection|RepairBreakdownInterface[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairBreakdownInterface",
+     *     mappedBy="repair",
+     *     fetch="EXTRA_LAZY",
+     *     cascade={"persist", "remove"}
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\ReadOnly
+     */
+    protected ?Collection $repairBreakdowns = null;
 
     public function setReference(?string $reference): self
     {

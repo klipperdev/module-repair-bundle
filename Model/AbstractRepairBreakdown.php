@@ -34,7 +34,8 @@ abstract class AbstractRepairBreakdown implements RepairBreakdownInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     fetch="EAGER"
+     *     fetch="EAGER",
+     *     inversedBy="repairBreakdowns"
      * )
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
