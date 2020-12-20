@@ -17,6 +17,7 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
+use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Price\PriceManagerInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 use Klipper\Module\RepairBundle\Model\RepairItemInterface;
@@ -146,12 +147,19 @@ class RepairItemSubscriber implements EventSubscriber
             $changeSet = $uow->getEntityChangeSet($object);
             $edited = false;
 
+            $account = $repair->getAccount();
+            $priceList = $repair->getPriceList();
+
+            if (null === $priceList && $account instanceof PriceListableInterface) {
+                $priceList = $account->getPriceList();
+            }
+
             if (null === $object->getPrice()) {
                 $edited = true;
                 $object->setPrice($this->priceManager->getProductPrice(
                     $object->getProduct(),
                     $object->getProductCombination(),
-                    $repair->getPriceList(),
+                    $priceList,
                     1,
                     $repair->getProduct(),
                     $repair->getProductCombination(),
