@@ -24,9 +24,9 @@ use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalInterface;
+use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableOptionalInterface;
-use Klipper\Module\ProductBundle\Model\Traits\SelectPriceListableInterface;
 
 /**
  * Repair interface.
@@ -41,7 +41,7 @@ interface RepairInterface extends
     OrganizationalRequiredInterface,
     ProductableOptionalInterface,
     ProductCombinationableOptionalInterface,
-    SelectPriceListableInterface,
+    PriceListableInterface,
     TimestampableInterface,
     UserTrackableInterface
 {
