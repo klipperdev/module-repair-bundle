@@ -152,7 +152,10 @@ class RepairItemSubscriber implements EventSubscriber
                     $object->getProduct(),
                     $object->getProductCombination(),
                     $repair->getPriceList(),
-                    1
+                    1,
+                    $repair->getProduct(),
+                    $repair->getProductCombination(),
+                    null !== $repair->getProduct() ? $repair->getProduct()->getProductRange() : null
                 ));
             } elseif (isset($changeSet['price'])) {
                 $edited = true;
