@@ -17,6 +17,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
+use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
@@ -32,6 +33,11 @@ class RepairSubscriber implements EventSubscriber
     private CodeGenerator $generator;
 
     private ObjectFactoryInterface $objectFactory;
+
+    /**
+     * @var null|bool|ChoiceInterface
+     */
+    private $shippedChoice;
 
     public function __construct(
         CodeGenerator $generator,
@@ -96,7 +102,29 @@ class RepairSubscriber implements EventSubscriber
         }
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
+            $this->updateStatus($em, $object);
             $this->saveRepairHistory($em, $object);
+        }
+    }
+
+    private function updateStatus(EntityManagerInterface $em, object $object): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if (isset($changeSet['shipping']) && (null === $object->getStatus() || 'shipped' !== $object->getStatus()->getValue())) {
+                if (null === $this->shippedChoice) {
+                    $this->shippedChoice = $em->getRepository(ChoiceInterface::class)->findOneBy([
+                        'type' => 'repair_status',
+                        'value' => 'shipped',
+                    ]) ?? false;
+                }
+
+                if ($this->shippedChoice) {
+                    $object->setStatus($this->shippedChoice);
+                }
+            }
         }
     }
 
