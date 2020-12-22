@@ -31,7 +31,7 @@ class RepairItemSubscriber implements EventSubscriber
     private PriceManagerInterface $priceManager;
 
     /**
-     * @var int[]|string[]
+     * @var array[] Array<int[]|string[]>
      */
     private array $updateRepairPrices = [];
 
@@ -74,7 +74,27 @@ class RepairItemSubscriber implements EventSubscriber
     public function postFlush(PostFlushEventArgs $args): void
     {
         $em = $args->getEntityManager();
-        $updatePrices = [];
+        $updateRepairPrices = [];
+        $updateRepairItemFinalPrices = [];
+        $proportionalPriceRepairIds = [];
+
+        // Flat rate module type
+        if (isset($this->updateRepairPrices['flat_rate'])) {
+            foreach ($this->updateRepairPrices['flat_rate'] as $repairId) {
+                $updateRepairItemFinalPrices[] = $repairId;
+            }
+
+            unset($this->updateRepairPrices['flat_rate']);
+        }
+
+        // Coupon module type
+        if (isset($this->updateRepairPrices['coupon'])) {
+            foreach ($this->updateRepairPrices['coupon'] as $repairId) {
+                $updateRepairItemFinalPrices[] = $repairId;
+            }
+
+            unset($this->updateRepairPrices['coupon']);
+        }
 
         // Operation highest price calculation
         if (isset($this->updateRepairPrices['operation_highest_price'])) {
@@ -90,7 +110,9 @@ class RepairItemSubscriber implements EventSubscriber
             ;
 
             foreach ($res as $val) {
-                $updatePrices[$val['id']] = (float) $val['totalPrice'];
+                $updateRepairPrices[$val['id']] = (float) $val['totalPrice'];
+                $updateRepairItemFinalPrices[] = $val['id'];
+                $proportionalPriceRepairIds[] = $val['id'];
             }
 
             unset($this->updateRepairPrices['operation_highest_price']);
@@ -116,22 +138,73 @@ class RepairItemSubscriber implements EventSubscriber
             ;
 
             foreach ($res as $val) {
-                $updatePrices[$val['id']] = (float) $val['totalPrice'];
+                $updateRepairPrices[$val['id']] = (float) $val['totalPrice'];
+                $updateRepairItemFinalPrices[] = $val['id'];
+                $proportionalPriceRepairIds[] = $val['id'];
             }
         }
 
         // Update repair prices
-        if (\count($updatePrices) > 0) {
-            foreach ($updatePrices as $id => $price) {
+        if (\count($updateRepairPrices) > 0) {
+            foreach ($updateRepairPrices as $id => $repairPrice) {
                 $em->createQueryBuilder()
                     ->update(RepairInterface::class, 'r')
                     ->set('r.price', ':price')
                     ->where('r.id = :id')
                     ->setParameter('id', $id)
-                    ->setParameter('price', $price)
+                    ->setParameter('price', $repairPrice)
                     ->getQuery()
                     ->execute()
                 ;
+            }
+        }
+
+        // Update repair item final prices
+        if (\count($updateRepairItemFinalPrices) > 0) {
+            $res = $em->createQueryBuilder()
+                ->select('r', 'ris')
+                ->from(RepairInterface::class, 'r')
+                ->leftJoin('r.repairItems', 'ris')
+                ->where('r.id in (:ids)')
+                ->setParameter('ids', $updateRepairItemFinalPrices)
+                ->getQuery()
+                ->getResult()
+            ;
+
+            /** @var RepairInterface $repair */
+            foreach ($res as $repair) {
+                $repairPrice = (float) $repair->getPrice();
+                /** @var RepairItemInterface[] $items */
+                $items = $repair->getRepairItems()->toArray();
+                $countItems = \count($items);
+                $itemPrice = $countItems > 0 ? round($repairPrice / $countItems, 2) : $repairPrice;
+                $isProportionalPrice = \in_array($repair->getId(), $proportionalPriceRepairIds, true);
+                $sum = 0;
+
+                foreach ($items as $i => $item) {
+                    if ($isProportionalPrice) {
+                        $itemPrice = round((float) $item->getPrice() * $repairPrice / 100, 2);
+                    }
+
+                    $item->setFinalPrice($itemPrice);
+                    $sum += (float) $item->getFinalPrice();
+
+                    // Add round difference on the last item
+                    if ($i === ($countItems - 1) && $sum !== $repairPrice) {
+                        $item->setFinalPrice((float) $item->getFinalPrice() + ($repairPrice - $sum));
+                    }
+
+                    // Do not the persist/flush in postFlush event
+                    $em->createQueryBuilder()
+                        ->update(RepairItemInterface::class, 'ri')
+                        ->set('ri.finalPrice', ':price')
+                        ->where('ri.id = :id')
+                        ->setParameter('id', $item->getId())
+                        ->setParameter('price', (float) $item->getFinalPrice())
+                        ->getQuery()
+                        ->execute()
+                    ;
+                }
             }
         }
 
@@ -145,17 +218,19 @@ class RepairItemSubscriber implements EventSubscriber
         if ($object instanceof RepairItemInterface && null !== $repair = $object->getRepair()) {
             $meta = $em->getClassMetadata(ClassUtils::getClass($object));
             $changeSet = $uow->getEntityChangeSet($object);
+            $priceEdited = false;
             $edited = false;
 
             $account = $repair->getAccount();
             $priceList = $repair->getPriceList();
 
             if (null === $priceList && $account instanceof PriceListableInterface) {
+                $edited = true;
                 $priceList = $account->getPriceList();
             }
 
             if (null === $object->getPrice()) {
-                $edited = true;
+                $priceEdited = true;
                 $object->setPrice($this->priceManager->getProductPrice(
                     $object->getProduct(),
                     $object->getProductCombination(),
@@ -166,14 +241,14 @@ class RepairItemSubscriber implements EventSubscriber
                     null !== $repair->getProduct() ? $repair->getProduct()->getProductRange() : null
                 ));
             } elseif (isset($changeSet['price'])) {
-                $edited = true;
+                $priceEdited = true;
             }
 
-            if ($edited && $create) {
+            if (($edited || $priceEdited) && $create) {
                 $uow->recomputeSingleEntityChangeSet($meta, $object);
             }
 
-            if ($edited) {
+            if ($priceEdited || $create) {
                 $this->reCalculateRepairPrice($repair);
             }
         }
@@ -185,7 +260,9 @@ class RepairItemSubscriber implements EventSubscriber
         $type = 'sum';
 
         if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
-            if (null !== $module->getPriceCalculation()) {
+            if (\in_array($module->getType(), ['flat_rate', 'coupon'], true)) {
+                $type = $module->getType();
+            } elseif (null !== $module->getPriceCalculation()) {
                 $type = $module->getPriceCalculation();
             }
         }
@@ -196,5 +273,6 @@ class RepairItemSubscriber implements EventSubscriber
     private function reCalculateRepairPrice(RepairInterface $repair): void
     {
         $this->updateRepairPrices[$this->getPriceCalculationType($repair)][] = $repair->getId();
+        $this->updateRepairPrices[$this->getPriceCalculationType($repair)] = array_unique($this->updateRepairPrices[$this->getPriceCalculationType($repair)]);
     }
 }

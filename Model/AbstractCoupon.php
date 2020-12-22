@@ -90,6 +90,15 @@ abstract class AbstractCoupon implements CouponInterface
     protected ?PartnerAddressInterface $shippingAddress = null;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @Assert\Type(type="float")
+     *
+     * @Serializer\Expose
+     */
+    protected ?float $price = null;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
      *
      * @EntityDoctrineChoice("coupon_status")
@@ -188,6 +197,18 @@ abstract class AbstractCoupon implements CouponInterface
     public function getShippingAddress(): ?PartnerAddressInterface
     {
         return $this->shippingAddress;
+    }
+
+    public function setPrice(?float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
     }
 
     public function setStatus(?ChoiceInterface $status): self

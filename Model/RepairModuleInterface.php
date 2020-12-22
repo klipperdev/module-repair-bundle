@@ -77,6 +77,13 @@ interface RepairModuleInterface extends
     /**
      * @return static
      */
+    public function setDefaultPrice(?float $defaultPrice);
+
+    public function getDefaultPrice(): ?float;
+
+    /**
+     * @return static
+     */
     public function setRepairPlace(?RepairPlaceInterface $repairPlace);
 
     public function getRepairPlace(): ?RepairPlaceInterface;

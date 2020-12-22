@@ -16,8 +16,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
+use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Module\RepairBundle\Model\CouponInterface;
+use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@klipper.dev>
@@ -26,9 +29,12 @@ class CouponSubscriber implements EventSubscriber
 {
     private CodeGenerator $generator;
 
-    public function __construct(CodeGenerator $generator)
+    private TranslatorInterface $translator;
+
+    public function __construct(CodeGenerator $generator, TranslatorInterface $translator)
     {
         $this->generator = $generator;
+        $this->translator = $translator;
     }
 
     public function getSubscribedEvents(): array
@@ -63,6 +69,25 @@ class CouponSubscriber implements EventSubscriber
             if (null === $object->getReference()) {
                 $edited = true;
                 $object->setReference($this->generator->generate());
+            }
+
+            if (null === $object->getPrice()) {
+                $account = $object->getAccount();
+
+                if ($account instanceof RepairModuleableInterface
+                    && $account->getRepairModule()
+                    && 'coupon' === $account->getRepairModule()->getType()
+                    && null !== $account->getRepairModule()->getDefaultPrice()
+                ) {
+                    $edited = true;
+                    $object->setPrice($account->getRepairModule()->getDefaultPrice());
+                } else {
+                    ListenerUtil::thrownError($this->translator->trans(
+                        'klipper_repair.coupon.invalid_empty_price',
+                        [],
+                        'validators'
+                    ), $object, 'price');
+                }
             }
 
             if ($edited && $create) {

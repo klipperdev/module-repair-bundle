@@ -5,6 +5,11 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <!-- Repair Module Listener -->
+        <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairModuleSubscriber">
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
         <!-- Repair Listener -->
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairSubscriber">
             <tag name="doctrine.event_subscriber" />
@@ -28,6 +33,7 @@
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\CouponSubscriber">
             <tag name="doctrine.event_subscriber" />
             <argument type="service" id="klipper_repair.generator.coupon_reference"/>
+            <argument type="service" id="translator"/>
         </service>
 
         <service id="klipper_repair.generator.coupon_reference" class="Klipper\Component\CodeGenerator\CodeGenerator">

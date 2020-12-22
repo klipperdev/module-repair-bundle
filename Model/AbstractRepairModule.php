@@ -123,6 +123,19 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     protected ?string $priceCalculation = null;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @Assert\Type(type="float")
+     * @Assert\Expression(
+     *     expression="!(this.getType() in ['flat_rate', 'coupon'] && !value)",
+     *     message="This value should not be blank."
+     * )
+     *
+     * @Serializer\Expose
+     */
+    protected ?float $defaultPrice = null;
+
+    /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairPlaceInterface",
      *     fetch="EAGER"
@@ -305,6 +318,18 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     public function getPriceCalculation(): ?string
     {
         return $this->priceCalculation;
+    }
+
+    public function setDefaultPrice(?float $defaultPrice): self
+    {
+        $this->defaultPrice = $defaultPrice;
+
+        return $this;
+    }
+
+    public function getDefaultPrice(): ?float
+    {
+        return $this->defaultPrice;
     }
 
     public function setRepairPlace(?RepairPlaceInterface $repairPlace): self

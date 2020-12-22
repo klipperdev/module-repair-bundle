@@ -22,6 +22,7 @@ use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\RepairBundle\Model\RepairHistoryInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
+use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@klipper.dev>
@@ -67,6 +68,20 @@ class RepairSubscriber implements EventSubscriber
 
             if (null === $object->getPriceList() && null !== $account && $account instanceof PriceListableInterface) {
                 $object->setPriceList($account->getPriceList());
+            }
+
+            // Price
+            if (null === $object->getPrice()) {
+                if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
+                    if ('flat_rate' === $module->getType()) {
+                        $object->setPrice($module->getDefaultPrice() ?? 0.0);
+                    } elseif ('coupon' === $module->getType()) {
+                        $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
+                            ? $object->getUsedCoupon()->getPrice()
+                            : 0.0;
+                        $object->setPrice($price);
+                    }
+                }
             }
         }
     }

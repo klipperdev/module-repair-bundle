@@ -60,6 +60,13 @@ interface RepairItemInterface extends
     /**
      * @return static
      */
+    public function setFinalPrice(?float $finalPrice);
+
+    public function getFinalPrice(): ?float;
+
+    /**
+     * @return static
+     */
     public function setInternalComment(?string $internalComment);
 
     public function getInternalComment(): ?string;

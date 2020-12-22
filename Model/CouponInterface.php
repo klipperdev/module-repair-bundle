@@ -67,6 +67,13 @@ interface CouponInterface extends
     /**
      * @return static
      */
+    public function setPrice(?float $price);
+
+    public function getPrice(): ?float;
+
+    /**
+     * @return static
+     */
     public function setStatus(?ChoiceInterface $status);
 
     public function getStatus(): ?ChoiceInterface;

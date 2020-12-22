@@ -86,6 +86,16 @@ abstract class AbstractRepairItem implements RepairItemInterface
     protected ?float $price = null;
 
     /**
+     * @ORM\Column(type="float", nullable=true)
+     *
+     * @Assert\Type(type="float")
+     *
+     * @Serializer\Expose
+     * @Serializer\ReadOnly
+     */
+    protected ?float $finalPrice = null;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Type(type="string")
@@ -146,6 +156,18 @@ abstract class AbstractRepairItem implements RepairItemInterface
     public function getPrice(): ?float
     {
         return $this->price;
+    }
+
+    public function setFinalPrice(?float $finalPrice): self
+    {
+        $this->finalPrice = $finalPrice;
+
+        return $this;
+    }
+
+    public function getFinalPrice(): ?float
+    {
+        return $this->finalPrice;
     }
 
     public function setInternalComment(?string $internalComment): self
