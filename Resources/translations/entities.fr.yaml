@@ -17,7 +17,7 @@ repair.fields.tray_reference: Bac référence
 repair.fields.warranty_end_date: Date de fin de garantie
 repair.fields.price: Prix
 repair.fields.receipted_at: Reçu le
-repair.associations.swapped_to_device: Échangé vers le device
+repair.associations.swapped_to_device: Échangé vers l'équipement
 repair.associations.status: Statut
 repair.associations.repairer: Technicien
 repair.associations.invoice_address: Adresse de facturation
@@ -37,7 +37,7 @@ repair_history.fields.swap: Est un échange
 repair_history.associations.previous_status: Statut précédent
 repair_history.associations.new_status: Nouveau statut
 repair_history.associations.previous_device: Device précédent
-repair_history.associations.new_device: Nouveau device
+repair_history.associations.new_device: Nouvel équipement
 
 # Repair item
 repair_item.name: Article de la réparation
