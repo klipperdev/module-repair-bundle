@@ -55,6 +55,7 @@ repair_module.name: Module de réparation
 repair_module.name.plural: Modules de réparation
 repair_module.fields.comment: Commentaire
 repair_module.fields.customer_reference: Référence du client
+repair_module.fields.default_price: Prix par défaut
 repair_module.fields.excluded_scope: Périmètre exclus
 repair_module.fields.internal_contract_reference: Référence du contrat interne
 repair_module.fields.identifier_type: Type d'identification
@@ -72,6 +73,7 @@ coupon.name: Coupon
 coupon.name.plural: Coupons
 coupon.fields.customer_reference: Référence du client
 coupon.fields.internal_contract_reference: Référence du contrat interne
+coupon.fields.price: Prix
 coupon.fields.reference: Référence
 coupon.fields.valid_until: Valable jusqu'au
 coupon.associations.invoice_address: Adresse de facturation
