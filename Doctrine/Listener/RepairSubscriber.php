@@ -123,6 +123,9 @@ class RepairSubscriber implements EventSubscriber
 
                 if ($this->shippedChoice) {
                     $object->setStatus($this->shippedChoice);
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                 }
             }
         }
