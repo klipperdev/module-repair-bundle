@@ -173,7 +173,9 @@ class RepairItemSubscriber implements EventSubscriber
 
             /** @var RepairInterface $repair */
             foreach ($res as $repair) {
-                $repairPrice = (float) $repair->getPrice();
+                $repairPrice = (float) (isset($updateRepairPrices[$repair->getId()])
+                    ? $updateRepairPrices[$repair->getId()]
+                    : $repair->getPrice());
                 /** @var RepairItemInterface[] $items */
                 $items = $repair->getRepairItems()->toArray();
                 $countItems = \count($items);
