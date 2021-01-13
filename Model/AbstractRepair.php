@@ -46,9 +46,9 @@ abstract class AbstractRepair implements RepairInterface
     use ContactableOptionalTrait;
     use CurrencyableTrait;
     use OrganizationalRequiredTrait;
+    use PriceListableTrait;
     use ProductableTrait;
     use ProductCombinationableTrait;
-    use PriceListableTrait;
     use TimestampableTrait;
     use UserTrackableTrait;
 
