@@ -224,7 +224,7 @@ abstract class AbstractRepair implements RepairInterface
      * )
      *
      * @Serializer\Expose
-     * @Serializer\MaxDepth(1)
+     * @Serializer\MaxDepth(2)
      */
     protected ?CouponInterface $usedCoupon = null;
 
