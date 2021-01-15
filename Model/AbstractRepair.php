@@ -220,6 +220,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
      *     inversedBy="usedByRepair",
+     *     cascade={"persist", "remove"},
      *     fetch="EAGER"
      * )
      *
@@ -479,7 +480,15 @@ abstract class AbstractRepair implements RepairInterface
 
     public function setUsedCoupon(?CouponInterface $usedCoupon): self
     {
+        if (null !== $this->usedCoupon) {
+            $this->usedCoupon->setUsedByRepair(null);
+        }
+
         $this->usedCoupon = $usedCoupon;
+
+        if (null !== $usedCoupon) {
+            $usedCoupon->setUsedByRepair($this);
+        }
 
         return $this;
     }
