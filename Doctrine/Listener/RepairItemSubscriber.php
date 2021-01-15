@@ -13,6 +13,7 @@ namespace Klipper\Module\RepairBundle\Doctrine\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
@@ -43,9 +44,34 @@ class RepairItemSubscriber implements EventSubscriber
     public function getSubscribedEvents(): array
     {
         return [
+            Events::prePersist,
+            Events::preUpdate,
             Events::onFlush,
             Events::postFlush,
         ];
+    }
+
+    public function prePersist(LifecycleEventArgs $event): void
+    {
+        $this->preUpdate($event);
+    }
+
+    public function preUpdate(LifecycleEventArgs $event): void
+    {
+        $object = $event->getObject();
+        $uow = $event->getEntityManager()->getUnitOfWork();
+        $changeSet = $uow->getEntityChangeSet($object);
+
+        if ($object instanceof RepairInterface) {
+            // Price
+            if (isset($changeSet['usedCoupon'])) {
+                $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
+                    ? $object->getUsedCoupon()->getPrice()
+                    : 0.0;
+                $object->setPrice($price);
+                $this->reCalculateRepairPrice($object);
+            }
+        }
     }
 
     public function onFlush(OnFlushEventArgs $event): void
