@@ -38,10 +38,7 @@ class RepairSubscriber implements EventSubscriber
 
     private TranslatorInterface $translator;
 
-    /**
-     * @var null|bool|ChoiceInterface
-     */
-    private $shippedChoice;
+    private array $statusChoices = [];
 
     public function __construct(
         CodeGenerator $generator,
@@ -133,23 +130,33 @@ class RepairSubscriber implements EventSubscriber
     private function updateStatus(EntityManagerInterface $em, object $object): void
     {
         if ($object instanceof RepairInterface) {
-            $uow = $em->getUnitOfWork();
-            $changeSet = $uow->getEntityChangeSet($object);
+            $this->changeStatus($em, $object, 'shipping', 'shipped');
+            $this->changeStatus($em, $object, 'swappedToDevice', 'swapped');
+        }
+    }
 
-            if (isset($changeSet['shipping']) && (null === $object->getStatus() || 'shipped' !== $object->getStatus()->getValue())) {
-                if (null === $this->shippedChoice) {
-                    $this->shippedChoice = $em->getRepository(ChoiceInterface::class)->findOneBy([
-                        'type' => 'repair_status',
-                        'value' => 'shipped',
-                    ]) ?? false;
-                }
+    private function changeStatus(
+        EntityManagerInterface $em,
+        RepairInterface $object,
+        string $changeSetField,
+        string $statusValue
+    ): void {
+        $uow = $em->getUnitOfWork();
+        $changeSet = $uow->getEntityChangeSet($object);
 
-                if ($this->shippedChoice) {
-                    $object->setStatus($this->shippedChoice);
+        if (isset($changeSet[$changeSetField]) && (null === $object->getStatus() || $statusValue !== $object->getStatus()->getValue())) {
+            if (!\array_key_exists($changeSetField, $this->statusChoices)) {
+                $this->statusChoices[$changeSetField] = $em->getRepository(ChoiceInterface::class)->findOneBy([
+                    'type' => 'repair_status',
+                    'value' => $statusValue,
+                ]) ?? false;
+            }
 
-                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
-                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
-                }
+            if (isset($this->statusChoices[$changeSetField]) && $this->statusChoices[$changeSetField] instanceof ChoiceInterface) {
+                $object->setStatus($this->statusChoices[$changeSetField]);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
             }
         }
     }
@@ -160,7 +167,7 @@ class RepairSubscriber implements EventSubscriber
             $uow = $em->getUnitOfWork();
             $changeSet = $uow->getEntityChangeSet($object);
 
-            if ($create || isset($changeSet['status'])) {
+            if ($create || isset($changeSet['status']) || isset($changeSet['swappedToDevice']) || isset($changeSet['shipping'])) {
                 /** @var RepairHistoryInterface $history */
                 $history = $this->objectFactory->create(RepairHistoryInterface::class);
                 $history->setRepair($object);
@@ -175,7 +182,9 @@ class RepairSubscriber implements EventSubscriber
                     $history->setSwap(true);
                     $history->setNewDevice($object->getSwappedToDevice());
 
-                    if (isset($changeSet['swappedToDevice'])) {
+                    if (null !== $object->getDevice()) {
+                        $history->setPreviousDevice($object->getDevice());
+                    } elseif (isset($changeSet['swappedToDevice'])) {
                         $history->setPreviousDevice($changeSet['swappedToDevice'][0]);
                     }
                 }
