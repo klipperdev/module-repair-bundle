@@ -18,12 +18,14 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
 use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
+use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\RepairBundle\Model\RepairHistoryInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@klipper.dev>
@@ -34,6 +36,8 @@ class RepairSubscriber implements EventSubscriber
 
     private ObjectFactoryInterface $objectFactory;
 
+    private TranslatorInterface $translator;
+
     /**
      * @var null|bool|ChoiceInterface
      */
@@ -41,10 +45,12 @@ class RepairSubscriber implements EventSubscriber
 
     public function __construct(
         CodeGenerator $generator,
-        ObjectFactoryInterface $objectFactory
+        ObjectFactoryInterface $objectFactory,
+        TranslatorInterface $translator
     ) {
         $this->generator = $generator;
         $this->objectFactory = $objectFactory;
+        $this->translator = $translator;
     }
 
     public function getSubscribedEvents(): array
@@ -102,8 +108,25 @@ class RepairSubscriber implements EventSubscriber
         }
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
+            $this->validateChangeAccount($em, $object);
             $this->updateStatus($em, $object);
             $this->saveRepairHistory($em, $object);
+        }
+    }
+
+    private function validateChangeAccount(EntityManagerInterface $em, object $object): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if (isset($changeSet['account']) && null !== $object->getUsedCoupon()) {
+                ListenerUtil::thrownError($this->translator->trans(
+                    'klipper_repair.repair.account_cannot_be_change_with_coupon',
+                    [],
+                    'validators'
+                ));
+            }
         }
     }
 

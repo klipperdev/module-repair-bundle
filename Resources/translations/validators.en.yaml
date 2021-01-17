@@ -1,1 +1,2 @@
 klipper_repair.coupon.invalid_empty_price: The price cannot be determinate automatically
+klipper_repair.repair.account_cannot_be_change_with_coupon: The account cannot be changed if the repair is attached to a coupon
