@@ -211,6 +211,7 @@ class RepairSubscriber implements EventSubscriber
 
         $uow = $em->getUnitOfWork();
         $changeSet = $uow->getEntityChangeSet($object);
+        $device = $object->getDevice();
 
         if ($create || isset($changeSet['device'])) {
             if (isset($changeSet['device'][0])) {
@@ -223,6 +224,49 @@ class RepairSubscriber implements EventSubscriber
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($oldDevice));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $oldDevice);
+                }
+            }
+        }
+
+        if (null === $device->getTerminatedAt()) {
+            $repairStatus = null !== $object->getStatus() ? $object->getStatus()->getValue() : '';
+
+            switch ($repairStatus) {
+                case 'unrepairable_recycling':
+                    $newDeviceStatusValue = 'recycled';
+
+                    break;
+
+                case 'waiting':
+                case 'received_improper':
+                case 'unrepairable_return_to_customer':
+                    $newDeviceStatusValue = 'broken_down';
+
+                    break;
+
+                case 'shipped':
+                    $newDeviceStatusValue = 'operational';
+
+                    break;
+
+                case 'received':
+                case 'received_compliant':
+                case 'repaired':
+                case 'swapped':
+                default:
+                    $newDeviceStatusValue = 'under_maintenance';
+
+                    break;
+            }
+
+            if (null === $device->getStatus() || $newDeviceStatusValue !== $device->getStatus()->getValue()) {
+                $newDeviceStatus = $this->getDeviceStatus($em, $newDeviceStatusValue);
+
+                if (null !== $newDeviceStatus) {
+                    $device->setStatus($newDeviceStatus);
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
                 }
             }
         }
