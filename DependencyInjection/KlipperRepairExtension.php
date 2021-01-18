@@ -48,7 +48,7 @@ class KlipperRepairExtension extends Extension
         $def->replaceArgument(3, array_unique(array_merge($config['closed_statuses'], [
             'shipped',
             'unrepairable_recycling',
-            'unrepairable_return_to_client',
+            'unrepairable_return_to_customer',
         ])));
     }
 }

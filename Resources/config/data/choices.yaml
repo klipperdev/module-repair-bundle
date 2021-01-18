@@ -7,34 +7,55 @@ product_type:
 repair_status:
     -   value: waiting
         label: Waiting
+        icon: fa-fw fa-hourglass-start
         translations:
             fr: { label: En attente }
     -   value: received
         label: Received
+        icon: fa-fw fa-box-open
+        color: '#40C1B8'
         translations:
             fr: { label: Réceptionné }
-    -   value: compliant
-        label: Compliant
+    -   value: received_compliant
+        label: Received - Compliant
+        icon: fa-fw fa-check-circle
+        color: '#40C1B8'
         translations:
-            fr: { label: Conforme }
-    -   value: improper
-        label: Improper
+            fr: { label: Réceptionné - Conforme }
+    -   value: received_improper
+        label: Received - Improper
+        icon: fa-fw fa-exclamation-circle
+        color: '#CCCCCC'
         translations:
-            fr: { label: Non conforme }
+            fr: { label: Réceptionné - Non conforme }
     -   value: unrepairable_recycling
         label: Unrepairable - Recycling
+        icon: fa-fw fa-recycle
+        color: '#B42727'
         translations:
             fr: { label: Irréparable - Recyclage }
+    -   value: unrepairable_return_to_customer
+        label: Unrepairable - Return to customer
+        icon: fa-fw fa-parachute-box
+        color: '#B427A2'
+        translations:
+            fr: { label: Irréparable - Retour client }
     -   value: repaired
         label: Repaired
+        icon: fa-fw fa-wrench
+        color: '#4BB85E'
         translations:
             fr: { label: Réparé }
     -   value: swapped
         label: Swapped
+        icon: fa-fw fa-exchange-alt
+        color: '#3f51b5'
         translations:
             fr: { label: Echangé }
     -   value: shipped
         label: Shipped
+        icon: fa-fw fa-truck
+        color: '#149c7d'
         translations:
             fr: { label: Expédié }
 
