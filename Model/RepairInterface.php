@@ -183,6 +183,13 @@ interface RepairInterface extends
     public function getUsedCoupon(): ?CouponInterface;
 
     /**
+     * @return static
+     */
+    public function setClosed(bool $closed);
+
+    public function isClosed(): bool;
+
+    /**
      * @return Collection|RepairItemInterface[]
      */
     public function getRepairItems(): Collection;

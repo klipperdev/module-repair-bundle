@@ -230,6 +230,16 @@ abstract class AbstractRepair implements RepairInterface
     protected ?CouponInterface $usedCoupon = null;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
+     * @Serializer\ReadOnly
+     */
+    protected bool $closed = false;
+
+    /**
      * @var null|Collection|RepairItemInterface[]
      *
      * @ORM\OneToMany(
@@ -496,6 +506,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getUsedCoupon(): ?CouponInterface
     {
         return $this->usedCoupon;
+    }
+
+    public function setClosed(bool $closed): self
+    {
+        $this->closed = $closed;
+
+        return $this;
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->closed;
     }
 
     public function getRepairItems(): Collection

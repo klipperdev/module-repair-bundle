@@ -39,6 +39,8 @@ class RepairSubscriber implements EventSubscriber
 
     private TranslatorInterface $translator;
 
+    private array $closedStatues;
+
     private array $statusChoices = [];
 
     private ?array $deviceStatusChoices = null;
@@ -46,11 +48,13 @@ class RepairSubscriber implements EventSubscriber
     public function __construct(
         CodeGenerator $generator,
         ObjectFactoryInterface $objectFactory,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        array $closedStatues = []
     ) {
         $this->generator = $generator;
         $this->objectFactory = $objectFactory;
         $this->translator = $translator;
+        $this->closedStatues = $closedStatues;
     }
 
     public function getSubscribedEvents(): array
@@ -105,6 +109,7 @@ class RepairSubscriber implements EventSubscriber
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
             $this->updateProduct($em, $object, true);
+            $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->saveRepairHistory($em, $object, true);
         }
@@ -113,6 +118,7 @@ class RepairSubscriber implements EventSubscriber
             $this->validateChangeAccount($em, $object);
             $this->updateProduct($em, $object);
             $this->updateStatus($em, $object);
+            $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->saveRepairHistory($em, $object);
         }
@@ -177,6 +183,22 @@ class RepairSubscriber implements EventSubscriber
             if (null !== $device->getProduct() && ($create || (isset($changeSet['device']) && null !== $changeSet['device'][1]))) {
                 $object->setProduct($device->getProduct());
                 $object->setProductCombination($device->getProductCombination());
+            }
+        }
+    }
+
+    private function updateClosed(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if ($create || isset($changeSet['status'])) {
+                $closed = null === $object->getStatus() || \in_array($object->getStatus()->getValue(), $this->closedStatues, true);
+                $object->setClosed($closed);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
             }
         }
     }
