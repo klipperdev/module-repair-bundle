@@ -101,11 +101,13 @@ class RepairSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
+            $this->updateProduct($em, $object, true);
             $this->saveRepairHistory($em, $object, true);
         }
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->validateChangeAccount($em, $object);
+            $this->updateProduct($em, $object);
             $this->updateStatus($em, $object);
             $this->saveRepairHistory($em, $object);
         }
@@ -157,6 +159,19 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+        }
+    }
+
+    private function updateProduct(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        $uow = $em->getUnitOfWork();
+        $changeSet = $uow->getEntityChangeSet($object);
+
+        if ($object instanceof RepairInterface && null !== $device = $object->getDevice()) {
+            if (null !== $device->getProduct() && ($create || (isset($changeSet['device']) && null !== $changeSet['device'][1]))) {
+                $object->setProduct($device->getProduct());
+                $object->setProductCombination($device->getProductCombination());
             }
         }
     }
