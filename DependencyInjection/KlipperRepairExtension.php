@@ -42,6 +42,7 @@ class KlipperRepairExtension extends Extension
     protected function configRepair(ContainerBuilder $container, LoaderInterface $loader, array $config): void
     {
         $loader->load('doctrine_subscriber.xml');
+        $loader->load('command.xml');
 
         $def = $container->getDefinition(RepairSubscriber::class);
 
