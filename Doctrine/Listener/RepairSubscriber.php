@@ -17,7 +17,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
-use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
+use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
@@ -33,6 +33,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class RepairSubscriber implements EventSubscriber
 {
+    use DoctrineListenerChoiceTrait;
+
     private CodeGenerator $generator;
 
     private ObjectFactoryInterface $objectFactory;
@@ -40,10 +42,6 @@ class RepairSubscriber implements EventSubscriber
     private TranslatorInterface $translator;
 
     private array $closedStatues;
-
-    private array $statusChoices = [];
-
-    private ?array $deviceStatusChoices = null;
 
     public function __construct(
         CodeGenerator $generator,
@@ -158,15 +156,10 @@ class RepairSubscriber implements EventSubscriber
         $changeSet = $uow->getEntityChangeSet($object);
 
         if (isset($changeSet[$changeSetField]) && (null === $object->getStatus() || $statusValue !== $object->getStatus()->getValue())) {
-            if (!\array_key_exists($changeSetField, $this->statusChoices)) {
-                $this->statusChoices[$changeSetField] = $em->getRepository(ChoiceInterface::class)->findOneBy([
-                    'type' => 'repair_status',
-                    'value' => $statusValue,
-                ]) ?? false;
-            }
+            $repairStatus = $this->getChoice($em, 'repair_status', $statusValue);
 
-            if (isset($this->statusChoices[$changeSetField]) && $this->statusChoices[$changeSetField] instanceof ChoiceInterface) {
-                $object->setStatus($this->statusChoices[$changeSetField]);
+            if (null !== $repairStatus) {
+                $object->setStatus($repairStatus);
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
@@ -217,7 +210,7 @@ class RepairSubscriber implements EventSubscriber
             if (isset($changeSet['device'][0])) {
                 /** @var DeviceInterface $oldDevice */
                 $oldDevice = $changeSet['device'][0];
-                $statusOperational = $this->getDeviceStatus($em, 'operational');
+                $statusOperational = $this->getChoice($em, 'device_status', 'operational');
 
                 if (null !== $statusOperational) {
                     $oldDevice->setStatus($statusOperational);
@@ -260,7 +253,7 @@ class RepairSubscriber implements EventSubscriber
             }
 
             if (null === $device->getStatus() || $newDeviceStatusValue !== $device->getStatus()->getValue()) {
-                $newDeviceStatus = $this->getDeviceStatus($em, $newDeviceStatusValue);
+                $newDeviceStatus = $this->getChoice($em, 'device_status', $newDeviceStatusValue);
 
                 if (null !== $newDeviceStatus) {
                     $device->setStatus($newDeviceStatus);
@@ -311,22 +304,5 @@ class RepairSubscriber implements EventSubscriber
                 $uow->computeChangeSet($classMetadata, $history);
             }
         }
-    }
-
-    private function getDeviceStatus(EntityManagerInterface $em, string $value): ?ChoiceInterface
-    {
-        if (null === $this->deviceStatusChoices) {
-            $this->deviceStatusChoices = [];
-            $res = $em->getRepository(ChoiceInterface::class)->findBy([
-                'type' => 'device_status',
-            ]);
-
-            /** @var ChoiceInterface $item */
-            foreach ($res as $item) {
-                $this->deviceStatusChoices[$item->getValue()] = $item;
-            }
-        }
-
-        return $this->deviceStatusChoices[$value] ?? null;
     }
 }
