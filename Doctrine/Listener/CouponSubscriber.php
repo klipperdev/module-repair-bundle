@@ -63,14 +63,15 @@ class CouponSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         if ($object instanceof CouponInterface) {
-            $meta = $em->getClassMetadata(ClassUtils::getClass($object));
             $edited = false;
 
+            // Update reference
             if (null === $object->getReference()) {
                 $edited = true;
                 $object->setReference($this->generator->generate());
             }
 
+            // Update price
             if (null === $object->getPrice()) {
                 $account = $object->getAccount();
 
@@ -91,6 +92,7 @@ class CouponSubscriber implements EventSubscriber
             }
 
             if ($edited && $create) {
+                $meta = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($meta, $object);
             }
         }
