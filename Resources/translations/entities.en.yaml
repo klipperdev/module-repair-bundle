@@ -75,6 +75,7 @@ coupon.fields.customer_reference: Customer reference
 coupon.fields.internal_contract_reference: Internal contract reference
 coupon.fields.price: Price
 coupon.fields.reference: Reference
+coupon.fields.used_at: Used at
 coupon.fields.valid_until: Valid until
 coupon.associations.invoice_address: Invoice address
 coupon.associations.shipping_address: Shipping address

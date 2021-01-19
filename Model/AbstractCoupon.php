@@ -139,6 +139,15 @@ abstract class AbstractCoupon implements CouponInterface
      */
     protected ?RepairInterface $usedByRepair = null;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @Assert\Type(type="datetime")
+     *
+     * @Serializer\Expose
+     */
+    protected ?\DateTimeInterface $usedAt = null;
+
     public function setReference(?string $reference): self
     {
         $this->reference = $reference;
@@ -245,5 +254,17 @@ abstract class AbstractCoupon implements CouponInterface
     public function getUsedByRepair(): ?RepairInterface
     {
         return $this->usedByRepair;
+    }
+
+    public function setUsedAt(?\DateTimeInterface $usedAt): self
+    {
+        $this->usedAt = $usedAt;
+
+        return $this;
+    }
+
+    public function getUsedAt(): ?\DateTimeInterface
+    {
+        return $this->usedAt;
     }
 }

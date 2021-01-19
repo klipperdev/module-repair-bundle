@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
+use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Module\RepairBundle\Model\CouponInterface;
@@ -27,6 +28,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CouponSubscriber implements EventSubscriber
 {
+    use DoctrineListenerChoiceTrait;
+
     private CodeGenerator $generator;
 
     private TranslatorInterface $translator;
@@ -63,6 +66,7 @@ class CouponSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         if ($object instanceof CouponInterface) {
+            $changeSet = $uow->getEntityChangeSet($object);
             $edited = false;
 
             // Update reference
@@ -89,6 +93,27 @@ class CouponSubscriber implements EventSubscriber
                         'validators'
                     ), $object, 'price');
                 }
+            }
+
+            // Update status and used at
+            if ($create && null !== $object->getUsedByRepair()) {
+                $edited = true;
+                $object->setStatus($this->getChoice($em, 'coupon_status', 'used'));
+                $object->setUsedAt(new \DateTime());
+            } elseif (isset($changeSet['usedByRepair'])) {
+                $edited = true;
+                $now = new \DateTime();
+
+                if (null !== $changeSet['usedByRepair'][1]) {
+                    $statusValue = 'used';
+                } elseif (null !== $object->getValidUntil() && $object->getValidUntil() < $now) {
+                    $statusValue = 'expired';
+                } else {
+                    $statusValue = 'valid';
+                }
+
+                $object->setStatus($this->getChoice($em, 'coupon_status', $statusValue));
+                $object->setUsedAt('used' === $statusValue ? $now : null);
             }
 
             if ($edited && $create) {

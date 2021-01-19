@@ -91,4 +91,11 @@ interface CouponInterface extends
     public function setUsedByRepair(?RepairInterface $usedByRepair);
 
     public function getUsedByRepair(): ?RepairInterface;
+
+    /**
+     * @return static
+     */
+    public function setUsedAt(?\DateTimeInterface $usedAt);
+
+    public function getUsedAt(): ?\DateTimeInterface;
 }
