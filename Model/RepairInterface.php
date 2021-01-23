@@ -23,6 +23,7 @@ use Klipper\Module\CarrierBundle\Model\ShippingInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableOptionalInterface;
+use Klipper\Module\PartnerBundle\Model\Traits\AccountOwnerableInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableOptionalInterface;
@@ -34,6 +35,7 @@ use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableOptionalInte
  * @author François Pluchino <francois.pluchino@klipper.dev>
  */
 interface RepairInterface extends
+    AccountOwnerableInterface,
     AccountableOptionalInterface,
     ContactableOptionalInterface,
     CurrencyableInterface,

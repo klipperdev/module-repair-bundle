@@ -19,6 +19,7 @@ use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
 use Klipper\Component\DoctrineChoice\Validator\Constraints\EntityDoctrineChoice;
 use Klipper\Component\Model\Traits\CurrencyableTrait;
 use Klipper\Component\Model\Traits\OrganizationalRequiredTrait;
+use Klipper\Component\Model\Traits\OwnerableOptionalTrait;
 use Klipper\Component\Model\Traits\TimestampableTrait;
 use Klipper\Component\Model\Traits\UserTrackableTrait;
 use Klipper\Component\Security\Model\UserInterface;
@@ -46,6 +47,7 @@ abstract class AbstractRepair implements RepairInterface
     use ContactableOptionalTrait;
     use CurrencyableTrait;
     use OrganizationalRequiredTrait;
+    use OwnerableOptionalTrait;
     use PriceListableTrait;
     use ProductableTrait;
     use ProductCombinationableTrait;
