@@ -143,4 +143,11 @@ interface RepairModuleInterface extends
     public function setWarrantyLengthInMonth(?int $warrantyLengthInMonth);
 
     public function getWarrantyLengthInMonth(): ?int;
+
+    /**
+     * @return static
+     */
+    public function setDefaultCouponValidityInMonth(?int $defaultCouponValidityInMonth);
+
+    public function getDefaultCouponValidityInMonth(): ?int;
 }

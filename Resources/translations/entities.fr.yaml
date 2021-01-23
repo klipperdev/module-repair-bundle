@@ -63,6 +63,7 @@ repair_module.fields.price_calculation: Calcul du prix
 repair_module.fields.repair_time_in_day: Durée de réparation (en jours)
 repair_module.fields.swap: Echange
 repair_module.fields.warranty_length_in_month: Durée de garantie (en mois)
+repair_module.fields.default_coupon_validity_in_month: Durée de validité du coupon (en mois)
 repair_module.associations.default_carrier: Transporteur par défaut
 repair_module.associations.default_invoice_address: Adresse de facturation par défaut
 repair_module.associations.default_shipping_address: Adresse d'expédition par défaut

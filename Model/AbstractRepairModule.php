@@ -237,6 +237,15 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      */
     protected ?int $warrantyLengthInMonth = null;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     *
+     * @Assert\Type(type="integer")
+     *
+     * @Serializer\Expose
+     */
+    protected ?int $defaultCouponValidityInMonth = null;
+
     public function setAccount(?AccountInterface $account): self
     {
         $this->account = $account;
@@ -438,5 +447,17 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     public function getWarrantyLengthInMonth(): ?int
     {
         return $this->warrantyLengthInMonth;
+    }
+
+    public function setDefaultCouponValidityInMonth(?int $defaultCouponValidityInMonth): self
+    {
+        $this->defaultCouponValidityInMonth = $defaultCouponValidityInMonth;
+
+        return $this;
+    }
+
+    public function getDefaultCouponValidityInMonth(): ?int
+    {
+        return $this->defaultCouponValidityInMonth;
     }
 }
