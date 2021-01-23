@@ -114,8 +114,6 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @Assert\Type(type="datetime")
      *
-     * @Assert\NotBlank
-     *
      * @Serializer\Expose
      */
     protected ?\DateTimeInterface $validUntil = null;

@@ -95,6 +95,25 @@ class CouponSubscriber implements EventSubscriber
                 }
             }
 
+            //Update valid until
+            if (null === $object->getValidUntil()) {
+                $account = $object->getAccount();
+                $validityPeriod = 1;
+                $edited = true;
+
+                if ($account instanceof RepairModuleableInterface
+                    && $account->getRepairModule()
+                    && null !== $account->getRepairModule()->getDefaultCouponValidityInMonth()
+                ) {
+                    $validityPeriod = $account->getRepairModule()->getDefaultCouponValidityInMonth();
+                }
+
+                $validityDate = new \DateTime();
+                $validityDate->setTime(0, 0, 0);
+                $validityDate->add(new \DateInterval((int) $validityPeriod.' months'));
+                $object->setValidUntil($validityDate);
+            }
+
             // Update status and used at
             if ($create && null !== $object->getUsedByRepair()) {
                 $edited = true;
