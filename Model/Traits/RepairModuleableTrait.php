@@ -36,7 +36,7 @@ trait RepairModuleableTrait
      * @Serializer\Expose
      * @Serializer\ReadOnly
      * @Serializer\MaxDepth(3)
-     * @Serializer\Groups({"View"})
+     * @Serializer\Groups({"View", "ViewsDetails"})
      */
     protected ?RepairModuleInterface $repairModule = null;
 
