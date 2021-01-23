@@ -80,7 +80,7 @@ coupon.fields.reference: Référence
 coupon.fields.used_at: Utilisé le
 coupon.fields.valid_until: Valable jusqu'au
 coupon.associations.invoice_address: Adresse de facturation
-coupon.associations.shipping_address: Adresse d'expédition
+coupon.associations.shipping_address: Adresse de validité
 coupon.associations.status: Statut
 coupon.associations.supplier: Prestataire
 coupon.associations.used_by_repair: Utilisé par la réparation
