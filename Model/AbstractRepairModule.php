@@ -89,7 +89,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @Serializer\Expose
      */
-    protected ?string $customerReference = null;
+    protected ?string $supplierReference = null;
 
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
@@ -292,16 +292,16 @@ abstract class AbstractRepairModule implements RepairModuleInterface
         return $this->internalContractReference;
     }
 
-    public function setCustomerReference(?string $customerReference): self
+    public function setSupplierReference(?string $supplierReference): self
     {
-        $this->customerReference = $customerReference;
+        $this->supplierReference = $supplierReference;
 
         return $this;
     }
 
-    public function getCustomerReference(): ?string
+    public function getSupplierReference(): ?string
     {
-        return $this->customerReference;
+        return $this->supplierReference;
     }
 
     public function setType(?string $type): self

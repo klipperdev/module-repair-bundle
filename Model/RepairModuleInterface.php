@@ -50,9 +50,9 @@ interface RepairModuleInterface extends
     /**
      * @return static
      */
-    public function setCustomerReference(?string $customerReference);
+    public function setSupplierReference(?string $supplierReference);
 
-    public function getCustomerReference(): ?string;
+    public function getSupplierReference(): ?string;
 
     /**
      * @return static

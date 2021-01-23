@@ -54,13 +54,13 @@ repair_breakdown.name.plural: Pannes de la réparation
 repair_module.name: Module de réparation
 repair_module.name.plural: Modules de réparation
 repair_module.fields.comment: Commentaire
-repair_module.fields.customer_reference: Référence du client
 repair_module.fields.default_price: Prix par défaut
 repair_module.fields.excluded_scope: Périmètre exclus
 repair_module.fields.internal_contract_reference: Référence du contrat interne
 repair_module.fields.identifier_type: Type d'identification
 repair_module.fields.price_calculation: Calcul du prix
 repair_module.fields.repair_time_in_day: Durée de réparation (en jours)
+repair_module.fields.supplier_reference: Référence du fournisseur
 repair_module.fields.swap: Echange
 repair_module.fields.warranty_length_in_month: Durée de garantie (en mois)
 repair_module.fields.default_coupon_validity_in_month: Durée de validité du coupon (en mois)
@@ -73,11 +73,11 @@ repair_module.associations.supplier: Prestataire
 # Coupon
 coupon.name: Coupon
 coupon.name.plural: Coupons
-coupon.fields.customer_reference: Référence du client
 coupon.fields.internal_contract_reference: Référence du contrat interne
 coupon.fields.order_reference: Référence de la commande
 coupon.fields.price: Prix
 coupon.fields.reference: Référence
+coupon.fields.supplier_reference: Référence du fournisseur
 coupon.fields.used_at: Utilisé le
 coupon.fields.valid_until: Valable jusqu'au
 coupon.associations.invoice_address: Adresse de facturation

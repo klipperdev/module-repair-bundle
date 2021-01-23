@@ -75,7 +75,7 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @Serializer\Expose
      */
-    protected ?string $customerReference = null;
+    protected ?string $supplierReference = null;
 
     /**
      * @ORM\ManyToOne(
@@ -211,16 +211,16 @@ abstract class AbstractCoupon implements CouponInterface
         return $this->internalContractReference;
     }
 
-    public function setCustomerReference(?string $customerReference): self
+    public function setSupplierReference(?string $supplierReference): self
     {
-        $this->customerReference = $customerReference;
+        $this->supplierReference = $supplierReference;
 
         return $this;
     }
 
-    public function getCustomerReference(): ?string
+    public function getSupplierReference(): ?string
     {
-        return $this->customerReference;
+        return $this->supplierReference;
     }
 
     public function setInvoiceAddress(?PartnerAddressInterface $invoiceAddress): self
