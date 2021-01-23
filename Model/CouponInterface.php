@@ -40,6 +40,13 @@ interface CouponInterface extends
     /**
      * @return static
      */
+    public function setOrderReference(?string $orderReference);
+
+    public function getOrderReference(): ?string;
+
+    /**
+     * @return static
+     */
     public function setInternalContractReference(?string $internalContractReference);
 
     public function getInternalContractReference(): ?string;

@@ -54,6 +54,17 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @Serializer\Expose
      */
+    protected ?string $orderReference = null;
+
+    /**
+     * @ORM\Column(type="string", length=128, nullable=true)
+     *
+     * @Assert\Type(type="string")
+     * @Assert\Length(min=0, max=128)
+     * @Assert\NotBlank
+     *
+     * @Serializer\Expose
+     */
     protected ?string $internalContractReference = null;
 
     /**
@@ -174,6 +185,18 @@ abstract class AbstractCoupon implements CouponInterface
     public function getReference(): ?string
     {
         return $this->reference;
+    }
+
+    public function setOrderReference(?string $orderReference): self
+    {
+        $this->orderReference = $orderReference;
+
+        return $this;
+    }
+
+    public function getOrderReference(): ?string
+    {
+        return $this->orderReference;
     }
 
     public function setInternalContractReference(?string $internalContractReference): self

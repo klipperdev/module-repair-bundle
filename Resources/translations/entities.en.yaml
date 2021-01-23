@@ -75,6 +75,7 @@ coupon.name: Coupon
 coupon.name.plural: Coupons
 coupon.fields.customer_reference: Customer reference
 coupon.fields.internal_contract_reference: Internal contract reference
+coupon.fields.order_reference: Order reference
 coupon.fields.price: Price
 coupon.fields.reference: Reference
 coupon.fields.used_at: Used at
