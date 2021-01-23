@@ -171,8 +171,6 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *     fetch="EAGER"
      * )
      *
-     * @Assert\NotBlank
-     *
      * @Serializer\Expose
      * @Serializer\MaxDepth(2)
      */
@@ -184,8 +182,6 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *     fetch="EAGER"
      * )
      *
-     * @Assert\NotBlank
-     *
      * @Serializer\Expose
      * @Serializer\MaxDepth(2)
      */
@@ -196,8 +192,6 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *     targetEntity="Klipper\Module\CarrierBundle\Model\CarrierInterface",
      *     fetch="EAGER"
      * )
-     *
-     * @Assert\NotBlank
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
