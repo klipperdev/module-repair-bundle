@@ -68,6 +68,7 @@ repair_module.associations.default_carrier: Default carrier
 repair_module.associations.default_invoice_address: Default invoice address
 repair_module.associations.default_shipping_address: Default shipping address
 repair_module.associations.default_status: Default status
+repair_module.associations.supplier: Provider
 
 # Coupon
 coupon.name: Coupon
@@ -81,4 +82,5 @@ coupon.fields.valid_until: Valid until
 coupon.associations.invoice_address: Invoice address
 coupon.associations.shipping_address: Shipping address
 coupon.associations.status: Status
+coupon.associations.supplier: Provider
 coupon.associations.used_by_repair: Used by repair

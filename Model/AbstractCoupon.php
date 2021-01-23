@@ -17,6 +17,7 @@ use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
 use Klipper\Component\DoctrineChoice\Validator\Constraints\EntityDoctrineChoice;
 use Klipper\Component\Model\Traits\OrganizationalRequiredTrait;
 use Klipper\Component\Model\Traits\TimestampableTrait;
+use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableRequiredTrait;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -88,6 +89,23 @@ abstract class AbstractCoupon implements CouponInterface
      * @Serializer\Expose
      */
     protected ?PartnerAddressInterface $shippingAddress = null;
+
+    /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Assert\NotNull
+     * @Assert\Expression(
+     *     expression="!(!value || !value.isSupplier())",
+     *     message="klipper_repair.repair_module.invalid_supplier"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     */
+    protected ?AccountInterface $supplier = null;
 
     /**
      * @ORM\Column(type="float", nullable=true)
@@ -204,6 +222,18 @@ abstract class AbstractCoupon implements CouponInterface
     public function getShippingAddress(): ?PartnerAddressInterface
     {
         return $this->shippingAddress;
+    }
+
+    public function setSupplier(?AccountInterface $supplier): self
+    {
+        $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getSupplier(): ?AccountInterface
+    {
+        return $this->supplier;
     }
 
     public function setPrice(?float $price): self

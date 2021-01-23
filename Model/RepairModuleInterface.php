@@ -17,6 +17,7 @@ use Klipper\Component\Model\Traits\IdInterface;
 use Klipper\Component\Model\Traits\OrganizationalRequiredInterface;
 use Klipper\Component\Model\Traits\TimestampableInterface;
 use Klipper\Module\CarrierBundle\Model\CarrierInterface;
+use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableRequiredInterface;
 
@@ -32,6 +33,13 @@ interface RepairModuleInterface extends
     OrganizationalRequiredInterface,
     TimestampableInterface
 {
+    /**
+     * @return static
+     */
+    public function setSupplier(?AccountInterface $supplier);
+
+    public function getSupplier(): ?AccountInterface;
+
     /**
      * @return static
      */

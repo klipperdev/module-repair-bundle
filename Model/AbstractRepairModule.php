@@ -55,6 +55,23 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     protected ?AccountInterface $account = null;
 
     /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Assert\NotNull
+     * @Assert\Expression(
+     *     expression="!(!value || !value.isSupplier())",
+     *     message="klipper_repair.repair_module.invalid_supplier"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     */
+    protected ?AccountInterface $supplier = null;
+
+    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      *
      * @Assert\Type(type="string")
@@ -255,6 +272,18 @@ abstract class AbstractRepairModule implements RepairModuleInterface
         }
 
         return $this;
+    }
+
+    public function setSupplier(?AccountInterface $supplier): self
+    {
+        $this->supplier = $supplier;
+
+        return $this;
+    }
+
+    public function getSupplier(): ?AccountInterface
+    {
+        return $this->supplier;
     }
 
     public function setInternalContractReference(?string $internalContractReference): self

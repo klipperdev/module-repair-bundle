@@ -114,6 +114,24 @@ class CouponSubscriber implements EventSubscriber
                 $object->setValidUntil($validityDate);
             }
 
+            //Update supplier
+            if (null === $object->getSupplier()) {
+                $account = $object->getAccount();
+
+                if ($account instanceof RepairModuleableInterface
+                    && $account->getRepairModule()
+                    && null !== $account->getRepairModule()->getSupplier()
+                ) {
+                    $edited = true;
+                } else {
+                    ListenerUtil::thrownError($this->translator->trans(
+                        'klipper_repair.coupon.invalid_empty_supplier',
+                        [],
+                        'validators'
+                    ), $object, 'supplier');
+                }
+            }
+
             // Update status and used at
             if ($create && null !== $object->getUsedByRepair()) {
                 $edited = true;
