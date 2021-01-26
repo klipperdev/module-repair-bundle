@@ -1,3 +1,4 @@
+klipper_repair.coupon.create_invalid_module_type: The repair module must be enabled and with the type coupon to create a coupon
 klipper_repair.coupon.invalid_empty_price: The price cannot be determinate automatically
 klipper_repair.repair.account_cannot_be_change_with_coupon: The account cannot be changed if the repair is attached to a coupon
 klipper_repair.repair_module.invalid_supplier: The selected account must be a supplier

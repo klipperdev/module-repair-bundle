@@ -69,6 +69,20 @@ class CouponSubscriber implements EventSubscriber
             $changeSet = $uow->getEntityChangeSet($object);
             $edited = false;
 
+            // Validate type of repair module
+            if ($create && null !== $account = $object->getAccount()) {
+                if (!$account instanceof RepairModuleableInterface
+                    || !$account->getRepairModule()
+                    || 'coupon' !== $account->getRepairModule()->getType()
+                ) {
+                    ListenerUtil::thrownError($this->translator->trans(
+                        'klipper_repair.coupon.create_invalid_module_type',
+                        [],
+                        'validators'
+                    ), $object);
+                }
+            }
+
             // Update reference
             if (null === $object->getReference()) {
                 $edited = true;
