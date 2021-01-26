@@ -113,4 +113,20 @@ interface CouponInterface extends
     public function setUsedAt(?\DateTimeInterface $usedAt);
 
     public function getUsedAt(): ?\DateTimeInterface;
+
+    /**
+     * @return static
+     */
+    public function setRecreditedCoupon(?CouponInterface $recreditedCoupon);
+
+    public function getRecreditedCoupon(): ?CouponInterface;
+
+    /**
+     * @return static
+     */
+    public function setNewCreditedCoupon(?CouponInterface $newCreditedCoupon);
+
+    public function getNewCreditedCoupon(): ?CouponInterface;
+
+    public function isRecredited(): bool;
 }

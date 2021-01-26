@@ -85,3 +85,5 @@ coupon.associations.shipping_address: Adresse de validité
 coupon.associations.status: Statut
 coupon.associations.supplier: Prestataire
 coupon.associations.used_by_repair: Utilisé par la réparation
+coupon.associations.recredited_coupon: Coupon recrédité
+coupon.associations.new_credited_coupon: Nouveau coupon crédité

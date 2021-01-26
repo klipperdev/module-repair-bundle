@@ -83,10 +83,26 @@ class CouponSubscriber implements EventSubscriber
                 }
             }
 
+            // Validate creation of new coupon for recrediting
+            if ($create && null !== $recreditedCoupon = $object->getRecreditedCoupon()) {
+                if ($recreditedCoupon->isRecredited()) {
+                    ListenerUtil::thrownError($this->translator->trans(
+                        'klipper_repair.coupon.coupon_already_recredited',
+                        [],
+                        'validators'
+                    ), $object);
+                }
+            }
+
             // Update reference
             if (null === $object->getReference()) {
                 $edited = true;
-                $object->setReference($this->generator->generate());
+
+                if (null !== $recreditedCoupon = $object->getRecreditedCoupon()) {
+                    $object->setReference($this->generateRecreditedReference($recreditedCoupon->getReference()));
+                } else {
+                    $object->setReference($this->generator->generate());
+                }
             }
 
             // Update price
@@ -172,5 +188,19 @@ class CouponSubscriber implements EventSubscriber
                 $uow->recomputeSingleEntityChangeSet($meta, $object);
             }
         }
+    }
+
+    private function generateRecreditedReference(?string $recreditedReference): ?string
+    {
+        if (!$recreditedReference) {
+            return null;
+        }
+
+        $split = explode('/', $recreditedReference);
+        $reference = $split[0];
+        $position = isset($split[1]) ? (int) $split[1] : 1;
+        ++$position;
+
+        return $reference.'/'.($position);
     }
 }

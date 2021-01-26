@@ -175,6 +175,60 @@ abstract class AbstractCoupon implements CouponInterface
      */
     protected ?\DateTimeInterface $usedAt = null;
 
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
+     *     inversedBy="newCreditedCoupon",
+     *     cascade={"persist", "remove"},
+     *     fetch="EAGER"
+     * )
+     * @ORM\JoinColumn(
+     *     name="recredited_coupon_id",
+     *     referencedColumnName="id",
+     *     onDelete="SET NULL",
+     *     nullable=true
+     * )
+     *
+     * @Assert\Expression(
+     *     expression="!(value && !value.getUsedByRepair())",
+     *     message="klipper_repair.repair_module.recredited_coupon_must_be_used"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\Groups({"ViewsDetails", "View"})
+     */
+    protected ?CouponInterface $recreditedCoupon = null;
+
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
+     *     mappedBy="recreditedCoupon",
+     *     fetch="EAGER"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\Groups({"ViewsDetails", "View"})
+     */
+    protected ?CouponInterface $newCreditedCoupon = null;
+
+    public function __clone()
+    {
+        if (property_exists($this, 'id')) {
+            $this->id = null;
+        }
+
+        $this->createdAt = null;
+        $this->updatedAt = null;
+        $this->validUntil = null;
+        $this->usedByRepair = null;
+        $this->usedAt = null;
+        $this->recreditedCoupon = null;
+        $this->newCreditedCoupon = null;
+        $this->reference = null;
+    }
+
     public function setReference(?string $reference): self
     {
         $this->reference = $reference;
@@ -317,5 +371,37 @@ abstract class AbstractCoupon implements CouponInterface
     public function getUsedAt(): ?\DateTimeInterface
     {
         return $this->usedAt;
+    }
+
+    public function setRecreditedCoupon(?CouponInterface $recreditedCoupon): self
+    {
+        $this->recreditedCoupon = $recreditedCoupon;
+
+        return $this;
+    }
+
+    public function getRecreditedCoupon(): ?CouponInterface
+    {
+        return $this->recreditedCoupon;
+    }
+
+    public function setNewCreditedCoupon(?CouponInterface $newCreditedCoupon): self
+    {
+        $this->newCreditedCoupon = $newCreditedCoupon;
+
+        return $this;
+    }
+
+    public function getNewCreditedCoupon(): ?CouponInterface
+    {
+        return $this->newCreditedCoupon;
+    }
+
+    /**
+     * @Serializer\VirtualProperty("label")
+     */
+    public function isRecredited(): bool
+    {
+        return null !== $this->getNewCreditedCoupon();
     }
 }

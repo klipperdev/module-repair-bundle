@@ -11,6 +11,8 @@
 
 namespace Klipper\Module\RepairBundle\DependencyInjection;
 
+use Klipper\Bundle\ApiBundle\Util\ControllerDefinitionUtil;
+use Klipper\Module\RepairBundle\Controller\ApiCouponController;
 use Klipper\Module\RepairBundle\Doctrine\Listener\RepairSubscriber;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -34,6 +36,8 @@ class KlipperRepairExtension extends Extension
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
 
         $this->configRepair($container, $loader, $config['repair']);
+
+        ControllerDefinitionUtil::set($container, ApiCouponController::class);
     }
 
     /**
