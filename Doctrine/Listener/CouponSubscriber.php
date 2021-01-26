@@ -110,7 +110,7 @@ class CouponSubscriber implements EventSubscriber
 
                 $validityDate = new \DateTime();
                 $validityDate->setTime(0, 0, 0);
-                $validityDate->add(new \DateInterval((int) $validityPeriod.' months'));
+                $validityDate->add(new \DateInterval('P'.((int) $validityPeriod).'M'));
                 $object->setValidUntil($validityDate);
             }
 
