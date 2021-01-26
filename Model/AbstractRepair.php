@@ -175,8 +175,6 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @EntityDoctrineChoice("repair_status")
      *
-     * @Assert\NotBlank
-     *
      * @Serializer\Expose
      */
     protected ?ChoiceInterface $status = null;

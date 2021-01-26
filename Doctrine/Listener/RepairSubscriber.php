@@ -107,6 +107,7 @@ class RepairSubscriber implements EventSubscriber
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
             $this->updateProduct($em, $object, true);
+            $this->updateStatus($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->saveRepairHistory($em, $object, true);
@@ -138,11 +139,21 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
-    private function updateStatus(EntityManagerInterface $em, object $object): void
+    private function updateStatus(EntityManagerInterface $em, object $object, bool $create = false): void
     {
         if ($object instanceof RepairInterface) {
-            $this->changeStatus($em, $object, 'shipping', 'shipped');
-            $this->changeStatus($em, $object, 'swappedToDevice', 'swapped');
+            if ($create) {
+                if (null === $object->getStatus()) {
+                    $repairStatus = $this->getChoice($em, 'repair_status', null);
+
+                    if (null !== $repairStatus) {
+                        $object->setStatus($repairStatus);
+                    }
+                }
+            } else {
+                $this->changeStatus($em, $object, 'shipping', 'shipped');
+                $this->changeStatus($em, $object, 'swappedToDevice', 'swapped');
+            }
         }
     }
 
