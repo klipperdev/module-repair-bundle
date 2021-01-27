@@ -22,9 +22,11 @@ use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
+use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\RepairBundle\Model\RepairHistoryInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
+use Klipper\Module\RepairBundle\Model\Traits\DeviceRepairableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -53,6 +55,26 @@ class RepairSubscriber implements EventSubscriber
         $this->objectFactory = $objectFactory;
         $this->translator = $translator;
         $this->closedStatues = $closedStatues;
+    }
+
+    public static function updatePrice(RepairInterface $object, AccountInterface $account): void
+    {
+        if (null === $object->getPrice()) {
+            if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
+                if ('flat_rate' === $module->getType()) {
+                    $object->setPrice($module->getDefaultPrice() ?? 0.0);
+                } elseif ('coupon' === $module->getType()) {
+                    $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
+                        ? $object->getUsedCoupon()->getPrice()
+                        : 0.0;
+                    $object->setPrice($price);
+                }
+            }
+
+            if (null !== $object->getWarrantyEndDate()) {
+                $object->setPrice(0.0);
+            }
+        }
     }
 
     public function getSubscribedEvents(): array
@@ -85,18 +107,7 @@ class RepairSubscriber implements EventSubscriber
             }
 
             // Price
-            if (null === $object->getPrice()) {
-                if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
-                    if ('flat_rate' === $module->getType()) {
-                        $object->setPrice($module->getDefaultPrice() ?? 0.0);
-                    } elseif ('coupon' === $module->getType()) {
-                        $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
-                            ? $object->getUsedCoupon()->getPrice()
-                            : 0.0;
-                        $object->setPrice($price);
-                    }
-                }
-            }
+            static::updatePrice($object, $account);
         }
     }
 
@@ -106,19 +117,23 @@ class RepairSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
+            $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object, true);
             $this->updateStatus($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
+            $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object, true);
         }
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->validateChangeAccount($em, $object);
+            $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object);
             $this->updateStatus($em, $object);
             $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
+            $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object);
         }
     }
@@ -174,6 +189,35 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+        }
+    }
+
+    private function updateLastRepairOnDevice(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface && null !== $device = $object->getDevice()) {
+            if ($device instanceof DeviceRepairableInterface) {
+                $edited = false;
+                $uow = $em->getUnitOfWork();
+
+                if (($create && null !== $object->getWarrantyEndDate()) || (!$create && isset($changeSet['warrantyEndDate']))) {
+                    $edited = true;
+                    $device->setWarrantyEndDate($object->getWarrantyEndDate());
+
+                    if (null !== $device->getWarrantyEndDate()) {
+                        $device->setLastRepair($object);
+                    }
+                }
+
+                if (null === $device->getLastRepair()) {
+                    $edited = true;
+                    $device->setLastRepair($object);
+                }
+
+                if ($edited) {
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
+                }
             }
         }
     }
@@ -272,6 +316,27 @@ class RepairSubscriber implements EventSubscriber
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
                 }
+            }
+        }
+    }
+
+    private function recreditCoupon(EntityManagerInterface $em, object $object): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+
+            if (null !== $object->getWarrantyEndDate()
+                && null !== $object->getUsedCoupon()
+                && !$object->getUsedCoupon()->isRecredited()
+            ) {
+                $coupon = $object->getUsedCoupon();
+                $newCoupon = clone $coupon;
+                $newCoupon->setRecreditedCoupon($coupon);
+                $newCoupon->setPrice(0);
+
+                $em->persist($newCoupon);
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($newCoupon));
+                $uow->computeChangeSet($classMetadata, $newCoupon);
             }
         }
     }

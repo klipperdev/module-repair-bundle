@@ -65,10 +65,26 @@ class RepairItemSubscriber implements EventSubscriber
         if ($object instanceof RepairInterface) {
             // Price
             if (isset($changeSet['usedCoupon'])) {
-                $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
+                $price = null === $object->getWarrantyEndDate()
+                        && null !== $object->getUsedCoupon()
+                        && null !== $object->getUsedCoupon()->getPrice()
                     ? $object->getUsedCoupon()->getPrice()
                     : 0.0;
+
                 $object->setPrice($price);
+                $this->reCalculateRepairPrice($object);
+            }
+
+            if (isset($changeSet['warrantyEndDate'])) {
+                if (null === $object->getWarrantyEndDate() && null !== $object->getAccount()) {
+                    $object->setPrice(null);
+                    RepairSubscriber::updatePrice($object, $object->getAccount());
+                } else {
+                    $object->setPrice(0.0);
+                }
+            }
+
+            if (isset($changeSet['usedCoupon']) || isset($changeSet['warrantyEndDate'])) {
                 $this->reCalculateRepairPrice($object);
             }
         }

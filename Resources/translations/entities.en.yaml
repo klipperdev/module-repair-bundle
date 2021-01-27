@@ -87,3 +87,7 @@ coupon.associations.supplier: Provider
 coupon.associations.used_by_repair: Used by repair
 coupon.associations.recredited_coupon: Recredited coupon
 coupon.associations.new_credited_coupon: New credited coupon
+
+# Device
+device.fields.warranty_end_date: Warranty end date
+device.associations.last_repair: Last repair
