@@ -70,6 +70,11 @@ repair_module.associations.default_shipping_address: Default shipping address
 repair_module.associations.default_status: Default status
 repair_module.associations.supplier: Provider
 
+# Repair Module Product
+repair_module_product.name: Product of repair module
+repair_module_product.name.plural: Products of repair module
+repair_module_product.fields.specificities: Specificities
+
 # Coupon
 coupon.name: Coupon
 coupon.name.plural: Coupons
