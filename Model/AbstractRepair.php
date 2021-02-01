@@ -161,12 +161,15 @@ abstract class AbstractRepair implements RepairInterface
     protected ?PartnerAddressInterface $shippingAddress = null;
 
     /**
-     * @ORM\ManyToOne(
+     * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
+     *     inversedBy="repair",
+     *     cascade={"persist", "remove"},
      *     fetch="EAGER"
      * )
      *
      * @Serializer\Expose
+     * @Serializer\MaxDepth(2)
      */
     protected ?ShippingInterface $shipping = null;
 
