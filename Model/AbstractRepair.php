@@ -276,6 +276,21 @@ abstract class AbstractRepair implements RepairInterface
      */
     protected ?Collection $repairBreakdowns = null;
 
+    /**
+     * @var null|Collection|RepairHistoryInterface[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairHistoryInterface",
+     *     mappedBy="repair",
+     *     fetch="EXTRA_LAZY",
+     *     cascade={"persist", "remove"}
+     * )
+     * @ORM\OrderBy({
+     *     "createdAt": "DESC"
+     * })
+     */
+    protected ?Collection $repairHistories = null;
+
     public function setReference(?string $reference): self
     {
         $this->reference = $reference;
@@ -531,5 +546,10 @@ abstract class AbstractRepair implements RepairInterface
     public function getRepairBreakdowns(): Collection
     {
         return $this->repairBreakdowns ?: $this->repairBreakdowns = new ArrayCollection();
+    }
+
+    public function getRepairHistories(): Collection
+    {
+        return $this->repairHistories ?: $this->repairHistories = new ArrayCollection();
     }
 }

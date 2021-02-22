@@ -38,6 +38,7 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
+     *     inversedBy="repairHistories",
      *     fetch="EAGER"
      * )
      *
