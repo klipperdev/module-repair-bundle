@@ -168,7 +168,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     fetch="EXTRA_LAZY"
      * )
      *
      * @Serializer\Expose
@@ -179,7 +179,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     fetch="EXTRA_LAZY"
      * )
      *
      * @Serializer\Expose
@@ -190,7 +190,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\CarrierBundle\Model\CarrierInterface",
-     *     fetch="EAGER"
+     *     fetch="EXTRA_LAZY"
      * )
      *
      * @Serializer\Expose
@@ -199,7 +199,10 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     protected ?CarrierInterface $defaultCarrier = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface",
+     *     fetch="EXTRA_LAZY"
+     * )
      *
      * @EntityDoctrineChoice("repair_status")
      *
