@@ -119,6 +119,7 @@ class RepairSubscriber implements EventSubscriber
         foreach ($uow->getScheduledEntityInsertions() as $object) {
             $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object, true);
+            $this->updateAccount($em, $object);
             $this->updateStatus($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
@@ -128,8 +129,9 @@ class RepairSubscriber implements EventSubscriber
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->validateChangeAccount($em, $object);
-            $this->updateLastRepairOnDevice($em, $object, true);
+            $this->updateLastRepairOnDevice($em, $object);
             $this->updateProduct($em, $object);
+            $this->updateAccount($em, $object);
             $this->updateStatus($em, $object);
             $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
@@ -231,6 +233,20 @@ class RepairSubscriber implements EventSubscriber
             if (null !== $device->getProduct() && ($create || (isset($changeSet['device']) && null !== $changeSet['device'][1]))) {
                 $object->setProduct($device->getProduct());
                 $object->setProductCombination($device->getProductCombination());
+            }
+        }
+    }
+
+    private function updateAccount(EntityManagerInterface $em, object $object): void
+    {
+        $uow = $em->getUnitOfWork();
+
+        if ($object instanceof RepairInterface && null !== $device = $object->getDevice()) {
+            if (null !== $object->getAccount() && (null === $device->getAccount() || $object->getAccount()->getId() !== $device->getAccount()->getId())) {
+                $device->setAccount($object->getAccount());
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
             }
         }
     }
