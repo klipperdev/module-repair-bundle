@@ -1,6 +1,7 @@
 # Breakdown
 breakdown.name: Panne
 breakdown.name.plural: Pannes
+breakdown.fields.repair_impossible: Réparation impossible
 
 # Repair place
 repair_place.name: Lieu de réparation

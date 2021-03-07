@@ -1,6 +1,7 @@
 # Breakdown
 breakdown.name: Breakdown
 breakdown.name.plural: Breakdowns
+breakdown.fields.repair_impossible: Repair impossible
 
 # Repair place
 repair_place.name: Repair place
