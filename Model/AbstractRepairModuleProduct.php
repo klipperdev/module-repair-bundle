@@ -35,9 +35,8 @@ abstract class AbstractRepairModuleProduct implements RepairModuleProductInterfa
     use TimestampableTrait;
 
     /**
-     * @ORM\OneToOne(
+     * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairModuleInterface",
-     *     mappedBy="account",
      *     fetch="EAGER"
      * )
      * @ORM\JoinColumn(
