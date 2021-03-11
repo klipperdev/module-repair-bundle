@@ -122,6 +122,11 @@ abstract class AbstractRepair implements RepairInterface
      *     fetch="EAGER"
      * )
      *
+     * @Assert\Expression(
+     *     expression="!(value && value === this.getDevice())",
+     *     message="klipper_repair.repair.swapped_to_device.same_device"
+     * )
+     *
      * @Serializer\Expose
      */
     protected ?DeviceInterface $swappedToDevice = null;
