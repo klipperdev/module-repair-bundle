@@ -16,18 +16,12 @@ repair_status:
         color: '#40C1B8'
         translations:
             fr: { label: Réceptionné }
-    -   value: received_compliant
-        label: Received - Compliant
-        icon: fa-fw fa-check-circle
-        color: '#40C1B8'
-        translations:
-            fr: { label: Réceptionné - Conforme }
     -   value: received_improper
-        label: Received - Improper
+        label: Received improper
         icon: fa-fw fa-exclamation-circle
         color: '#CCCCCC'
         translations:
-            fr: { label: Réceptionné - Non conforme }
+            fr: { label: Réceptionné non conforme }
     -   value: unrepairable_recycling
         label: Unrepairable - Recycling
         icon: fa-fw fa-recycle
