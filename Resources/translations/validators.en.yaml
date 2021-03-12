@@ -3,6 +3,7 @@ klipper_repair.coupon.coupon_already_recredited: The coupon is already recredite
 klipper_repair.coupon.invalid_empty_price: The price cannot be determinate automatically
 klipper_repair.repair.account_cannot_be_change_with_coupon: The account cannot be changed if the repair is attached to a coupon
 klipper_repair.repair.swapped_to_device.same_device: The equipment cannot be swapped by the same equipment
+klipper_repair.repair.previous_repair_already_open: A previous repair is already open
 klipper_repair.repair_module.invalid_supplier: The selected account must be a supplier
 klipper_repair.coupon.invalid_empty_supplier: The provider cannot be determinate automatically
 klipper_repair.repair_module.recredited_coupon_must_be_used: Coupon must be used in order to be recredited

@@ -208,6 +208,14 @@ class RepairSubscriber implements EventSubscriber
                     $device->setWarrantyEndDate($object->getWarrantyEndDate());
                 }
 
+                if ($create && null !== $device->getLastRepair() && !$device->getLastRepair()->isClosed()) {
+                    ListenerUtil::thrownError($this->translator->trans(
+                        'klipper_repair.repair.previous_repair_already_open',
+                        [],
+                        'validators'
+                    ));
+                }
+
                 if ($create || null === $device->getLastRepair()) {
                     $edited = true;
                     $device->setLastRepair($object);
