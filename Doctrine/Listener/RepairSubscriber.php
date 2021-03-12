@@ -201,17 +201,14 @@ class RepairSubscriber implements EventSubscriber
             if ($device instanceof DeviceRepairableInterface) {
                 $edited = false;
                 $uow = $em->getUnitOfWork();
+                $changeSet = $uow->getEntityChangeSet($object);
 
                 if (($create && null !== $object->getWarrantyEndDate()) || (!$create && isset($changeSet['warrantyEndDate']))) {
                     $edited = true;
                     $device->setWarrantyEndDate($object->getWarrantyEndDate());
-
-                    if (null !== $device->getWarrantyEndDate()) {
-                        $device->setLastRepair($object);
-                    }
                 }
 
-                if (null === $device->getLastRepair()) {
+                if ($create || null === $device->getLastRepair()) {
                     $edited = true;
                     $device->setLastRepair($object);
                 }
