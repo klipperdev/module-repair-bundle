@@ -71,10 +71,10 @@ class RepairSubscriber implements EventSubscriber
                     $object->setPrice($price);
                 }
             }
+        }
 
-            if ($object->hasWarrantyApplied()) {
-                $object->setPrice(0.0);
-            }
+        if ($object->hasWarrantyApplied()) {
+            $object->setPrice(0.0);
         }
     }
 

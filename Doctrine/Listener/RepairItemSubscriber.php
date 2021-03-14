@@ -65,7 +65,7 @@ class RepairItemSubscriber implements EventSubscriber
         if ($object instanceof RepairInterface) {
             // Price
             if (isset($changeSet['usedCoupon'])) {
-                $price = null === $object->getWarrantyEndDate()
+                $price = !$object->hasWarrantyApplied()
                         && null !== $object->getUsedCoupon()
                         && null !== $object->getUsedCoupon()->getPrice()
                     ? $object->getUsedCoupon()->getPrice()
@@ -75,8 +75,8 @@ class RepairItemSubscriber implements EventSubscriber
                 $this->reCalculateRepairPrice($object);
             }
 
-            if (isset($changeSet['warrantyEndDate'])) {
-                if (null === $object->getWarrantyEndDate() && null !== $object->getAccount()) {
+            if (isset($changeSet['warrantyApplied'])) {
+                if (!$object->hasWarrantyApplied() && null !== $object->getAccount()) {
                     $object->setPrice(null);
                     RepairSubscriber::updatePrice($object, $object->getAccount());
                 } else {
@@ -84,7 +84,7 @@ class RepairItemSubscriber implements EventSubscriber
                 }
             }
 
-            if (isset($changeSet['usedCoupon']) || isset($changeSet['warrantyEndDate'])) {
+            if (isset($changeSet['usedCoupon']) || isset($changeSet['warrantyApplied'])) {
                 $this->reCalculateRepairPrice($object);
             }
         }
@@ -119,6 +119,16 @@ class RepairItemSubscriber implements EventSubscriber
         $updateRepairPrices = [];
         $updateRepairItemFinalPrices = [];
         $proportionalPriceRepairIds = [];
+
+        // Warranty type
+        if (isset($this->updateRepairPrices['warranty'])) {
+            foreach ($this->updateRepairPrices['warranty'] as $repairId) {
+                $updateRepairPrices[$repairId] = 0.0;
+                $updateRepairItemFinalPrices[] = $repairId;
+            }
+
+            unset($this->updateRepairPrices['warranty']);
+        }
 
         // Flat rate module type
         if (isset($this->updateRepairPrices['flat_rate'])) {
@@ -309,6 +319,10 @@ class RepairItemSubscriber implements EventSubscriber
     {
         $account = $repair->getAccount();
         $type = 'sum';
+
+        if ($repair->hasWarrantyApplied()) {
+            return 'warranty';
+        }
 
         if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
             if (\in_array($module->getType(), ['flat_rate', 'coupon'], true)) {
