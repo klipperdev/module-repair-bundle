@@ -197,6 +197,15 @@ abstract class AbstractRepair implements RepairInterface
     protected ?\DateTimeInterface $warrantyEndDate = null;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
+     */
+    protected bool $warrantyApplied = false;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      *
      * @Assert\Type(type="float")
@@ -482,6 +491,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getWarrantyEndDate(): ?\DateTimeInterface
     {
         return $this->warrantyEndDate;
+    }
+
+    public function setWarrantyApplied(bool $warrantyApplied): self
+    {
+        $this->warrantyApplied = $warrantyApplied;
+
+        return $this;
+    }
+
+    public function hasWarrantyApplied(): bool
+    {
+        return $this->warrantyApplied;
     }
 
     public function setPrice(?float $price): self
