@@ -186,6 +186,13 @@ class RepairItemSubscriber implements EventSubscriber
             }
         }
 
+        // check if the repair has no more items to set price to 0
+        foreach ($ids as $id) {
+            if (!isset($updateRepairPrices[$id])) {
+                $updateRepairPrices[$id] = 0;
+            }
+        }
+
         // Update repair prices
         if (\count($updateRepairPrices) > 0) {
             foreach ($updateRepairPrices as $id => $repairPrice) {
