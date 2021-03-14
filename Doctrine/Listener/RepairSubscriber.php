@@ -123,6 +123,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object, true);
             $this->updateUnderContract($em, $object, true);
+            $this->updateWarrantyEndDate($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
@@ -136,6 +137,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object);
             $this->updateUnderContract($em, $object);
+            $this->updateWarrantyEndDate($em, $object);
             $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
@@ -299,6 +301,31 @@ class RepairSubscriber implements EventSubscriber
                     ;
 
                     $object->setUnderContract($countUnderContract > 0);
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+                }
+            }
+        }
+    }
+
+    private function updateWarrantyEndDate(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+
+            if ($create || null === $object->getWarrantyEndDate()) {
+                $account = $object->getAccount();
+
+                if ($account instanceof RepairModuleableInterface
+                    && null !== $account->getRepairModule()
+                    && (int) $account->getRepairModule()->getWarrantyLengthInMonth() > 0
+                ) {
+                    $endDate = new \DateTime();
+                    $endDate->setTime(0, 0, 0);
+                    $endDate->modify(sprintf('+ %s months', $account->getRepairModule()->getWarrantyLengthInMonth()));
+
+                    $object->setWarrantyEndDate($endDate);
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
