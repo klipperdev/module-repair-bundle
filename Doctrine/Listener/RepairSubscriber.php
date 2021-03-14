@@ -118,12 +118,12 @@ class RepairSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
+            $this->updateWarrantyEndDate($em, $object, true);
             $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object, true);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object, true);
             $this->updateUnderContract($em, $object, true);
-            $this->updateWarrantyEndDate($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
@@ -132,12 +132,12 @@ class RepairSubscriber implements EventSubscriber
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->validateChangeAccount($em, $object);
+            $this->updateWarrantyEndDate($em, $object);
             $this->updateLastRepairOnDevice($em, $object);
             $this->updateProduct($em, $object);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object);
             $this->updateUnderContract($em, $object);
-            $this->updateWarrantyEndDate($em, $object);
             $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
