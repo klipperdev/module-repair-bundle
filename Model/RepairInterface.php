@@ -187,6 +187,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setUnderContract(bool $underContract);
+
+    public function isUnderContract(): bool;
+
+    /**
+     * @return static
+     */
     public function setClosed(bool $closed);
 
     public function isClosed(): bool;

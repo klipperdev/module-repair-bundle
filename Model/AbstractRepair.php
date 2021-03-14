@@ -243,6 +243,15 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Type(type="boolean")
      *
      * @Serializer\Expose
+     */
+    protected bool $underContract = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
      * @Serializer\ReadOnly
      */
     protected bool $closed = false;
@@ -529,6 +538,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getUsedCoupon(): ?CouponInterface
     {
         return $this->usedCoupon;
+    }
+
+    public function setUnderContract(bool $underContract): self
+    {
+        $this->underContract = $underContract;
+
+        return $this;
+    }
+
+    public function isUnderContract(): bool
+    {
+        return $this->underContract;
     }
 
     public function setClosed(bool $closed): self

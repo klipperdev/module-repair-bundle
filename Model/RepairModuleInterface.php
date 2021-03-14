@@ -11,6 +11,7 @@
 
 namespace Klipper\Module\RepairBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
 use Klipper\Component\Model\Traits\EnableInterface;
 use Klipper\Component\Model\Traits\IdInterface;
@@ -158,4 +159,9 @@ interface RepairModuleInterface extends
     public function setDefaultCouponValidityInMonth(?int $defaultCouponValidityInMonth);
 
     public function getDefaultCouponValidityInMonth(): ?int;
+
+    /**
+     * @return Collection|RepairModuleProductInterface[]
+     */
+    public function getRepairModuleProducts(): Collection;
 }

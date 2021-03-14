@@ -37,6 +37,7 @@ abstract class AbstractRepairModuleProduct implements RepairModuleProductInterfa
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairModuleInterface",
+     *     inversedBy="repairModuleProducts",
      *     fetch="EAGER"
      * )
      * @ORM\JoinColumn(

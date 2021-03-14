@@ -18,6 +18,7 @@ repair.fields.tray_reference: Tray reference
 repair.fields.warranty_end_date: Warranty end date
 repair.fields.price: Price
 repair.fields.receipted_at: Receipted at
+repair.fields.under_contract: Under contract
 repair.associations.swapped_to_device: Swapped to device
 repair.associations.status: Status
 repair.associations.repairer: Repairer

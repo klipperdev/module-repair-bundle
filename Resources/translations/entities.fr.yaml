@@ -18,6 +18,7 @@ repair.fields.tray_reference: Bac référence
 repair.fields.warranty_end_date: Date de fin de garantie
 repair.fields.price: Prix
 repair.fields.receipted_at: Reçu le
+repair.fields.under_contract: Sous contrat
 repair.associations.swapped_to_device: Échangé vers l'équipement
 repair.associations.status: Statut
 repair.associations.repairer: Technicien

@@ -11,6 +11,8 @@
 
 namespace Klipper\Module\RepairBundle\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
@@ -260,6 +262,18 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      */
     protected ?int $defaultCouponValidityInMonth = null;
 
+    /**
+     * @var null|Collection|RepairModuleProductInterface[]
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairModuleProductInterface",
+     *     mappedBy="repairModule",
+     *     fetch="EXTRA_LAZY",
+     *     cascade={"persist", "remove"}
+     * )
+     */
+    protected ?Collection $repairModuleProducts = null;
+
     public function setAccount(?AccountInterface $account): self
     {
         $this->account = $account;
@@ -485,5 +499,10 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     public function getDefaultCouponValidityInMonth(): ?int
     {
         return $this->defaultCouponValidityInMonth;
+    }
+
+    public function getRepairModuleProducts(): Collection
+    {
+        return $this->repairModuleProducts ?: $this->repairModuleProducts = new ArrayCollection();
     }
 }

@@ -26,6 +26,7 @@ use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\RepairBundle\Model\RepairHistoryInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
+use Klipper\Module\RepairBundle\Model\RepairModuleProductInterface;
 use Klipper\Module\RepairBundle\Model\Traits\DeviceRepairableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -121,6 +122,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateProduct($em, $object, true);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object, true);
+            $this->updateUnderContract($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
@@ -133,6 +135,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateProduct($em, $object);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object);
+            $this->updateUnderContract($em, $object);
             $this->updateClosed($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
@@ -268,6 +271,38 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+        }
+    }
+
+    private function updateUnderContract(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if ($create || isset($changeSet['product']) || isset($changeSet['device'])) {
+                $account = $object->getAccount();
+                $product = $object->getProduct();
+
+                if (null !== $product && $account instanceof RepairModuleableInterface && null !== $account->getRepairModule()) {
+                    $countUnderContract = $em->createQueryBuilder()
+                        ->select('count(mp.id)')
+                        ->from(RepairModuleProductInterface::class, 'mp')
+                        ->join('mp.repairModule', 'rm')
+                        ->where('mp.repairModule = :module')
+                        ->andWhere('mp.product = :product')
+                        ->setParameter('module', $account->getRepairModule())
+                        ->setParameter('product', $product)
+                        ->getQuery()
+                        ->getSingleScalarResult()
+                    ;
+
+                    $object->setUnderContract($countUnderContract > 0);
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+                }
             }
         }
     }
