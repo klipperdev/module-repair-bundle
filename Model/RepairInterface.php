@@ -166,6 +166,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setWarrantyComment(?string $warrantyComment);
+
+    public function getWarrantyComment(): ?string;
+
+    /**
+     * @return static
+     */
     public function setPrice(?float $price);
 
     public function getPrice(): ?float;

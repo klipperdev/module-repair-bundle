@@ -20,6 +20,7 @@ repair.fields.price: Prix
 repair.fields.receipted_at: Reçu le
 repair.fields.under_contract: Sous contrat
 repair.fields.warranty_applied: Garantie appliquée
+repair.fields.warranty_comment: Commentaire sur la garantie
 repair.associations.swapped_to_device: Échangé vers l'équipement
 repair.associations.status: Statut
 repair.associations.repairer: Technicien

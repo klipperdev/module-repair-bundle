@@ -206,6 +206,16 @@ abstract class AbstractRepair implements RepairInterface
     protected bool $warrantyApplied = false;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     *
+     * @Assert\Type(type="string")
+     * @Assert\Length(min=0, max=65535)
+     *
+     * @Serializer\Expose
+     */
+    protected ?string $warrantyComment = null;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      *
      * @Assert\Type(type="float")
@@ -503,6 +513,18 @@ abstract class AbstractRepair implements RepairInterface
     public function hasWarrantyApplied(): bool
     {
         return $this->warrantyApplied;
+    }
+
+    public function setWarrantyComment(?string $warrantyComment): self
+    {
+        $this->warrantyComment = $warrantyComment;
+
+        return $this;
+    }
+
+    public function getWarrantyComment(): ?string
+    {
+        return $this->warrantyComment;
     }
 
     public function setPrice(?float $price): self
