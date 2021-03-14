@@ -72,7 +72,7 @@ class RepairSubscriber implements EventSubscriber
                 }
             }
 
-            if (null !== $object->getWarrantyEndDate()) {
+            if ($object->hasWarrantyApplied()) {
                 $object->setPrice(0.0);
             }
         }
