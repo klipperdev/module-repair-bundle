@@ -162,7 +162,7 @@ abstract class AbstractCoupon implements CouponInterface
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
-     * @Serializer\Groups({"View"})
+     * @Serializer\Groups({"ViewsDetails", "View"})
      */
     protected ?RepairInterface $usedByRepair = null;
 
