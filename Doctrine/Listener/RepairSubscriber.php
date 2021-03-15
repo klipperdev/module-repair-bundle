@@ -118,13 +118,13 @@ class RepairSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
 
         foreach ($uow->getScheduledEntityInsertions() as $object) {
-            $this->updateWarrantyEndDate($em, $object, true);
             $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object, true);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object, true);
             $this->updateUnderContract($em, $object, true);
             $this->updateClosed($em, $object, true);
+            $this->updateWarrantyEndDate($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object, true);
@@ -132,13 +132,13 @@ class RepairSubscriber implements EventSubscriber
 
         foreach ($uow->getScheduledEntityUpdates() as $object) {
             $this->validateChangeAccount($em, $object);
-            $this->updateWarrantyEndDate($em, $object);
             $this->updateLastRepairOnDevice($em, $object);
             $this->updateProduct($em, $object);
             $this->updateAccount($em, $object);
             $this->updateStatus($em, $object);
             $this->updateUnderContract($em, $object);
             $this->updateClosed($em, $object);
+            $this->updateWarrantyEndDate($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object);
@@ -204,14 +204,7 @@ class RepairSubscriber implements EventSubscriber
     {
         if ($object instanceof RepairInterface && null !== $device = $object->getDevice()) {
             if ($device instanceof DeviceRepairableInterface) {
-                $edited = false;
                 $uow = $em->getUnitOfWork();
-                $changeSet = $uow->getEntityChangeSet($object);
-
-                if (($create && null !== $object->getWarrantyEndDate()) || (!$create && isset($changeSet['warrantyEndDate']))) {
-                    $edited = true;
-                    $device->setWarrantyEndDate($object->getWarrantyEndDate());
-                }
 
                 if ($create && null !== $device->getLastRepair() && !$device->getLastRepair()->isClosed()) {
                     ListenerUtil::thrownError($this->translator->trans(
@@ -221,12 +214,16 @@ class RepairSubscriber implements EventSubscriber
                     ));
                 }
 
-                if ($create || null === $device->getLastRepair()) {
-                    $edited = true;
-                    $device->setLastRepair($object);
+                if (null === $object->getPreviousRepair() && null !== $device->getLastRepair() && $object !== $device->getLastRepair()) {
+                    $object->setPreviousRepair($device->getLastRepair());
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                 }
 
-                if ($edited) {
+                if ($create || null === $device->getLastRepair()) {
+                    $device->setLastRepair($object);
+
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
                 }
@@ -313,25 +310,58 @@ class RepairSubscriber implements EventSubscriber
     {
         if ($object instanceof RepairInterface) {
             $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+            $device = $object->getDevice();
 
-            if ($create || null === $object->getWarrantyEndDate()) {
-                $account = $object->getAccount();
+            if ($object->isClosed()) {
+                $isReparable = null !== $object->getStatus() && 0 !== strpos($object->getStatus()->getValue(), 'unrepairable_');
 
-                if ($account instanceof RepairModuleableInterface
-                    && null !== $account->getRepairModule()
-                    && (int) $account->getRepairModule()->getWarrantyLengthInMonth() > 0
-                ) {
-                    $endDate = new \DateTime();
-                    $endDate->setTime(0, 0, 0);
-                    $endDate->modify(sprintf('+ %s months', $account->getRepairModule()->getWarrantyLengthInMonth()));
+                if (null === $object->getWarrantyEndDate()) {
+                    if ($isReparable) {
+                        $object->setWarrantyEndDate($this->calculateWarrantyEndDate($object->getAccount()));
 
-                    $object->setWarrantyEndDate($endDate);
+                        $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                        $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+                    }
+                } elseif (!$isReparable) {
+                    $object->setWarrantyEndDate(null);
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                 }
+            } elseif (null !== $object->getWarrantyEndDate()) {
+                $object->setWarrantyEndDate(null);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+
+            // Update warranty end date of device with the warranty end date of repair
+            if (null !== $device && $device instanceof DeviceRepairableInterface) {
+                if (($create && null !== $object->getWarrantyEndDate()) || (!$create && isset($changeSet['warrantyEndDate']))) {
+                    $device->setWarrantyEndDate($object->getWarrantyEndDate());
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
+                }
             }
         }
+    }
+
+    private function calculateWarrantyEndDate(object $account): ?\DateTimeInterface
+    {
+        if ($account instanceof RepairModuleableInterface
+            && null !== $account->getRepairModule()
+            && (int) $account->getRepairModule()->getWarrantyLengthInMonth() > 0
+        ) {
+            $endDate = new \DateTime();
+            $endDate->setTime(0, 0, 0);
+            $endDate->modify(sprintf('+ %s months', $account->getRepairModule()->getWarrantyLengthInMonth()));
+
+            return $endDate;
+        }
+
+        return null;
     }
 
     private function updateDeviceStatus(EntityManagerInterface $em, object $object, bool $create = false): void

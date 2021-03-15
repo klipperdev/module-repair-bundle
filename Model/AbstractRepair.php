@@ -276,6 +276,39 @@ abstract class AbstractRepair implements RepairInterface
     protected bool $closed = false;
 
     /**
+     * @ORM\OneToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
+     *     inversedBy="nextRepair",
+     *     cascade={"persist", "remove"},
+     *     fetch="EXTRA_LAZY"
+     * )
+     * @ORM\JoinColumn(
+     *     name="previous_repair_id",
+     *     referencedColumnName="id",
+     *     onDelete="SET NULL",
+     *     nullable=true
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\Groups({"ViewsDetails", "View"})
+     */
+    protected ?RepairInterface $previousRepair = null;
+
+    /**
+     * @ORM\OneToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
+     *     mappedBy="previousRepair",
+     *     fetch="EXTRA_LAZY"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\Groups({"ViewsDetails", "View"})
+     */
+    protected ?RepairInterface $nextRepair = null;
+
+    /**
      * @var null|Collection|RepairItemInterface[]
      *
      * @ORM\OneToMany(
@@ -605,6 +638,30 @@ abstract class AbstractRepair implements RepairInterface
     public function isClosed(): bool
     {
         return $this->closed;
+    }
+
+    public function setPreviousRepair(?RepairInterface $previousRepair): self
+    {
+        $this->previousRepair = $previousRepair;
+
+        return $this;
+    }
+
+    public function getPreviousRepair(): ?RepairInterface
+    {
+        return $this->previousRepair;
+    }
+
+    public function setNextRepair(?RepairInterface $nextRepair): self
+    {
+        $this->nextRepair = $nextRepair;
+
+        return $this;
+    }
+
+    public function getNextRepair(): ?RepairInterface
+    {
+        return $this->nextRepair;
     }
 
     public function getRepairItems(): Collection
