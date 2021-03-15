@@ -216,4 +216,14 @@ interface RepairInterface extends
      * @return Collection|RepairItemInterface[]
      */
     public function getRepairItems(): Collection;
+
+    /**
+     * @return Collection|RepairBreakdownInterface[]
+     */
+    public function getRepairBreakdowns(): Collection;
+
+    /**
+     * @return Collection|RepairHistoryInterface[]
+     */
+    public function getRepairHistories(): Collection;
 }
