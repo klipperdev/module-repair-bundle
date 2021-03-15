@@ -124,6 +124,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateStatus($em, $object, true);
             $this->updateUnderContract($em, $object, true);
             $this->updateClosed($em, $object, true);
+            $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
@@ -138,6 +139,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateStatus($em, $object);
             $this->updateUnderContract($em, $object);
             $this->updateClosed($em, $object);
+            $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
@@ -306,6 +308,24 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
+    private function updateWarrantyApplied(EntityManagerInterface $em, object $object): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+
+            // Clean the warranty applied and warranty comment for the first repair of device
+            if (($object->hasWarrantyApplied() || null !== $object->getWarrantyComment())
+                && null === $object->getPreviousRepair()
+            ) {
+                $object->setWarrantyApplied(false);
+                $object->setWarrantyComment(null);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+        }
+    }
+
     private function updateWarrantyEndDate(EntityManagerInterface $em, object $object, bool $create = false): void
     {
         if ($object instanceof RepairInterface) {
@@ -316,6 +336,7 @@ class RepairSubscriber implements EventSubscriber
             if ($object->isClosed()) {
                 $isReparable = null !== $object->getStatus() && 0 !== strpos($object->getStatus()->getValue(), 'unrepairable_');
 
+                // Define the warranty end date when the repair is closed and repaired
                 if (null === $object->getWarrantyEndDate()) {
                     if ($isReparable) {
                         $object->setWarrantyEndDate($this->calculateWarrantyEndDate($object->getAccount()));
@@ -324,12 +345,14 @@ class RepairSubscriber implements EventSubscriber
                         $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                     }
                 } elseif (!$isReparable) {
+                    // Clean the warranty end date when the repair is closed and unrepaired
                     $object->setWarrantyEndDate(null);
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                 }
             } elseif (null !== $object->getWarrantyEndDate()) {
+                // Clean the warranty end date when the repair is open
                 $object->setWarrantyEndDate(null);
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
