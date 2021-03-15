@@ -398,7 +398,7 @@ abstract class AbstractCoupon implements CouponInterface
     }
 
     /**
-     * @Serializer\VirtualProperty("label")
+     * @Serializer\VirtualProperty
      */
     public function isRecredited(): bool
     {

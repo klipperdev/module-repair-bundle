@@ -83,6 +83,7 @@ repair_module_product.fields.specificities: Specificities
 coupon.name: Coupon
 coupon.name.plural: Coupons
 coupon.fields.internal_contract_reference: Internal contract reference
+coupon.fields.is_recredited: Is recredited
 coupon.fields.order_reference: Order reference
 coupon.fields.price: Price
 coupon.fields.reference: Reference
