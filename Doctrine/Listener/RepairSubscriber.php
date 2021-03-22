@@ -349,7 +349,7 @@ class RepairSubscriber implements EventSubscriber
                 // Define the warranty end date when the repair is closed and repaired
                 if (null === $object->getWarrantyEndDate()) {
                     if ($isReparable) {
-                        $object->setWarrantyEndDate($this->calculateWarrantyEndDate($object->getAccount()));
+                        $object->setWarrantyEndDate($this->calculateWarrantyEndDate($object->getAccount(), $this->getRepairStartDate($object)));
 
                         $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                         $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
@@ -381,14 +381,27 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
-    private function calculateWarrantyEndDate(object $account): ?\DateTimeInterface
+    private function getRepairStartDate(RepairInterface $object): \DateTimeInterface
+    {
+        if (null !== $object->getReceiptedAt()) {
+            return clone $object->getReceiptedAt();
+        }
+
+        if (null !== $object->getCreatedAt()) {
+            return clone $object->getCreatedAt();
+        }
+
+        return new \DateTime();
+    }
+
+    private function calculateWarrantyEndDate(object $account, \DateTimeInterface $startDate): ?\DateTimeInterface
     {
         if ($account instanceof RepairModuleableInterface
             && null !== $account->getRepairModule()
             && (int) $account->getRepairModule()->getWarrantyLengthInMonth() > 0
         ) {
-            $endDate = new \DateTime();
-            $endDate->setTime(0, 0, 0);
+            $endDate = clone $startDate;
+            $endDate->setTime(0, 0);
             $endDate->modify(sprintf('+ %s months', $account->getRepairModule()->getWarrantyLengthInMonth()));
 
             return $endDate;
