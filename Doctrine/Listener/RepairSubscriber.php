@@ -16,6 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Klipper\Component\CodeGenerator\CodeGenerator;
 use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
@@ -112,6 +114,10 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
+    /**
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
     public function onFlush(OnFlushEventArgs $event): void
     {
         $em = $event->getEntityManager();
@@ -276,6 +282,10 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
+    /**
+     * @throws NoResultException
+     * @throws NonUniqueResultException
+     */
     private function updateUnderContract(EntityManagerInterface $em, object $object, bool $create = false): void
     {
         if ($object instanceof RepairInterface) {
