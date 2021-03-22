@@ -250,6 +250,12 @@ abstract class AbstractRepair implements RepairInterface
      *     cascade={"persist", "remove"},
      *     fetch="EAGER"
      * )
+     * @ORM\JoinColumn(
+     *     name="used_coupon_id",
+     *     referencedColumnName="id",
+     *     onDelete="SET NULL",
+     *     nullable=true
+     * )
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(2)
