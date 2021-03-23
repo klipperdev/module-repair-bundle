@@ -214,6 +214,19 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     protected ?ChoiceInterface $defaultStatus = null;
 
     /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface",
+     *     fetch="EXTRA_LAZY"
+     * )
+     *
+     * @EntityDoctrineChoice("repair_status")
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     */
+    protected ?ChoiceInterface $defaultStatusForNoUnderContract = null;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
@@ -439,6 +452,18 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     public function getDefaultStatus(): ?ChoiceInterface
     {
         return $this->defaultStatus;
+    }
+
+    public function setDefaultStatusForNoUnderContract(?ChoiceInterface $defaultStatusForNoUnderContract): self
+    {
+        $this->defaultStatusForNoUnderContract = $defaultStatusForNoUnderContract;
+
+        return $this;
+    }
+
+    public function getDefaultStatusForNoUnderContract(): ?ChoiceInterface
+    {
+        return $this->defaultStatusForNoUnderContract;
     }
 
     public function setComment(?string $comment): self

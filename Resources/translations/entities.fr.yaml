@@ -72,6 +72,7 @@ repair_module.associations.default_carrier: Transporteur par défaut
 repair_module.associations.default_invoice_address: Adresse de facturation par défaut
 repair_module.associations.default_shipping_address: Adresse d'expédition par défaut
 repair_module.associations.default_status: Statut par défaut
+repair_module.associations.default_status_for_no_under_contract: Statut par défaut pour hors contrat
 repair_module.associations.supplier: Prestataire
 
 # Repair Module Product

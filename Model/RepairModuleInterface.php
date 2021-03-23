@@ -128,6 +128,13 @@ interface RepairModuleInterface extends
     /**
      * @return static
      */
+    public function setDefaultStatusForNoUnderContract(?ChoiceInterface $defaultStatusForNoUnderContract);
+
+    public function getDefaultStatusForNoUnderContract(): ?ChoiceInterface;
+
+    /**
+     * @return static
+     */
     public function setComment(?string $comment);
 
     public function getComment(): ?string;

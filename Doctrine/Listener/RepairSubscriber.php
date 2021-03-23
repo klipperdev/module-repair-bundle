@@ -129,8 +129,8 @@ class RepairSubscriber implements EventSubscriber
             $this->updateLastRepairOnDevice($em, $object, true);
             $this->updateProduct($em, $object, true);
             $this->updateAccount($em, $object);
-            $this->updateStatus($em, $object, true);
             $this->updateUnderContract($em, $object, true);
+            $this->updateStatus($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
@@ -144,8 +144,8 @@ class RepairSubscriber implements EventSubscriber
             $this->updateLastRepairOnDevice($em, $object);
             $this->updateProduct($em, $object);
             $this->updateAccount($em, $object);
-            $this->updateStatus($em, $object);
             $this->updateUnderContract($em, $object);
+            $this->updateStatus($em, $object);
             $this->updateClosed($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object);
@@ -176,7 +176,18 @@ class RepairSubscriber implements EventSubscriber
         if ($object instanceof RepairInterface) {
             if ($create) {
                 if (null === $object->getStatus()) {
-                    $repairStatus = $this->getChoice($em, 'repair_status', null);
+                    $account = $object->getAccount();
+                    $repairStatus = null;
+
+                    if ($account instanceof RepairModuleableInterface && null !== ($module = $account->getRepairModule())) {
+                        if (!$object->isUnderContract()) {
+                            $repairStatus = $module->getDefaultStatusForNoUnderContract();
+                        }
+
+                        $repairStatus = $repairStatus ?? $module->getDefaultStatus();
+                    }
+
+                    $repairStatus = $repairStatus ?? $this->getChoice($em, 'repair_status', null);
 
                     if (null !== $repairStatus) {
                         $object->setStatus($repairStatus);

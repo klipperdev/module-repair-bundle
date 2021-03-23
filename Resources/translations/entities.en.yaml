@@ -72,6 +72,7 @@ repair_module.associations.default_carrier: Default carrier
 repair_module.associations.default_invoice_address: Default invoice address
 repair_module.associations.default_shipping_address: Default shipping address
 repair_module.associations.default_status: Default status
+repair_module.associations.default_status_for_no_under_contract: Default status for no under contract
 repair_module.associations.supplier: Provider
 
 # Repair Module Product
