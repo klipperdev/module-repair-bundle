@@ -498,8 +498,7 @@ class RepairSubscriber implements EventSubscriber
             $uow = $em->getUnitOfWork();
 
             // Re-credit coupon only if repair status is one of unrepairable statuses
-            if (null !== $object->getWarrantyEndDate()
-                && null !== $object->getUsedCoupon()
+            if (null !== $object->getUsedCoupon()
                 && !$object->getUsedCoupon()->isRecredited()
                 && null !== $object->getStatus()
                 && 0 === strpos($object->getStatus()->getValue(), 'unrepairable_')
