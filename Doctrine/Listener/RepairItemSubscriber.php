@@ -244,7 +244,8 @@ class RepairItemSubscriber implements EventSubscriber
 
                 foreach ($items as $i => $item) {
                     if ($isProportionalPrice) {
-                        $itemPrice = round((float) $item->getPrice() * $repairPrice / 100, 2);
+                        $ipPrice = (float) $item->getPrice();
+                        $itemPrice = round(($ipPrice / $repairPrice) * $repairPrice, 2);
                     }
 
                     $item->setFinalPrice($itemPrice);
