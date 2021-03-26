@@ -179,7 +179,7 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
      *     inversedBy="newCreditedCoupon",
-     *     cascade={"persist", "remove"},
+     *     cascade={"persist"},
      *     fetch="EAGER"
      * )
      * @ORM\JoinColumn(
