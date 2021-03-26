@@ -206,12 +206,6 @@ abstract class AbstractCoupon implements CouponInterface
      *     mappedBy="recreditedCoupon",
      *     fetch="EAGER"
      * )
-     * @ORM\JoinColumn(
-     *     name="new_credited_coupon_id",
-     *     referencedColumnName="id",
-     *     onDelete="SET NULL",
-     *     nullable=true
-     * )
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
