@@ -25,6 +25,11 @@
             <argument>0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</argument>
         </service>
 
+        <!-- Repair Breakdown Listener -->
+        <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairBreakdownSubscriber">
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
         <!-- Repair Item Listener -->
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairItemSubscriber">
             <tag name="doctrine.event_subscriber" />

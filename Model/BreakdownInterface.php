@@ -29,4 +29,10 @@ interface BreakdownInterface extends
     TimestampableInterface,
     UserTrackableInterface
 {
+    /**
+     * @return static
+     */
+    public function setRepairImpossible(bool $repairImpossible);
+
+    public function isRepairImpossible(): bool;
 }

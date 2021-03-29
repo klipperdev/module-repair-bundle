@@ -57,6 +57,15 @@ abstract class AbstractRepairBreakdown implements RepairBreakdownInterface
      */
     protected ?BreakdownInterface $breakdown = null;
 
+    /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
+     */
+    protected ?bool $repairImpossible = null;
+
     public function setRepair(?RepairInterface $repair): self
     {
         $this->repair = $repair;
@@ -86,5 +95,22 @@ abstract class AbstractRepairBreakdown implements RepairBreakdownInterface
     public function getBreakdown(): ?BreakdownInterface
     {
         return $this->breakdown;
+    }
+
+    public function setRepairImpossible(?bool $repairImpossible): self
+    {
+        $this->repairImpossible = $repairImpossible;
+
+        return $this;
+    }
+
+    public function isRepairImpossible(): bool
+    {
+        return true === $this->repairImpossible;
+    }
+
+    public function isRepairImpossibleInitialized(): bool
+    {
+        return null !== $this->repairImpossible;
     }
 }

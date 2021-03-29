@@ -50,9 +50,10 @@ repair_item.fields.price: Price
 repair_item.fields.internal_comment: Internal comment
 repair_item.fields.public_comment: public comment
 
-# Repair history
+# Repair breakdown
 repair_breakdown.name: Repair breakdown
 repair_breakdown.name.plural: Repair breakdowns
+repair_breakdown.fields.repair_impossible: Repair impossible
 
 # Repair module
 repair_module.name: Repair module

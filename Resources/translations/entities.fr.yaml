@@ -50,9 +50,10 @@ repair_item.fields.price: Prix
 repair_item.fields.internal_comment: Commentaire interne
 repair_item.fields.public_comment: Commentaire public
 
-# Repair history
+# Repair breakdown
 repair_breakdown.name: Panne de la réparation
 repair_breakdown.name.plural: Pannes de la réparation
+repair_breakdown.fields.repair_impossible: Réparation impossible
 
 # Repair module
 repair_module.name: Module de réparation

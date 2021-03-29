@@ -45,4 +45,13 @@ interface RepairBreakdownInterface extends
     public function setBreakdown(?BreakdownInterface $breakdown);
 
     public function getBreakdown(): ?BreakdownInterface;
+
+    /**
+     * @return static
+     */
+    public function setRepairImpossible(?bool $repairImpossible);
+
+    public function isRepairImpossible(): bool;
+
+    public function isRepairImpossibleInitialized(): bool;
 }
