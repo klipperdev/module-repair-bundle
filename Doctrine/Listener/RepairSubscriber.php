@@ -457,9 +457,13 @@ class RepairSubscriber implements EventSubscriber
 
                     break;
 
+                case 'unrepairable_return_to_customer':
+                    $newDeviceStatusValue = 'broken_down_return_to_customer';
+
+                    break;
+
                 case 'waiting':
                 case 'received_improper':
-                case 'unrepairable_return_to_customer':
                     $newDeviceStatusValue = 'broken_down';
 
                     break;
