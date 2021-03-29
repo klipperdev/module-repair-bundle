@@ -132,6 +132,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateUnderContract($em, $object, true);
             $this->updateStatus($em, $object, true);
             $this->updateClosed($em, $object, true);
+            $this->updateTrayReference($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
@@ -147,6 +148,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateUnderContract($em, $object);
             $this->updateStatus($em, $object);
             $this->updateClosed($em, $object);
+            $this->updateTrayReference($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object);
             $this->updateDeviceStatus($em, $object);
@@ -327,6 +329,20 @@ class RepairSubscriber implements EventSubscriber
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
                 }
+            }
+        }
+    }
+
+    private function updateTrayReference(EntityManagerInterface $em, object $object): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+
+            if (null !== $object->getTrayReference() && $object->isClosed()) {
+                $object->setTrayReference(null);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
             }
         }
     }
