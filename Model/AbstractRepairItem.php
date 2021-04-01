@@ -96,20 +96,20 @@ abstract class AbstractRepairItem implements RepairItemInterface
     protected ?float $finalPrice = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min=0, max=255)
+     * @Assert\Length(min=0, max=65535)
      *
      * @Serializer\Expose
      */
     protected ?string $internalComment = null;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
-     * @Assert\Length(min=0, max=255)
+     * @Assert\Length(min=0, max=65535)
      *
      * @Serializer\Expose
      */
