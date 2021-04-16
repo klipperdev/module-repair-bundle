@@ -18,10 +18,13 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
+use Klipper\Component\Resource\Object\ObjectFactoryInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Price\PriceManagerInterface;
+use Klipper\Module\RepairBundle\Model\RepairBreakdownInterface;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 use Klipper\Module\RepairBundle\Model\RepairItemInterface;
+use Klipper\Module\RepairBundle\Model\Traits\ProductBreakdownableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 
 /**
@@ -31,14 +34,19 @@ class RepairItemSubscriber implements EventSubscriber
 {
     private PriceManagerInterface $priceManager;
 
+    private ObjectFactoryInterface $objectFactory;
+
     /**
      * @var array[] Array<int[]|string[]>
      */
     private array $updateRepairPrices = [];
 
-    public function __construct(PriceManagerInterface $priceManager)
-    {
+    public function __construct(
+        PriceManagerInterface $priceManager,
+        ObjectFactoryInterface $objectFactory
+    ) {
         $this->priceManager = $priceManager;
+        $this->objectFactory = $objectFactory;
     }
 
     public function getSubscribedEvents(): array
@@ -286,6 +294,7 @@ class RepairItemSubscriber implements EventSubscriber
 
             $account = $repair->getAccount();
             $priceList = $repair->getPriceList();
+            $product = $object->getProduct();
 
             if (null === $priceList && $account instanceof PriceListableInterface) {
                 $edited = true;
@@ -295,7 +304,7 @@ class RepairItemSubscriber implements EventSubscriber
             if (null === $object->getPrice()) {
                 $priceEdited = true;
                 $object->setPrice($this->priceManager->getProductPrice(
-                    $object->getProduct(),
+                    $product,
                     $object->getProductCombination(),
                     $priceList,
                     1,
@@ -305,6 +314,32 @@ class RepairItemSubscriber implements EventSubscriber
                 ));
             } elseif (isset($changeSet['price'])) {
                 $priceEdited = true;
+            }
+
+            // Add associated breakdown
+            if ($create && $product instanceof ProductBreakdownableInterface && null !== ($breakdown = $product->getOperationBreakdown())) {
+                $breakdownExist = false;
+
+                foreach ($repair->getRepairBreakdowns() as $repairBreakdown) {
+                    if ($breakdown === $repairBreakdown->getBreakdown()) {
+                        $breakdownExist = true;
+
+                        break;
+                    }
+                }
+
+                if (!$breakdownExist) {
+                    /** @var RepairBreakdownInterface $operationBreakdown */
+                    $operationBreakdown = $this->objectFactory->create(RepairBreakdownInterface::class);
+                    $operationBreakdown->setRepair($repair);
+                    $operationBreakdown->setBreakdown($breakdown);
+                    $operationBreakdown->setRepairImpossible($breakdown->isRepairImpossible());
+                    $repair->getRepairBreakdowns()->add($operationBreakdown);
+
+                    $em->persist($operationBreakdown);
+                    $repairClassMeta = $em->getClassMetadata(ClassUtils::getClass($operationBreakdown));
+                    $uow->computeChangeSet($repairClassMeta, $operationBreakdown);
+                }
             }
 
             if (($edited || $priceEdited) && $create) {

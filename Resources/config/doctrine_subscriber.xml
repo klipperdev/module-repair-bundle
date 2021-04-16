@@ -34,6 +34,7 @@
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairItemSubscriber">
             <tag name="doctrine.event_subscriber" />
             <argument type="service" id="klipper_module_product.price_manager"/>
+            <argument type="service" id="klipper_resource.object_factory"/>
         </service>
 
         <!-- Coupon Listener -->
