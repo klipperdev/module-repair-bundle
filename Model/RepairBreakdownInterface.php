@@ -51,6 +51,8 @@ interface RepairBreakdownInterface extends
      */
     public function setRepairImpossible(?bool $repairImpossible);
 
+    public function getRepairImpossible(): ?bool;
+
     public function isRepairImpossible(): bool;
 
     public function isRepairImpossibleInitialized(): bool;

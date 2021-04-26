@@ -104,6 +104,11 @@ abstract class AbstractRepairBreakdown implements RepairBreakdownInterface
         return $this;
     }
 
+    public function getRepairImpossible(): ?bool
+    {
+        return $this->repairImpossible;
+    }
+
     public function isRepairImpossible(): bool
     {
         return true === $this->repairImpossible;
