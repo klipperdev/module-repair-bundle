@@ -44,6 +44,11 @@
             <argument type="service" id="translator"/>
         </service>
 
+        <!-- Coupon Listener -->
+        <service id="Klipper\Module\RepairBundle\Doctrine\Listener\DeviceSubscriber">
+            <tag name="doctrine.event_subscriber" />
+        </service>
+
         <service id="klipper_repair.generator.coupon_reference" class="Klipper\Component\CodeGenerator\CodeGenerator">
             <argument>8</argument>
             <argument>8</argument>
