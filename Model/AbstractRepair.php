@@ -282,6 +282,16 @@ abstract class AbstractRepair implements RepairInterface
     protected bool $closed = false;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
+     * @Serializer\ReadOnly
+     */
+    protected bool $unrepairable = false;
+
+    /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
      *     inversedBy="nextRepair",
@@ -637,6 +647,18 @@ abstract class AbstractRepair implements RepairInterface
     public function setClosed(bool $closed): self
     {
         $this->closed = $closed;
+
+        return $this;
+    }
+
+    public function isUnrepairable(): bool
+    {
+        return $this->unrepairable;
+    }
+
+    public function setUnrepairable(bool $unrepairable): self
+    {
+        $this->unrepairable = $unrepairable;
 
         return $this;
     }

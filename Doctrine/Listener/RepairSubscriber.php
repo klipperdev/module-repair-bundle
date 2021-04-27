@@ -196,8 +196,8 @@ class RepairSubscriber implements EventSubscriber
                     }
                 }
             } else {
-                $this->changeStatus($em, $object, 'shipping', 'shipped');
                 $this->changeStatus($em, $object, 'swappedToDevice', 'swapped');
+                $this->changeStatus($em, $object, 'shipping', 'shipped');
             }
         }
     }
@@ -211,7 +211,11 @@ class RepairSubscriber implements EventSubscriber
         $uow = $em->getUnitOfWork();
         $changeSet = $uow->getEntityChangeSet($object);
 
-        if (isset($changeSet[$changeSetField]) && (null === $object->getStatus() || $statusValue !== $object->getStatus()->getValue())) {
+        // Automatically change the status only if the repair is repairable
+        if (!$object->isUnrepairable()
+            && isset($changeSet[$changeSetField])
+            && (null === $object->getStatus() || $statusValue !== $object->getStatus()->getValue())
+        ) {
             $repairStatus = $this->getChoice($em, 'repair_status', $statusValue);
 
             if (null !== $repairStatus) {

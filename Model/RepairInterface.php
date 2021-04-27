@@ -215,6 +215,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setUnrepairable(bool $unrepairable);
+
+    public function isUnrepairable(): bool;
+
+    /**
+     * @return static
+     */
     public function setPreviousRepair(?RepairInterface $previousRepair);
 
     public function getPreviousRepair(): ?RepairInterface;
