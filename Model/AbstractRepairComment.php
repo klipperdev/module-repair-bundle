@@ -36,6 +36,7 @@ abstract class AbstractRepairComment implements RepairCommentInterface
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
      *     fetch="EAGER"
      * )
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *

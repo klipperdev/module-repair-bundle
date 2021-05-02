@@ -41,6 +41,7 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
      *     inversedBy="repairHistories",
      *     fetch="EAGER"
      * )
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *

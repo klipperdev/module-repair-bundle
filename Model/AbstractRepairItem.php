@@ -57,6 +57,7 @@ abstract class AbstractRepairItem implements RepairItemInterface
      *     fetch="EAGER",
      *     inversedBy="repairItems"
      * )
+     * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *
