@@ -295,7 +295,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
      *     inversedBy="nextRepair",
-     *     cascade={"persist", "remove"},
+     *     cascade={"persist"},
      *     fetch="EXTRA_LAZY"
      * )
      * @ORM\JoinColumn(
