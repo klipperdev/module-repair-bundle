@@ -98,7 +98,7 @@ class RepairBreakdownSubscriber implements EventSubscriber
                 }
             }
 
-            if ($unrepairable !== $repair->isUnrepairable()) {
+            if ($unrepairable !== $repair->isUnrepairable() && !$uow->isScheduledForDelete($repair)) {
                 $repair->setUnrepairable($unrepairable);
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($repair));
