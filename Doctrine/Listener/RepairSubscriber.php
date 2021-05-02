@@ -48,6 +48,8 @@ class RepairSubscriber implements EventSubscriber
 
     private array $closedStatues;
 
+    private bool $autoRecreditCoupon = true;
+
     public function __construct(
         CodeGenerator $generator,
         ObjectFactoryInterface $objectFactory,
@@ -89,6 +91,16 @@ class RepairSubscriber implements EventSubscriber
             Events::preUpdate,
             Events::onFlush,
         ];
+    }
+
+    public function setAutoRecreditCoupon(bool $enabled): void
+    {
+        $this->autoRecreditCoupon = $enabled;
+    }
+
+    public function isAutoRecreditCoupon(): bool
+    {
+        return $this->autoRecreditCoupon;
     }
 
     public function prePersist(LifecycleEventArgs $event): void
@@ -522,7 +534,8 @@ class RepairSubscriber implements EventSubscriber
             $uow = $em->getUnitOfWork();
 
             // Re-credit coupon only if repair status is one of unrepairable statuses
-            if (null !== $object->getUsedCoupon()
+            if ($this->autoRecreditCoupon
+                && null !== $object->getUsedCoupon()
                 && !$object->getUsedCoupon()->isRecredited()
                 && null !== $object->getStatus()
                 && 0 === strpos($object->getStatus()->getValue(), 'unrepairable_')
