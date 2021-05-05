@@ -32,6 +32,7 @@ use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalTrait;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableTrait;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableTrait;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableTrait;
+use Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -133,13 +134,13 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairPlaceInterface",
+     *     targetEntity="Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface",
      *     fetch="EAGER"
      * )
      *
      * @Serializer\Expose
      */
-    protected ?RepairPlaceInterface $repairPlace = null;
+    protected ?WorkcenterInterface $workcenter = null;
 
     /**
      * @ORM\ManyToOne(
@@ -466,22 +467,22 @@ abstract class AbstractRepair implements RepairInterface
             : null;
     }
 
-    public function setRepairPlace(?RepairPlaceInterface $repairPlace): self
+    public function setWorkcenter(?WorkcenterInterface $workcenter): self
     {
-        $this->repairPlace = $repairPlace;
+        $this->workcenter = $workcenter;
 
         return $this;
     }
 
-    public function getRepairPlace(): ?RepairPlaceInterface
+    public function getWorkcenter(): ?WorkcenterInterface
     {
-        return $this->repairPlace;
+        return $this->workcenter;
     }
 
-    public function getRepairPlaceId()
+    public function getWorkcenterId()
     {
-        return null !== $this->getRepairPlace()
-            ? $this->getRepairPlace()->getId()
+        return null !== $this->getWorkcenter()
+            ? $this->getWorkcenter()->getId()
             : null;
     }
 

@@ -3,11 +3,6 @@ breakdown.name: Breakdown
 breakdown.name.plural: Breakdowns
 breakdown.fields.repair_impossible: Repair impossible
 
-# Repair place
-repair_place.name: Repair place
-repair_place.name.plural: Repair places
-repair_place.fields.subcontractor: Is a subcontractor
-
 # Repair
 repair.name: Repair
 repair.name.plural: Repairs

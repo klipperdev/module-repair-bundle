@@ -21,6 +21,7 @@ use Klipper\Module\CarrierBundle\Model\CarrierInterface;
 use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableRequiredInterface;
+use Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface;
 
 /**
  * Repair module interface.
@@ -93,9 +94,9 @@ interface RepairModuleInterface extends
     /**
      * @return static
      */
-    public function setRepairPlace(?RepairPlaceInterface $repairPlace);
+    public function setWorkcenter(?WorkcenterInterface $workcenter);
 
-    public function getRepairPlace(): ?RepairPlaceInterface;
+    public function getWorkcenter(): ?WorkcenterInterface;
 
     /**
      * @return static

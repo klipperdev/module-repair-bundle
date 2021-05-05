@@ -28,6 +28,7 @@ use Klipper\Module\PartnerBundle\Model\Traits\ContactableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductableOptionalInterface;
 use Klipper\Module\ProductBundle\Model\Traits\ProductCombinationableOptionalInterface;
+use Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface;
 
 /**
  * Repair interface.
@@ -107,14 +108,14 @@ interface RepairInterface extends
     /**
      * @return static
      */
-    public function setRepairPlace(?RepairPlaceInterface $repairPlace);
+    public function setWorkcenter(?WorkcenterInterface $workcenter);
 
-    public function getRepairPlace(): ?RepairPlaceInterface;
+    public function getWorkcenter(): ?WorkcenterInterface;
 
     /**
      * @return null|int|string
      */
-    public function getRepairPlaceId();
+    public function getWorkcenterId();
 
     /**
      * @return static
