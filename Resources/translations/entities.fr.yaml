@@ -8,6 +8,7 @@ repair.name: Réparation
 repair.name.plural: Réparations
 repair.fields.declared_breakdown_by_customer: Pannes déclarées par le client
 repair.fields.reference: Référence
+repair.fields.batch_reference: Réference du lot
 repair.fields.description: Description
 repair.fields.tray_reference: Bac référence
 repair.fields.warranty_end_date: Date de fin de garantie

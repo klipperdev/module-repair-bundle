@@ -58,6 +58,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setBatchReference(?string $batchReference);
+
+    public function getBatchReference(): ?string;
+
+    /**
+     * @return static
+     */
     public function setDescription(?string $description);
 
     public function getDescription(): ?string;
