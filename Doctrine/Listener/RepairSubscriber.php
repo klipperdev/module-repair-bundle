@@ -117,6 +117,10 @@ class RepairSubscriber implements EventSubscriber
                 $object->setReference($this->generator->generate());
             }
 
+            if (null === $object->getBatchReference()) {
+                $object->setBatchReference($object->getReference());
+            }
+
             $account = $object->getAccount();
 
             if (null === $object->getPriceList() && null !== $account && $account instanceof PriceListableInterface) {
