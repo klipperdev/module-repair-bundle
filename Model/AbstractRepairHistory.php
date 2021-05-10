@@ -112,6 +112,10 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
      *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
      *     fetch="EAGER"
      * )
+     * @ORM\JoinColumn(
+     *     onDelete="CASCADE",
+     *     nullable=true
+     * )
      *
      * @Serializer\Expose
      */
