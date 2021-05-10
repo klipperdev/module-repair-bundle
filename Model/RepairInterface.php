@@ -65,6 +65,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setCustomerReference(?string $customerReference);
+
+    public function getCustomerReference(): ?string;
+
+    /**
+     * @return static
+     */
     public function setDescription(?string $description);
 
     public function getDescription(): ?string;

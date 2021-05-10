@@ -89,6 +89,16 @@ abstract class AbstractRepair implements RepairInterface
     protected ?string $batchReference = null;
 
     /**
+     * @ORM\Column(type="string", length=80, nullable=true)
+     *
+     * @Assert\Type(type="string")
+     * @Assert\Length(min=0, max=80)
+     *
+     * @Serializer\Expose
+     */
+    protected ?string $customerReference = null;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
@@ -411,6 +421,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getBatchReference(): ?string
     {
         return $this->batchReference;
+    }
+
+    public function setCustomerReference(?string $customerReference): self
+    {
+        $this->customerReference = $customerReference;
+
+        return $this;
+    }
+
+    public function getCustomerReference(): ?string
+    {
+        return $this->customerReference;
     }
 
     public function setDescription(?string $description): self

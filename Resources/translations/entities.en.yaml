@@ -9,6 +9,7 @@ repair.name.plural: Repairs
 repair.fields.declared_breakdown_by_customer: Declared breakdown by customer
 repair.fields.reference: Reference
 repair.fields.batch_reference: Batch reference
+repair.fields.customer_reference: Customer reference
 repair.fields.description: Description
 repair.fields.tray_reference: Tray reference
 repair.fields.warranty_end_date: Warranty end date
