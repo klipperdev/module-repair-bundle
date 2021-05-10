@@ -45,7 +45,7 @@ interface RepairHistoryInterface extends
     /**
      * @return static
      */
-    public function setPublic(bool $subcontractor);
+    public function setPublic(bool $public);
 
     public function isPublic(): bool;
 
