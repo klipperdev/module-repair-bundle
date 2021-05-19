@@ -1,0 +1,9 @@
+klipper_repair.coupon.create_invalid_module_type: El módulo de reparación debe estar activo y de tipo cupón para poder crear un cupón
+klipper_repair.coupon.coupon_already_recredited: El cupón ya se volvió a abonar. Use el último cupón abonado válido
+klipper_repair.coupon.invalid_empty_price: El precio no se puede determinar automáticamente
+klipper_repair.repair.account_cannot_be_change_with_coupon: La cuenta no se puede modificar si la reparación está enlazada a un cupón
+klipper_repair.repair.swapped_to_device.same_device: El dispositivo no se puede intercambiar por uno idéntico
+klipper_repair.repair.previous_repair_already_open: Una reparación anterior ya está abierta
+klipper_repair.repair_module.invalid_supplier: La cuenta seleccionada debe ser de proveedor
+klipper_repair.coupon.invalid_empty_supplier: El proveedor ne se puede determinar automáticamente
+klipper_repair.repair_module.recredited_coupon_must_be_used: El cupón se debe usar para poder volver a abonarlo.

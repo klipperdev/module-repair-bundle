@@ -1,0 +1,102 @@
+# Breakdown
+breakdown.name: Avería
+breakdown.name.plural: Averías
+breakdown.fields.repair_impossible: Reparación imposible
+
+# Repair
+repair.name: Reparación
+repair.name.plural: Reparaciones
+repair.fields.declared_breakdown_by_customer: Averías declaradas por el cliente
+repair.fields.reference: Referencia
+repair.fields.batch_reference: Referencia del lote
+repair.fields.customer_reference: Referencia cliente
+repair.fields.description: Descripción
+repair.fields.tray_reference: Referencia bandeja
+repair.fields.warranty_end_date: Fecha de fin de garantía
+repair.fields.price: Precio
+repair.fields.receipted_at: Recibido el
+repair.fields.under_contract: Bajo contrato
+repair.fields.warranty_applied: Garantía aplicada
+repair.fields.warranty_comment: Comentario sobre la garantía
+repair.associations.swapped_to_device: Intercambio de dispositivo
+repair.associations.status: Estado
+repair.associations.repairer: Técnico
+repair.associations.invoice_address: Dirección de facturación
+repair.associations.shipping_address: Dirección de entrega
+
+# Repair comment
+repair_comment.name: Comentario de la reparación
+repair_comment.name.plural: Comentarios de la reparación
+repair_comment.fields.description: Descripción
+repair_comment.fields.public: Es público
+
+# Repair history
+repair_history.name: Histórico de la reparación
+repair_history.name.plural: Históricos de la reparación
+repair_history.fields.public: Es público
+repair_history.fields.swap: Es un intercambio
+repair_history.associations.previous_status: Estado anterior
+repair_history.associations.new_status: Nuevo estado
+repair_history.associations.previous_device: Dispositivo anterior
+repair_history.associations.new_device: Nuevo dispositivo
+
+# Repair item
+repair_item.name: Artículo de la reparación
+repair_item.name.plural: Artículos de la reparación
+repair_item.fields.price: Precio
+repair_item.fields.internal_comment: Comentario interno
+repair_item.fields.public_comment: Comentario público
+
+# Repair breakdown
+repair_breakdown.name: Avería de la reparación
+repair_breakdown.name.plural: Averías de la reparación
+repair_breakdown.fields.repair_impossible: Reparación imposible
+
+# Repair module
+repair_module.name: Módulo de reparación
+repair_module.name.plural: Módulos de reparación
+repair_module.fields.comment: Comentario
+repair_module.fields.default_price: Precio por defecto
+repair_module.fields.excluded_scope: Perímetro excluido
+repair_module.fields.internal_contract_reference: Referencia interna del contrato
+repair_module.fields.identifier_type: Tipo de identificación
+repair_module.fields.price_calculation: Cálculo del precio
+repair_module.fields.repair_time_in_day: Duración de la reparación (en días)
+repair_module.fields.supplier_reference: Referencia del proveedor
+repair_module.fields.swap: Intercambio
+repair_module.fields.warranty_length_in_month: Duración de la garantía (en meses)
+repair_module.fields.default_coupon_validity_in_month: Duración de la validez del cupón (en meses)
+repair_module.associations.default_carrier: Transportista por defecto
+repair_module.associations.default_invoice_address: Dirección de facturación por defecto
+repair_module.associations.default_shipping_address: Dirección de entrega por defecto
+repair_module.associations.default_status: Estado por defecto
+repair_module.associations.default_status_for_no_under_contract: Estado por defecto para unidades fuera de contrato
+repair_module.associations.supplier: Proveedor
+
+# Repair Module Product
+repair_module_product.name: Producto del módulo de reparación
+repair_module_product.name.plural: Productos del módulo de reparación
+repair_module_product.fields.specificities: Especificaciones
+
+# Coupon
+coupon.name: Cupón
+coupon.name.plural: Cupones
+coupon.fields.internal_contract_reference: Referencia interna del contrato
+coupon.fields.is_recredited: Es abonado de nuevo
+coupon.fields.order_reference: Ref. del pedido
+coupon.fields.price: Precio
+coupon.fields.reference: Referencia
+coupon.fields.supplier_reference: Ref. del proveedor
+coupon.fields.used_at: Usado el
+coupon.fields.valid_until: Válido hasta el
+coupon.associations.invoice_address: Dirección de facturación
+coupon.associations.shipping_address: Dirección de entrega
+coupon.associations.status: Estado
+coupon.associations.supplier: Proveedor
+coupon.associations.used_by_repair: Usado para la reparación
+coupon.associations.recredited_coupon: Coupon abonado de nuevo
+coupon.associations.new_credited_coupon: Nuevo cupón abonado
+
+# Device
+device.fields.warranty_end_date: Fecha de fin de garantía
+device.associations.last_repair: Última reparación
