@@ -147,6 +147,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateAccount($em, $object);
             $this->updateUnderContract($em, $object, true);
             $this->updateStatus($em, $object, true);
+            $this->updateReceiptedAt($em, $object, true);
             $this->updateClosed($em, $object, true);
             $this->updateTrayReference($em, $object);
             $this->updateWarrantyApplied($em, $object);
@@ -163,6 +164,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateAccount($em, $object);
             $this->updateUnderContract($em, $object);
             $this->updateStatus($em, $object);
+            $this->updateReceiptedAt($em, $object);
             $this->updateClosed($em, $object);
             $this->updateTrayReference($em, $object);
             $this->updateWarrantyApplied($em, $object);
@@ -297,6 +299,25 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
+            }
+        }
+    }
+
+    private function updateReceiptedAt(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            $uow = $em->getUnitOfWork();
+            $changeSet = $uow->getEntityChangeSet($object);
+
+            if (($create && null === $object->getReceiptedAt()) || (!$create && !isset($changeSet['receiptedAt']))) {
+                $repairStatus = null !== $object->getStatus() ? $object->getStatus()->getValue() : '';
+
+                if (\in_array($repairStatus, ['received'], true)) {
+                    $object->setReceiptedAt(new \DateTime());
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+                }
             }
         }
     }
