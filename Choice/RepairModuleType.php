@@ -21,6 +21,7 @@ final class RepairModuleType implements ChoiceInterface
     public static function listIdentifiers(): array
     {
         return [
+            'annual_flat_rate' => 'repair_module_type.annual_flat_rate',
             'fix_price' => 'repair_module_type.fix_price',
             'price_list' => 'repair_module_type.price_list',
             'coupon' => 'repair_module_type.coupon',

@@ -2,6 +2,7 @@
 repair_item.operation: Operation
 
 # Repair Module Type
+repair_module_type.annual_flat_rate: Annual flat rate
 repair_module_type.fix_price: Fix price
 repair_module_type.price_list: Price list
 repair_module_type.coupon: Coupon

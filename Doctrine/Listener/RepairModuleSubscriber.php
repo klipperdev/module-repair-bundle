@@ -40,7 +40,7 @@ class RepairModuleSubscriber implements EventSubscriber
 
         if ($object instanceof RepairModuleInterface) {
             if (null !== $object->getDefaultPrice()
-                && !\in_array($object->getType(), ['fix_price', 'coupon'], true)
+                && !\in_array($object->getType(), ['annual_flat_rate', 'fix_price', 'coupon'], true)
             ) {
                 $object->setDefaultPrice(null);
             }

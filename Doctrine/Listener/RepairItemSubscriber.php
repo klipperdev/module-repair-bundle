@@ -138,6 +138,15 @@ class RepairItemSubscriber implements EventSubscriber
             unset($this->updateRepairPrices['warranty']);
         }
 
+        // Annual flat rate module type
+        if (isset($this->updateRepairPrices['annual_flat_rate'])) {
+            foreach ($this->updateRepairPrices['annual_flat_rate'] as $repairId) {
+                $updateRepairItemFinalPrices[] = $repairId;
+            }
+
+            unset($this->updateRepairPrices['annual_flat_rate']);
+        }
+
         // Flat rate module type
         if (isset($this->updateRepairPrices['fix_price'])) {
             foreach ($this->updateRepairPrices['fix_price'] as $repairId) {
@@ -362,7 +371,7 @@ class RepairItemSubscriber implements EventSubscriber
         }
 
         if ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
-            if (\in_array($module->getType(), ['fix_price', 'coupon'], true)) {
+            if (\in_array($module->getType(), ['annual_flat_rate', 'fix_price', 'coupon'], true)) {
                 $type = $module->getType();
             } elseif (null !== $module->getPriceCalculation()) {
                 $type = $module->getPriceCalculation();
