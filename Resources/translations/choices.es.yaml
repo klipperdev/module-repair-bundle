@@ -2,8 +2,8 @@
 repair_item.operation: Operación
 
 # Repair Module Type
-repair_module_type.flat_rate: Contrato
-repair_module_type.pay_as_you_go: Precio fijo
+repair_module_type.fix_price: Precio único
+repair_module_type.price_list: Lista de precios
 repair_module_type.coupon: Cupón
 
 # Repair Module Swap

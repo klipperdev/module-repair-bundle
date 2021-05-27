@@ -147,7 +147,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @Assert\Type(type="float")
      * @Assert\Expression(
-     *     expression="!(this.getType() in ['flat_rate', 'coupon'] && null === value)",
+     *     expression="!(this.getType() in ['fix_price', 'coupon'] && null === value)",
      *     message="This value should not be blank."
      * )
      *

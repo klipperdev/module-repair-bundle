@@ -68,7 +68,7 @@ class RepairSubscriber implements EventSubscriber
             if (!$object->isUnderContract()) {
                 $object->setPrice(0.0);
             } elseif ($account instanceof RepairModuleableInterface && null !== $module = $account->getRepairModule()) {
-                if ('flat_rate' === $module->getType()) {
+                if ('fix_price' === $module->getType()) {
                     $object->setPrice($module->getDefaultPrice() ?? 0.0);
                 } elseif ('coupon' === $module->getType()) {
                     $price = null !== $object->getUsedCoupon() && null !== $object->getUsedCoupon()->getPrice()
