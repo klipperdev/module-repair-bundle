@@ -260,6 +260,15 @@ abstract class AbstractRepair implements RepairInterface
     protected ?\DateTimeInterface $receiptedAt = null;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     *
+     * @Assert\Type(type="datetime")
+     *
+     * @Serializer\Expose
+     */
+    protected ?\DateTimeInterface $repairedAt = null;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      *
      * @Assert\Type(type="string")
@@ -648,6 +657,18 @@ abstract class AbstractRepair implements RepairInterface
     public function getReceiptedAt(): ?\DateTimeInterface
     {
         return $this->receiptedAt;
+    }
+
+    public function setRepairedAt(?\DateTimeInterface $repairedAtAt): self
+    {
+        $this->repairedAt = $repairedAtAt;
+
+        return $this;
+    }
+
+    public function getRepairedAt(): ?\DateTimeInterface
+    {
+        return $this->repairedAt;
     }
 
     public function setDeclaredBreakdownByCustomer(?string $declaredBreakdownByCustomer): self

@@ -15,6 +15,7 @@ repair.fields.tray_reference: Referencia bandeja
 repair.fields.warranty_end_date: Fecha de fin de garantía
 repair.fields.price: Precio
 repair.fields.receipted_at: Recibido el
+repair.fields.repaired_at: Reparado el
 repair.fields.under_contract: Bajo contrato
 repair.fields.warranty_applied: Garantía aplicada
 repair.fields.warranty_comment: Comentario sobre la garantía

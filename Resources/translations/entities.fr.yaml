@@ -15,6 +15,7 @@ repair.fields.tray_reference: Bac référence
 repair.fields.warranty_end_date: Date de fin de garantie
 repair.fields.price: Prix
 repair.fields.receipted_at: Reçu le
+repair.fields.repaired_at: Réparé le
 repair.fields.under_contract: Sous contrat
 repair.fields.warranty_applied: Garantie appliquée
 repair.fields.warranty_comment: Commentaire sur la garantie

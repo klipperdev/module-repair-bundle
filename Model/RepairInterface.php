@@ -202,6 +202,13 @@ interface RepairInterface extends
     /**
      * @return static
      */
+    public function setRepairedAt(?\DateTimeInterface $repairedAtAt);
+
+    public function getRepairedAt(): ?\DateTimeInterface;
+
+    /**
+     * @return static
+     */
     public function setDeclaredBreakdownByCustomer(?string $declaredBreakdownByCustomer);
 
     public function getDeclaredBreakdownByCustomer(): ?string;
