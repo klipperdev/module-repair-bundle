@@ -167,21 +167,40 @@ class RepairItemSubscriber implements EventSubscriber
 
         // Operation highest price calculation
         if (isset($this->updateRepairPrices['operation_highest_price'])) {
-            $res = $em->createQueryBuilder()
+            $resMax = $em->createQueryBuilder()
                 ->select('r.id as id, MAX(ri.price) as totalPrice')
                 ->from(RepairItemInterface::class, 'ri')
                 ->leftJoin('ri.repair', 'r')
                 ->groupBy('r.id')
                 ->where('r.id in (:ids)')
+                ->andWhere('ri.extra = false')
                 ->setParameter('ids', $this->updateRepairPrices['operation_highest_price'])
                 ->getQuery()
                 ->getResult()
             ;
 
-            foreach ($res as $val) {
+            foreach ($resMax as $val) {
                 $updateRepairPrices[$val['id']] = (float) $val['totalPrice'];
                 $updateRepairItemFinalPrices[] = $val['id'];
                 $proportionalPriceRepairIds[] = $val['id'];
+            }
+
+            $resSum = $em->createQueryBuilder()
+                ->select('r.id as id, SUM(ri.price) as totalPrice')
+                ->from(RepairItemInterface::class, 'ri')
+                ->leftJoin('ri.repair', 'r')
+                ->groupBy('r.id')
+                ->where('r.id in (:ids)')
+                ->andWhere('ri.extra = true')
+                ->setParameter('ids', $this->updateRepairPrices['operation_highest_price'])
+                ->getQuery()
+                ->getResult()
+            ;
+
+            foreach ($resSum as $val) {
+                $updateRepairPrices[$val['id']] = ($updateRepairPrices[$val['id']] ?? 0) + (float) $val['totalPrice'];
+                $updateRepairItemFinalPrices[] = $val['id'];
+                $updateRepairItemFinalPrices[] = $val['id'];
             }
 
             unset($this->updateRepairPrices['operation_highest_price']);
@@ -312,7 +331,7 @@ class RepairItemSubscriber implements EventSubscriber
 
             if (null === $object->getPrice()) {
                 $priceEdited = true;
-                $object->setPrice($this->priceManager->getProductPrice(
+                $price = $this->priceManager->getProductPrice(
                     $product,
                     $object->getProductCombination(),
                     $priceList,
@@ -320,8 +339,10 @@ class RepairItemSubscriber implements EventSubscriber
                     $repair->getProduct(),
                     $repair->getProductCombination(),
                     null !== $repair->getProduct() ? $repair->getProduct()->getProductRange() : null
-                ));
-            } elseif (isset($changeSet['price'])) {
+                );
+                $object->setPrice($price->getPrice());
+                $object->setExtra($price->isExtra());
+            } elseif (isset($changeSet['price']) || isset($changeSet['extra'])) {
                 $priceEdited = true;
             }
 

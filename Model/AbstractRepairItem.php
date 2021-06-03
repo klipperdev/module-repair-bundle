@@ -78,6 +78,15 @@ abstract class AbstractRepairItem implements RepairItemInterface
     protected ?string $type = null;
 
     /**
+     * @ORM\Column(type="boolean")
+     *
+     * @Assert\Type(type="boolean")
+     *
+     * @Serializer\Expose
+     */
+    protected bool $extra = false;
+
+    /**
      * @ORM\Column(type="float", nullable=true)
      *
      * @Assert\Type(type="float")
@@ -145,6 +154,18 @@ abstract class AbstractRepairItem implements RepairItemInterface
     public function getType(): ?string
     {
         return $this->type;
+    }
+
+    public function isExtra(): bool
+    {
+        return $this->extra;
+    }
+
+    public function setExtra(bool $extra): self
+    {
+        $this->extra = $extra;
+
+        return $this;
     }
 
     public function setPrice(?float $price): self

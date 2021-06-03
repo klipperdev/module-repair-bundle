@@ -53,6 +53,13 @@ interface RepairItemInterface extends
     /**
      * @return static
      */
+    public function setExtra(bool $extra);
+
+    public function isExtra(): bool;
+
+    /**
+     * @return static
+     */
     public function setPrice(?float $price);
 
     public function getPrice(): ?float;

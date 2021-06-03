@@ -45,6 +45,7 @@ repair_history.associations.new_device: New device
 repair_item.name: Repair item
 repair_item.name.plural: Repair items
 repair_item.fields.price: Price
+repair_item.fields.extra: Is an extra?
 repair_item.fields.internal_comment: Internal comment
 repair_item.fields.public_comment: public comment
 

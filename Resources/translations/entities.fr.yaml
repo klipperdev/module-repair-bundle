@@ -45,6 +45,7 @@ repair_history.associations.new_device: Nouvel équipement
 repair_item.name: Article de la réparation
 repair_item.name.plural: Articles de la réparation
 repair_item.fields.price: Prix
+repair_item.fields.extra: Est un extra ?
 repair_item.fields.internal_comment: Commentaire interne
 repair_item.fields.public_comment: Commentaire public
 
