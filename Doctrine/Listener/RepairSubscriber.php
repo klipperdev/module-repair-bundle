@@ -158,9 +158,9 @@ class RepairSubscriber implements EventSubscriber
             $this->updateReceiptedAt($em, $object, true);
             $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object, true);
-            $this->validateDevice($em, $object, true);
+            $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
-            $this->updateRepairer($em, $object, true);
+            $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
             $this->updateDeviceStatus($em, $object, true);
@@ -178,7 +178,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateReceiptedAt($em, $object);
             $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object);
-            $this->validateDevice($em, $object);
+            $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
             $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
@@ -367,7 +367,7 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
-    private function validateDevice(EntityManagerInterface $em, object $object, bool $create = false): void
+    private function validateDevice(object $object): void
     {
         if ($object instanceof RepairInterface) {
             if ($object->isClosed() && null === $object->getDevice()) {
@@ -430,7 +430,7 @@ class RepairSubscriber implements EventSubscriber
         }
     }
 
-    private function updateRepairer(EntityManagerInterface $em, object $object, bool $create = false): void
+    private function updateRepairer(EntityManagerInterface $em, object $object): void
     {
         if ($object instanceof RepairInterface) {
             $uow = $em->getUnitOfWork();
