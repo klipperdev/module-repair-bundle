@@ -24,7 +24,7 @@ trait RepairModuleableTrait
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairModuleInterface",
      *     mappedBy="account",
-     *     fetch="EAGER"
+     *     fetch="EXTRA_LAZY"
      * )
      * @ORM\JoinColumn(
      *     name="repair_module_id",
