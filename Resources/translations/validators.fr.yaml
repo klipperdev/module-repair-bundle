@@ -7,3 +7,4 @@ klipper_repair.repair.previous_repair_already_open: Une précédente réparation
 klipper_repair.repair_module.invalid_supplier: Le compte sélectionné doit être un fournisseur
 klipper_repair.coupon.invalid_empty_supplier: Le prestataire ne peut-être déterminé automatiquement
 klipper_repair.repair_module.recredited_coupon_must_be_used: Le coupon doit être utilisé pour pouvoir être recrédité
+klipper_repair.repair.device_required: L'équipement doit être renseigné avant

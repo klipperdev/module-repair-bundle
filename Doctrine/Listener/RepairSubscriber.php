@@ -158,6 +158,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateReceiptedAt($em, $object, true);
             $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object, true);
+            $this->validateDevice($em, $object, true);
             $this->updateTrayReference($em, $object);
             $this->updateRepairer($em, $object, true);
             $this->updateWarrantyApplied($em, $object);
@@ -177,6 +178,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateReceiptedAt($em, $object);
             $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object);
+            $this->validateDevice($em, $object);
             $this->updateTrayReference($em, $object);
             $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
@@ -361,6 +363,19 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+            }
+        }
+    }
+
+    private function validateDevice(EntityManagerInterface $em, object $object, bool $create = false): void
+    {
+        if ($object instanceof RepairInterface) {
+            if ($object->isClosed() && null === $object->getDevice()) {
+                ListenerUtil::thrownError($this->translator->trans(
+                    'klipper_repair.repair.device_required',
+                    [],
+                    'validators'
+                ));
             }
         }
     }
