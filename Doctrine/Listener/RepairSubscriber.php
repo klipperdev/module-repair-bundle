@@ -156,8 +156,8 @@ class RepairSubscriber implements EventSubscriber
             $this->updateUnderContract($em, $object, true);
             $this->updateStatus($em, $object, true);
             $this->updateReceiptedAt($em, $object, true);
-            $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object, true);
+            $this->updateRepairedAt($em, $object);
             $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
             $this->updateRepairer($em, $object);
@@ -176,8 +176,8 @@ class RepairSubscriber implements EventSubscriber
             $this->updateUnderContract($em, $object);
             $this->updateStatus($em, $object);
             $this->updateReceiptedAt($em, $object);
-            $this->updateRepairedAt($em, $object);
             $this->updateClosed($em, $object);
+            $this->updateRepairedAt($em, $object);
             $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
             $this->updateRepairer($em, $object);
@@ -342,7 +342,9 @@ class RepairSubscriber implements EventSubscriber
             $uow = $em->getUnitOfWork();
             $repairStatus = null !== $object->getStatus() ? $object->getStatus()->getValue() : '';
 
-            if (\in_array($repairStatus, ['repaired'], true)) {
+            if (\in_array($repairStatus, ['repaired'], true)
+                || ($object->isClosed() && null === $object->getRepairedAt())
+            ) {
                 $object->setRepairedAt(new \DateTime());
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
