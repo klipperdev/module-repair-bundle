@@ -11,10 +11,6 @@ repair_module_type.coupon: Coupon
 repair_module_swap.standard: Standard
 repair_module_swap.fast: Fast
 
-# Repair Module Identifier Type
-repair_module_identifier_type.imei: IMEI
-repair_module_identifier_type.serial_number: Serial number
-
 # Repair Module Price Calculation
 repair_module_price_calculation.sum: Sum
 repair_module_price_calculation.operation_highest_price: Highest price of operation

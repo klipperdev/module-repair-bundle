@@ -21,6 +21,7 @@ use Klipper\Component\Model\Traits\EnableTrait;
 use Klipper\Component\Model\Traits\OrganizationalRequiredTrait;
 use Klipper\Component\Model\Traits\TimestampableTrait;
 use Klipper\Module\CarrierBundle\Model\CarrierInterface;
+use Klipper\Module\DeviceBundle\Validator\Constraints as KlipperDeviceAssert;
 use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\PartnerBundle\Model\PartnerAddressInterface;
 use Klipper\Module\PartnerBundle\Model\Traits\AccountableTrait;
@@ -121,7 +122,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\Column(type="string", length=128, nullable=true)
      *
-     * @KlipperRepairAssert\RepairModuleIdentifierTypeChoice
+     * @KlipperDeviceAssert\DeviceIdentifierTypeChoice
      * @Assert\Type(type="string")
      * @Assert\Length(min=0, max=128)
      * @Assert\NotBlank
