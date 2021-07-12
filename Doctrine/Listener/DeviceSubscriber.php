@@ -39,6 +39,7 @@ class DeviceSubscriber implements EventSubscriber
 
         if ($object instanceof DeviceInterface && $object instanceof DeviceRepairableInterface) {
             $changeSet = $uow->getEntityChangeSet($object);
+            $lastRepair = null;
 
             if (isset($changeSet['product'])
                 && null !== $object->getProduct()
@@ -47,11 +48,24 @@ class DeviceSubscriber implements EventSubscriber
             ) {
                 $lastRepair = $object->getLastRepair();
                 $lastRepair->setProduct($object->getProduct());
+            }
+
+            if (isset($changeSet['productCombination'])
+                && null !== $object->getProductCombination()
+                && null !== $object->getLastRepair()
+                && $object->getProductCombination() !== $object->getLastRepair()->getProductCombination()
+            ) {
+                $lastRepair = $object->getLastRepair();
+                $lastRepair->setProductCombination($object->getProductCombination());
+            }
+
+            if (null !== $lastRepair) {
                 $repairMeta = $em->getClassMetadata(ClassUtils::getClass($lastRepair));
                 $uow->recomputeSingleEntityChangeSet($repairMeta, $lastRepair);
             }
         } elseif ($object instanceof RepairInterface) {
             $changeSet = $uow->getEntityChangeSet($object);
+            $device = null;
 
             if (isset($changeSet['product'])
                 && null !== $object->getProduct()
@@ -60,6 +74,18 @@ class DeviceSubscriber implements EventSubscriber
             ) {
                 $device = $object->getDevice();
                 $device->setProduct($object->getProduct());
+            }
+
+            if (isset($changeSet['productCombination'])
+                && null !== $object->getProductCombination()
+                && null !== $object->getDevice()
+                && $object->getProductCombination() !== $object->getDevice()->getProductCombination()
+            ) {
+                $device = $object->getDevice();
+                $device->setProductCombination($object->getProductCombination());
+            }
+
+            if (null !== $device) {
                 $repairMeta = $em->getClassMetadata(ClassUtils::getClass($device));
                 $uow->recomputeSingleEntityChangeSet($repairMeta, $device);
             }
