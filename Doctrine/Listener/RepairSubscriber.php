@@ -19,7 +19,7 @@ use Doctrine\ORM\Events;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
 use Klipper\Component\CodeGenerator\CodeGenerator;
-use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
+use Klipper\Component\DoctrineChoice\ChoiceManagerInterface;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
@@ -40,7 +40,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class RepairSubscriber implements EventSubscriber
 {
-    use DoctrineListenerChoiceTrait;
+    private ChoiceManagerInterface $choiceManager;
 
     private CodeGenerator $generator;
 
@@ -55,12 +55,14 @@ class RepairSubscriber implements EventSubscriber
     private bool $autoRecreditCoupon = true;
 
     public function __construct(
+        ChoiceManagerInterface $choiceManager,
         CodeGenerator $generator,
         ObjectFactoryInterface $objectFactory,
         TranslatorInterface $translator,
         TokenStorageInterface $tokenStorage,
         array $closedStatues = []
     ) {
+        $this->choiceManager = $choiceManager;
         $this->generator = $generator;
         $this->objectFactory = $objectFactory;
         $this->translator = $translator;
@@ -221,7 +223,7 @@ class RepairSubscriber implements EventSubscriber
                         $repairStatus = $repairStatus ?? $module->getDefaultStatus();
                     }
 
-                    $repairStatus = $repairStatus ?? $this->getChoice($em, 'repair_status', null);
+                    $repairStatus = $repairStatus ?? $this->choiceManager->getChoice('repair_status', null);
 
                     if (null !== $repairStatus) {
                         $object->setStatus($repairStatus);
@@ -248,7 +250,7 @@ class RepairSubscriber implements EventSubscriber
             && isset($changeSet[$changeSetField])
             && (null === $object->getStatus() || $statusValue !== $object->getStatus()->getValue())
         ) {
-            $repairStatus = $this->getChoice($em, 'repair_status', $statusValue);
+            $repairStatus = $this->choiceManager->getChoice('repair_status', $statusValue);
 
             if (null !== $repairStatus) {
                 $object->setStatus($repairStatus);
@@ -560,7 +562,7 @@ class RepairSubscriber implements EventSubscriber
             if (isset($changeSet['device'][0])) {
                 /** @var DeviceInterface $oldDevice */
                 $oldDevice = $changeSet['device'][0];
-                $statusOperational = $this->getChoice($em, 'device_status', 'in_use');
+                $statusOperational = $this->choiceManager->getChoice('device_status', 'in_use');
 
                 if (null !== $statusOperational) {
                     $oldDevice->setStatus($statusOperational);
@@ -607,7 +609,7 @@ class RepairSubscriber implements EventSubscriber
             }
 
             if (null === $device->getStatus() || $newDeviceStatusValue !== $device->getStatus()->getValue()) {
-                $newDeviceStatus = $this->getChoice($em, 'device_status', $newDeviceStatusValue);
+                $newDeviceStatus = $this->choiceManager->getChoice('device_status', $newDeviceStatusValue);
 
                 if (null !== $newDeviceStatus) {
                     $device->setStatus($newDeviceStatus);

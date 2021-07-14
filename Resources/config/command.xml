@@ -9,6 +9,7 @@
                  class="Klipper\Module\RepairBundle\Command\CouponExpireCommand">
             <tag name="console.command" command="coupon:expire" />
             <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="klipper_doctrine_choice.manager"/>
         </service>
     </services>
 </container>

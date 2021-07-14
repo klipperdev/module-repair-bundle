@@ -13,6 +13,7 @@
         <!-- Repair Listener -->
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\RepairSubscriber">
             <tag name="doctrine.event_subscriber" />
+            <argument type="service" id="klipper_doctrine_choice.manager"/>
             <argument type="service" id="klipper_repair.generator.repair_reference"/>
             <argument type="service" id="klipper_resource.object_factory"/>
             <argument type="service" id="translator"/>
@@ -41,6 +42,7 @@
         <!-- Coupon Listener -->
         <service id="Klipper\Module\RepairBundle\Doctrine\Listener\CouponSubscriber">
             <tag name="doctrine.event_subscriber" />
+            <argument type="service" id="klipper_doctrine_choice.manager"/>
             <argument type="service" id="klipper_repair.generator.coupon_reference"/>
             <argument type="service" id="translator"/>
         </service>

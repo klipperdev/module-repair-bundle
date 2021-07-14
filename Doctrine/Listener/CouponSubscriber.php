@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\CodeGenerator\CodeGenerator;
-use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
+use Klipper\Component\DoctrineChoice\ChoiceManagerInterface;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Module\RepairBundle\Model\CouponInterface;
@@ -28,14 +28,18 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class CouponSubscriber implements EventSubscriber
 {
-    use DoctrineListenerChoiceTrait;
+    private ChoiceManagerInterface $choiceManager;
 
     private CodeGenerator $generator;
 
     private TranslatorInterface $translator;
 
-    public function __construct(CodeGenerator $generator, TranslatorInterface $translator)
-    {
+    public function __construct(
+        ChoiceManagerInterface $choiceManager,
+        CodeGenerator $generator,
+        TranslatorInterface $translator
+    ) {
+        $this->choiceManager = $choiceManager;
         $this->generator = $generator;
         $this->translator = $translator;
     }
@@ -165,7 +169,7 @@ class CouponSubscriber implements EventSubscriber
             // Update status and used at
             if ($create && null !== $object->getUsedByRepair()) {
                 $edited = true;
-                $object->setStatus($this->getChoice($em, 'coupon_status', 'used'));
+                $object->setStatus($this->choiceManager->getChoice('coupon_status', 'used'));
                 $object->setUsedAt(new \DateTime());
             } elseif (isset($changeSet['usedByRepair'])) {
                 $edited = true;
@@ -179,7 +183,7 @@ class CouponSubscriber implements EventSubscriber
                     $statusValue = 'valid';
                 }
 
-                $object->setStatus($this->getChoice($em, 'coupon_status', $statusValue));
+                $object->setStatus($this->choiceManager->getChoice('coupon_status', $statusValue));
                 $object->setUsedAt('used' === $statusValue ? $now : null);
             }
 

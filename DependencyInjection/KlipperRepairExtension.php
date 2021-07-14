@@ -50,7 +50,7 @@ class KlipperRepairExtension extends Extension
 
         $def = $container->getDefinition(RepairSubscriber::class);
 
-        $def->replaceArgument(4, array_unique(array_merge($config['closed_statuses'], [
+        $def->replaceArgument(5, array_unique(array_merge($config['closed_statuses'], [
             'shipped',
             'unrepairable_recycling',
             'unrepairable_return_to_customer',

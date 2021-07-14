@@ -12,7 +12,7 @@
 namespace Klipper\Module\RepairBundle\Command;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Klipper\Component\DoctrineChoice\Listener\Traits\DoctrineListenerChoiceTrait;
+use Klipper\Component\DoctrineChoice\ChoiceManagerInterface;
 use Klipper\Module\RepairBundle\Exception\RuntimeException;
 use Klipper\Module\RepairBundle\Model\CouponInterface;
 use Symfony\Component\Console\Command\Command;
@@ -25,15 +25,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  */
 class CouponExpireCommand extends Command
 {
-    use DoctrineListenerChoiceTrait;
-
     private EntityManagerInterface $em;
 
-    public function __construct(EntityManagerInterface $em)
+    private ChoiceManagerInterface $choiceManager;
+
+    public function __construct(EntityManagerInterface $em, ChoiceManagerInterface $choiceManager)
     {
         parent::__construct();
 
         $this->em = $em;
+        $this->choiceManager = $choiceManager;
     }
 
     protected function configure(): void
@@ -58,7 +59,7 @@ class CouponExpireCommand extends Command
 
     private function expireCoupons(): void
     {
-        $status = $this->getChoice($this->em, 'coupon_status', 'expired');
+        $status = $this->choiceManager->getChoice('coupon_status', 'expired');
 
         if (null === $status) {
             throw new RuntimeException('The doctrine choice "expired" for "coupon_status" does not exist');
