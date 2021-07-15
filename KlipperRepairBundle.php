@@ -11,6 +11,8 @@
 
 namespace Klipper\Module\RepairBundle;
 
+use Klipper\Module\RepairBundle\DependencyInjection\Compiler\RepairPriceListenerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -18,4 +20,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class KlipperRepairBundle extends Bundle
 {
+    public function build(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new RepairPriceListenerPass());
+    }
 }

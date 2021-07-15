@@ -37,6 +37,11 @@ class RepairItemSubscriber implements EventSubscriber
     private ObjectFactoryInterface $objectFactory;
 
     /**
+     * @var RepairPriceListenerInterface[]
+     */
+    private array $repairPriceListeners = [];
+
+    /**
      * @var array[] Array<int[]|string[]>
      */
     private array $updateRepairPrices = [];
@@ -57,6 +62,11 @@ class RepairItemSubscriber implements EventSubscriber
             Events::onFlush,
             Events::postFlush,
         ];
+    }
+
+    public function addRepairPriceListener(RepairPriceListenerInterface $repairPriceListener): void
+    {
+        $this->repairPriceListeners[] = $repairPriceListener;
     }
 
     public function prePersist(LifecycleEventArgs $event): void
@@ -304,6 +314,13 @@ class RepairItemSubscriber implements EventSubscriber
                         ->execute()
                     ;
                 }
+            }
+        }
+
+        // Update repair prices
+        if (\count($this->repairPriceListeners) > 0 && \count($updateRepairPrices) > 0) {
+            foreach ($this->repairPriceListeners as $repairPriceListener) {
+                $repairPriceListener->onUpdate($em, $updateRepairPrices);
             }
         }
 
