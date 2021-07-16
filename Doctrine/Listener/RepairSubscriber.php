@@ -165,6 +165,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
+            $this->updateDevice($em, $object);
             $this->updateDeviceStatus($em, $object, true);
             $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object, true);
@@ -185,6 +186,7 @@ class RepairSubscriber implements EventSubscriber
             $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object);
+            $this->updateDevice($em, $object);
             $this->updateDeviceStatus($em, $object);
             $this->recreditCoupon($em, $object);
             $this->saveRepairHistory($em, $object);
@@ -546,6 +548,30 @@ class RepairSubscriber implements EventSubscriber
         }
 
         return null;
+    }
+
+    private function updateDevice(EntityManagerInterface $em, object $object): void
+    {
+        if (!$object instanceof RepairInterface || null !== $object->getDevice()) {
+            return;
+        }
+
+        $uow = $em->getUnitOfWork();
+        $changeSet = $uow->getEntityChangeSet($object);
+
+        if (isset($changeSet['device']) && null === $object->getDevice()) {
+            $oldDevice = $changeSet['device'][0];
+
+            if ($oldDevice instanceof DeviceInterface
+                && $oldDevice instanceof DeviceRepairableInterface
+                && $object === $oldDevice->getLastRepair()
+            ) {
+                $oldDevice->setLastRepair(null);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($oldDevice));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $oldDevice);
+            }
+        }
     }
 
     private function updateDeviceStatus(EntityManagerInterface $em, object $object, bool $create = false): void
