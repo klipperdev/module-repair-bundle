@@ -101,7 +101,7 @@ abstract class AbstractRepairItem implements RepairItemInterface
      * @Assert\Type(type="float")
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected ?float $finalPrice = null;
 

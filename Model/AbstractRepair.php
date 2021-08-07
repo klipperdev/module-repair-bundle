@@ -73,7 +73,7 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected ?string $reference = null;
 
@@ -84,7 +84,7 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Length(min=0, max=80)
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected ?string $batchReference = null;
 
@@ -312,7 +312,7 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Type(type="boolean")
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected bool $closed = false;
 
@@ -322,7 +322,7 @@ abstract class AbstractRepair implements RepairInterface
      * @Assert\Type(type="boolean")
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected bool $unrepairable = false;
 
@@ -370,7 +370,7 @@ abstract class AbstractRepair implements RepairInterface
      * )
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      * @Serializer\MaxDepth(3)
      * @Serializer\Groups({"ViewsDetails", "View"})
      */
@@ -387,7 +387,7 @@ abstract class AbstractRepair implements RepairInterface
      * )
      *
      * @Serializer\Expose
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      * @Serializer\MaxDepth(3)
      * @Serializer\Groups({"ViewsDetails", "View"})
      */

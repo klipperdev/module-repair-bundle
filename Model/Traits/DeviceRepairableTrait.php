@@ -35,7 +35,7 @@ trait DeviceRepairableTrait
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
-     * @Serializer\ReadOnly
+     * @Serializer\ReadOnlyProperty
      */
     protected ?RepairInterface $lastRepair = null;
 
