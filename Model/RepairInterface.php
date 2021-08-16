@@ -249,13 +249,6 @@ interface RepairInterface extends
     public function getPreviousRepair(): ?RepairInterface;
 
     /**
-     * @return static
-     */
-    public function setNextRepair(?RepairInterface $nextRepair);
-
-    public function getNextRepair(): ?RepairInterface;
-
-    /**
      * @return Collection|RepairItemInterface[]
      */
     public function getRepairItems(): Collection;

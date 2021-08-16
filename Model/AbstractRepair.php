@@ -322,9 +322,8 @@ abstract class AbstractRepair implements RepairInterface
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     inversedBy="nextRepair",
      *     cascade={"persist"},
-     *     fetch="EXTRA_LAZY"
+     *     fetch="EAGER"
      * )
      * @ORM\JoinColumn(
      *     name="previous_repair_id",
@@ -338,19 +337,6 @@ abstract class AbstractRepair implements RepairInterface
      * @Serializer\Groups({"ViewsDetails", "View"})
      */
     protected ?RepairInterface $previousRepair = null;
-
-    /**
-     * @ORM\OneToOne(
-     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     mappedBy="previousRepair",
-     *     fetch="EXTRA_LAZY"
-     * )
-     *
-     * @Serializer\Expose
-     * @Serializer\MaxDepth(1)
-     * @Serializer\Groups({"ViewsDetails", "View"})
-     */
-    protected ?RepairInterface $nextRepair = null;
 
     /**
      * @var null|Collection|RepairItemInterface[]
@@ -742,18 +728,6 @@ abstract class AbstractRepair implements RepairInterface
     public function getPreviousRepair(): ?RepairInterface
     {
         return $this->previousRepair;
-    }
-
-    public function setNextRepair(?RepairInterface $nextRepair): self
-    {
-        $this->nextRepair = $nextRepair;
-
-        return $this;
-    }
-
-    public function getNextRepair(): ?RepairInterface
-    {
-        return $this->nextRepair;
     }
 
     public function getRepairItems(): Collection
