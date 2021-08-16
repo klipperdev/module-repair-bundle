@@ -24,8 +24,7 @@ trait ShippingRepairableTrait
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     mappedBy="shipping",
-     *     fetch="EAGER"
+     *     mappedBy="shipping"
      * )
      * @ORM\JoinColumn(
      *     name="repair_id",

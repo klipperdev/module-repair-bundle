@@ -23,8 +23,7 @@ trait DeviceRepairableTrait
 {
     /**
      * @ORM\OneToOne(
-     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface"
      * )
      * @ORM\JoinColumn(
      *     name="last_repair_id",

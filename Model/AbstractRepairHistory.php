@@ -38,13 +38,13 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     inversedBy="repairHistories",
-     *     fetch="EAGER"
+     *     inversedBy="repairHistories"
      * )
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *
+     * @Serializer\Type("AssociationId")
      * @Serializer\Expose
      */
     protected ?RepairInterface $repair = null;
@@ -68,7 +68,9 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
     protected bool $swap = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     * )
      *
      * @EntityDoctrineChoice("repair_status")
      *
@@ -77,7 +79,9 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
     protected ?ChoiceInterface $previousStatus = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     * )
      *
      * @EntityDoctrineChoice("repair_status")
      *
@@ -89,8 +93,7 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface"
      * )
      *
      * @Serializer\Expose
@@ -99,8 +102,7 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface"
      * )
      *
      * @Serializer\Expose
@@ -109,8 +111,7 @@ abstract class AbstractRepairHistory implements RepairHistoryInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface"
      * )
      * @ORM\JoinColumn(
      *     onDelete="CASCADE",

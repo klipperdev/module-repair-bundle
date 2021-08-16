@@ -47,21 +47,19 @@ abstract class AbstractRepairModule implements RepairModuleInterface
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
-     *     inversedBy="repairModule",
-     *     fetch="EAGER"
+     *     inversedBy="repairModule"
      * )
      *
      * @Assert\NotNull
      *
+     * @Serializer\Type("AssociationId")
      * @Serializer\Expose
-     * @Serializer\MaxDepth(1)
      */
     protected ?AccountInterface $account = null;
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface"
      * )
      *
      * @Assert\NotNull
@@ -158,8 +156,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface"
      * )
      *
      * @Assert\NotBlank
@@ -171,8 +168,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EXTRA_LAZY"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Serializer\Expose
@@ -182,8 +178,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EXTRA_LAZY"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Serializer\Expose
@@ -193,8 +188,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\CarrierBundle\Model\CarrierInterface",
-     *     fetch="EXTRA_LAZY"
+     *     targetEntity="Klipper\Module\CarrierBundle\Model\CarrierInterface"
      * )
      *
      * @Serializer\Expose
@@ -204,8 +198,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface",
-     *     fetch="EXTRA_LAZY"
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
      * )
      *
      * @EntityDoctrineChoice("repair_status")
@@ -217,8 +210,7 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface",
-     *     fetch="EXTRA_LAZY"
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
      * )
      *
      * @EntityDoctrineChoice("repair_status")
@@ -282,8 +274,8 @@ abstract class AbstractRepairModule implements RepairModuleInterface
      *
      * @ORM\OneToMany(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairModuleProductInterface",
-     *     mappedBy="repairModule",
      *     fetch="EXTRA_LAZY",
+     *     mappedBy="repairModule",
      *     cascade={"persist", "remove"}
      * )
      */

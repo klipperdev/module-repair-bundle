@@ -34,21 +34,20 @@ abstract class AbstractRepairBreakdown implements RepairBreakdownInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     fetch="EAGER",
      *     inversedBy="repairBreakdowns"
      * )
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *
+     * @Serializer\Type("AssociationId")
      * @Serializer\Expose
      */
     protected ?RepairInterface $repair = null;
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\RepairBundle\Model\BreakdownInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\RepairBundle\Model\BreakdownInterface"
      * )
      *
      * @Assert\NotBlank

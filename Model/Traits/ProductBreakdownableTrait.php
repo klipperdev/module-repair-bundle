@@ -23,8 +23,7 @@ trait ProductBreakdownableTrait
 {
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\RepairBundle\Model\BreakdownInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\RepairBundle\Model\BreakdownInterface"
      * )
      *
      * @Assert\Expression(

@@ -57,8 +57,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface"
      * )
      *
      * @Serializer\Expose
@@ -120,8 +119,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Component\Security\Model\UserInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Component\Security\Model\UserInterface"
      * )
      *
      * @Serializer\Expose
@@ -130,8 +128,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface"
      * )
      *
      * @Serializer\Expose
@@ -140,8 +137,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface"
      * )
      *
      * @Assert\Expression(
@@ -155,8 +151,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\WorkcenterBundle\Model\WorkcenterInterface"
      * )
      *
      * @Serializer\Expose
@@ -165,8 +160,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Assert\NotBlank
@@ -177,8 +171,7 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Assert\NotBlank
@@ -191,8 +184,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\CarrierBundle\Model\ShippingInterface",
      *     inversedBy="repair",
-     *     cascade={"persist", "remove"},
-     *     fetch="EAGER"
+     *     cascade={"persist", "remove"}
      * )
      * @ORM\JoinColumn(
      *     onDelete="SET NULL",
@@ -205,7 +197,9 @@ abstract class AbstractRepair implements RepairInterface
     protected ?ShippingInterface $shipping = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     * )
      *
      * @EntityDoctrineChoice("repair_status")
      *
@@ -282,8 +276,7 @@ abstract class AbstractRepair implements RepairInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
      *     inversedBy="usedByRepair",
-     *     cascade={"persist", "remove"},
-     *     fetch="EAGER"
+     *     cascade={"persist", "remove"}
      * )
      * @ORM\JoinColumn(
      *     name="used_coupon_id",
@@ -364,8 +357,8 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @ORM\OneToMany(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairItemInterface",
-     *     mappedBy="repair",
      *     fetch="EXTRA_LAZY",
+     *     mappedBy="repair",
      *     cascade={"persist", "remove"}
      * )
      *
@@ -381,8 +374,8 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @ORM\OneToMany(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairBreakdownInterface",
-     *     mappedBy="repair",
      *     fetch="EXTRA_LAZY",
+     *     mappedBy="repair",
      *     cascade={"persist", "remove"}
      * )
      *
@@ -398,8 +391,8 @@ abstract class AbstractRepair implements RepairInterface
      *
      * @ORM\OneToMany(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairHistoryInterface",
-     *     mappedBy="repair",
      *     fetch="EXTRA_LAZY",
+     *     mappedBy="repair",
      *     cascade={"persist", "remove"}
      * )
      * @ORM\OrderBy({

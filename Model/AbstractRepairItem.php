@@ -39,8 +39,7 @@ abstract class AbstractRepairItem implements RepairItemInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\ProductBundle\Model\ProductInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\ProductBundle\Model\ProductInterface"
      * )
      *
      * @Assert\Expression(
@@ -54,13 +53,13 @@ abstract class AbstractRepairItem implements RepairItemInterface
     /**
      * @ORM\ManyToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     fetch="EAGER",
      *     inversedBy="repairItems"
      * )
      * @ORM\JoinColumn(onDelete="CASCADE", nullable=false)
      *
      * @Assert\NotBlank
      *
+     * @Serializer\Type("AssociationId")
      * @Serializer\Expose
      */
     protected ?RepairInterface $repair = null;

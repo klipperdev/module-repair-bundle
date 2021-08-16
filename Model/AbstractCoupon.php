@@ -79,8 +79,7 @@ abstract class AbstractCoupon implements CouponInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Assert\NotBlank
@@ -91,8 +90,7 @@ abstract class AbstractCoupon implements CouponInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\PartnerAddressInterface"
      * )
      *
      * @Assert\NotBlank
@@ -103,8 +101,7 @@ abstract class AbstractCoupon implements CouponInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface",
-     *     fetch="EAGER"
+     *     targetEntity="Klipper\Module\PartnerBundle\Model\AccountInterface"
      * )
      *
      * @Assert\NotNull
@@ -128,7 +125,9 @@ abstract class AbstractCoupon implements CouponInterface
     protected ?float $price = null;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface", fetch="EAGER")
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     * )
      *
      * @EntityDoctrineChoice("coupon_status")
      *
@@ -150,8 +149,7 @@ abstract class AbstractCoupon implements CouponInterface
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
-     *     mappedBy="usedCoupon",
-     *     fetch="EAGER"
+     *     mappedBy="usedCoupon"
      * )
      * @ORM\JoinColumn(
      *     name="used_by_repair_id",
@@ -179,8 +177,7 @@ abstract class AbstractCoupon implements CouponInterface
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
      *     inversedBy="newCreditedCoupon",
-     *     cascade={"persist"},
-     *     fetch="EAGER"
+     *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(
      *     name="recredited_coupon_id",
@@ -203,8 +200,7 @@ abstract class AbstractCoupon implements CouponInterface
     /**
      * @ORM\OneToOne(
      *     targetEntity="Klipper\Module\RepairBundle\Model\CouponInterface",
-     *     mappedBy="recreditedCoupon",
-     *     fetch="EAGER"
+     *     mappedBy="recreditedCoupon"
      * )
      *
      * @Serializer\Expose
