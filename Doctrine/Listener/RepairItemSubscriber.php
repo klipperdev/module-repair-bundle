@@ -219,7 +219,7 @@ class RepairItemSubscriber implements EventSubscriber
         // Sum calculation
         $ids = [];
 
-        foreach ($this->updateRepairPrices as $type => $repairIds) {
+        foreach ($this->updateRepairPrices as $repairIds) {
             $ids = array_merge($ids, $repairIds);
         }
 
