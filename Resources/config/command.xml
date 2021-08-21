@@ -11,5 +11,11 @@
             <argument type="service" id="doctrine.orm.entity_manager" />
             <argument type="service" id="klipper_doctrine_choice.manager"/>
         </service>
+
+        <service id="klipper_repair.command.fix_repair_associations"
+                 class="Klipper\Module\RepairBundle\Command\FixRepairAssociationsCommand">
+            <tag name="console.command" command="repair:fix-associations" />
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
     </services>
 </container>
