@@ -277,15 +277,17 @@ class RepairSubscriber implements EventSubscriber
                     ));
                 }
 
-                if ($create || null === $device->getLastRepair()) {
+                $deviceLastRepair = $device->getLastRepair();
+
+                if ($create || null === $deviceLastRepair) {
                     $device->setLastRepair($object);
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($device));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $device);
                 }
 
-                if (null === $object->getPreviousRepair() && null !== $device->getLastRepair() && $object !== $device->getLastRepair()) {
-                    $object->setPreviousRepair($device->getLastRepair());
+                if (null === $object->getPreviousRepair() && null !== $deviceLastRepair && $object !== $deviceLastRepair) {
+                    $object->setPreviousRepair($deviceLastRepair);
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
