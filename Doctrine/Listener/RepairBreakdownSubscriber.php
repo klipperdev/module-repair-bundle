@@ -59,6 +59,7 @@ class RepairBreakdownSubscriber implements EventSubscriber
     {
         $em = $event->getEntityManager();
         $uow = $em->getUnitOfWork();
+
         /** @var RepairInterface[] $repairs */
         $repairs = [];
         $deletedRepairBreakdowns = [];

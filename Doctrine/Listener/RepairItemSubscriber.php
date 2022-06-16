@@ -281,6 +281,7 @@ class RepairItemSubscriber implements EventSubscriber
                 $repairPrice = (float) (isset($updateRepairPrices[$repair->getId()])
                     ? $updateRepairPrices[$repair->getId()]
                     : $repair->getPrice());
+
                 /** @var RepairItemInterface[] $items */
                 $items = $repair->getRepairItems()->toArray();
                 $countItems = \count($items);
