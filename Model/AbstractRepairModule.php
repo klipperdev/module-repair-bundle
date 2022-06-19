@@ -15,8 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
-use Klipper\Component\DoctrineChoice\Model\ChoiceInterface;
-use Klipper\Component\DoctrineChoice\Validator\Constraints\EntityDoctrineChoice;
 use Klipper\Component\Model\Traits\EnableTrait;
 use Klipper\Component\Model\Traits\OrganizationalRequiredTrait;
 use Klipper\Component\Model\Traits\TimestampableTrait;
@@ -198,27 +196,23 @@ abstract class AbstractRepairModule implements RepairModuleInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairStatusInterface"
      * )
-     *
-     * @EntityDoctrineChoice("repair_status")
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
      */
-    protected ?ChoiceInterface $defaultStatus = null;
+    protected ?RepairStatusInterface $defaultStatus = null;
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Component\DoctrineChoice\Model\ChoiceInterface"
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairStatusInterface"
      * )
-     *
-     * @EntityDoctrineChoice("repair_status")
      *
      * @Serializer\Expose
      * @Serializer\MaxDepth(1)
      */
-    protected ?ChoiceInterface $defaultStatusForNoUnderContract = null;
+    protected ?RepairStatusInterface $defaultStatusForNoUnderContract = null;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -436,26 +430,26 @@ abstract class AbstractRepairModule implements RepairModuleInterface
         return $this->defaultCarrier;
     }
 
-    public function setDefaultStatus(?ChoiceInterface $defaultStatus): self
+    public function setDefaultStatus(?RepairStatusInterface $defaultStatus): self
     {
         $this->defaultStatus = $defaultStatus;
 
         return $this;
     }
 
-    public function getDefaultStatus(): ?ChoiceInterface
+    public function getDefaultStatus(): ?RepairStatusInterface
     {
         return $this->defaultStatus;
     }
 
-    public function setDefaultStatusForNoUnderContract(?ChoiceInterface $defaultStatusForNoUnderContract): self
+    public function setDefaultStatusForNoUnderContract(?RepairStatusInterface $defaultStatusForNoUnderContract): self
     {
         $this->defaultStatusForNoUnderContract = $defaultStatusForNoUnderContract;
 
         return $this;
     }
 
-    public function getDefaultStatusForNoUnderContract(): ?ChoiceInterface
+    public function getDefaultStatusForNoUnderContract(): ?RepairStatusInterface
     {
         return $this->defaultStatusForNoUnderContract;
     }

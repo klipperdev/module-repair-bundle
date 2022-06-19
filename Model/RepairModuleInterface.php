@@ -122,16 +122,16 @@ interface RepairModuleInterface extends
     /**
      * @return static
      */
-    public function setDefaultStatus(?ChoiceInterface $defaultStatus);
+    public function setDefaultStatus(?RepairStatusInterface $defaultStatus);
 
-    public function getDefaultStatus(): ?ChoiceInterface;
+    public function getDefaultStatus(): ?RepairStatusInterface;
 
     /**
      * @return static
      */
-    public function setDefaultStatusForNoUnderContract(?ChoiceInterface $defaultStatusForNoUnderContract);
+    public function setDefaultStatusForNoUnderContract(?RepairStatusInterface $defaultStatusForNoUnderContract);
 
-    public function getDefaultStatusForNoUnderContract(): ?ChoiceInterface;
+    public function getDefaultStatusForNoUnderContract(): ?RepairStatusInterface;
 
     /**
      * @return static
