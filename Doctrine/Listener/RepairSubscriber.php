@@ -378,7 +378,7 @@ class RepairSubscriber implements EventSubscriber
     private function validateDevice(object $object): void
     {
         if ($object instanceof RepairInterface) {
-            if ($object->isClosed() && null === $object->getDevice()) {
+            if ($object->isClosed() && null === $object->getDevice() && null === $object->getSwappedToDevice()) {
                 ListenerUtil::thrownError($this->translator->trans(
                     'klipper_repair.repair.device_required',
                     [],
