@@ -32,6 +32,7 @@ use Klipper\Module\RepairBundle\Model\RepairInterface;
 use Klipper\Module\RepairBundle\Model\RepairModuleProductInterface;
 use Klipper\Module\RepairBundle\Model\Traits\DeviceRepairableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
+use Klipper\Module\RepairBundle\Warranty\WarrantyCalculationListenerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -49,6 +50,11 @@ class RepairSubscriber implements EventSubscriber
     private TranslatorInterface $translator;
 
     private TokenStorageInterface $tokenStorage;
+
+    /**
+     * @var WarrantyCalculationListenerInterface[]
+     */
+    private array $warrantyCalculationListeners = [];
 
     private array $closedStatues;
 
@@ -101,6 +107,11 @@ class RepairSubscriber implements EventSubscriber
             Events::preUpdate,
             Events::onFlush,
         ];
+    }
+
+    public function addWarrantyCalculationListener(WarrantyCalculationListenerInterface $listener): void
+    {
+        $this->warrantyCalculationListeners[] = $listener;
     }
 
     public function setAutoRecreditCoupon(bool $enabled): void
@@ -545,6 +556,10 @@ class RepairSubscriber implements EventSubscriber
             $endDate = clone $startDate;
             $endDate->setTime(0, 0);
             $endDate->modify(sprintf('+ %s months', $account->getRepairModule()->getWarrantyLengthInMonth()));
+
+            foreach ($this->warrantyCalculationListeners as $listener) {
+                $listener->calculate($account, $startDate, $endDate);
+            }
 
             return $endDate;
         }
