@@ -621,7 +621,7 @@ class RepairSubscriber implements EventSubscriber
 
             switch ($repairStatus) {
                 case 'unrepairable_recycling':
-                    $newDeviceStatusValue = 'recycled';
+                    $newDeviceStatusValue = 'recycling';
 
                     break;
 
