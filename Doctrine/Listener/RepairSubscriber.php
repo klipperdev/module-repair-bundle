@@ -23,7 +23,6 @@ use Klipper\Component\DoctrineChoice\ChoiceManagerInterface;
 use Klipper\Component\DoctrineExtensionsExtra\Util\ListenerUtil;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
-use Klipper\Component\Security\Model\UserInterface;
 use Klipper\Module\DeviceBundle\Model\DeviceInterface;
 use Klipper\Module\PartnerBundle\Model\AccountInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
@@ -33,7 +32,6 @@ use Klipper\Module\RepairBundle\Model\RepairModuleProductInterface;
 use Klipper\Module\RepairBundle\Model\Traits\DeviceRepairableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
 use Klipper\Module\RepairBundle\Warranty\WarrantyCalculationListenerInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -49,8 +47,6 @@ class RepairSubscriber implements EventSubscriber
 
     private TranslatorInterface $translator;
 
-    private TokenStorageInterface $tokenStorage;
-
     /**
      * @var WarrantyCalculationListenerInterface[]
      */
@@ -65,7 +61,6 @@ class RepairSubscriber implements EventSubscriber
         CodeGenerator $generator,
         ObjectFactoryInterface $objectFactory,
         TranslatorInterface $translator,
-        TokenStorageInterface $tokenStorage,
         array $closedStatues = []
     ) {
         $this->choiceManager = $choiceManager;
@@ -73,7 +68,6 @@ class RepairSubscriber implements EventSubscriber
         $this->objectFactory = $objectFactory;
         $this->translator = $translator;
         $this->closedStatues = $closedStatues;
-        $this->tokenStorage = $tokenStorage;
     }
 
     public static function updatePrice(RepairInterface $object, AccountInterface $account): void
@@ -173,7 +167,6 @@ class RepairSubscriber implements EventSubscriber
             $this->updateRepairedAt($em, $object);
             $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
-            $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object, true);
             $this->updateDevice($em, $object);
@@ -194,7 +187,6 @@ class RepairSubscriber implements EventSubscriber
             $this->updateRepairedAt($em, $object);
             $this->validateDevice($object);
             $this->updateTrayReference($em, $object);
-            $this->updateRepairer($em, $object);
             $this->updateWarrantyApplied($em, $object);
             $this->updateWarrantyEndDate($em, $object);
             $this->updateDevice($em, $object);
@@ -445,28 +437,6 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
-            }
-        }
-    }
-
-    private function updateRepairer(EntityManagerInterface $em, object $object): void
-    {
-        if ($object instanceof RepairInterface) {
-            $uow = $em->getUnitOfWork();
-            $repairStatus = null !== $object->getStatus() ? $object->getStatus()->getValue() : '';
-
-            if (null === $object->getRepairer()
-                && (\in_array($repairStatus, ['repaired'], true) || $object->isClosed())
-            ) {
-                $token = $this->tokenStorage->getToken();
-                $user = null !== $token ? $token->getUser() : null;
-
-                if ($user instanceof UserInterface) {
-                    $object->setRepairer($user);
-
-                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
-                    $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
-                }
             }
         }
     }

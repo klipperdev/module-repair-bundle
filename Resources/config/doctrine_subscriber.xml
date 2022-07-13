@@ -17,7 +17,6 @@
             <argument type="service" id="klipper_repair.generator.repair_reference"/>
             <argument type="service" id="klipper_resource.object_factory"/>
             <argument type="service" id="translator"/>
-            <argument type="service" id="security.token_storage"/>
             <argument type="collection"/>
         </service>
 
@@ -37,6 +36,7 @@
             <tag name="doctrine.event_subscriber" />
             <argument type="service" id="klipper_module_product.price_manager"/>
             <argument type="service" id="klipper_resource.object_factory"/>
+            <argument type="service" id="security.token_storage"/>
         </service>
 
         <!-- Coupon Listener -->

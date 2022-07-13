@@ -19,6 +19,7 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Klipper\Component\DoctrineExtra\Util\ClassUtils;
 use Klipper\Component\Resource\Object\ObjectFactoryInterface;
+use Klipper\Component\Security\Model\UserInterface;
 use Klipper\Module\ProductBundle\Model\Traits\PriceListableInterface;
 use Klipper\Module\ProductBundle\Price\PriceManagerInterface;
 use Klipper\Module\RepairBundle\Model\RepairBreakdownInterface;
@@ -26,6 +27,7 @@ use Klipper\Module\RepairBundle\Model\RepairInterface;
 use Klipper\Module\RepairBundle\Model\RepairItemInterface;
 use Klipper\Module\RepairBundle\Model\Traits\ProductBreakdownableInterface;
 use Klipper\Module\RepairBundle\Model\Traits\RepairModuleableInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @author François Pluchino <francois.pluchino@klipper.dev>
@@ -35,6 +37,8 @@ class RepairItemSubscriber implements EventSubscriber
     private PriceManagerInterface $priceManager;
 
     private ObjectFactoryInterface $objectFactory;
+
+    private TokenStorageInterface $tokenStorage;
 
     /**
      * @var RepairPriceListenerInterface[]
@@ -48,10 +52,12 @@ class RepairItemSubscriber implements EventSubscriber
 
     public function __construct(
         PriceManagerInterface $priceManager,
-        ObjectFactoryInterface $objectFactory
+        ObjectFactoryInterface $objectFactory,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->priceManager = $priceManager;
         $this->objectFactory = $objectFactory;
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function getSubscribedEvents(): array
@@ -387,6 +393,19 @@ class RepairItemSubscriber implements EventSubscriber
                     $em->persist($operationBreakdown);
                     $repairClassMeta = $em->getClassMetadata(ClassUtils::getClass($operationBreakdown));
                     $uow->computeChangeSet($repairClassMeta, $operationBreakdown);
+                }
+            }
+
+            // Add Repairer user in repair
+            if ($create && null === $repair->getRepairer()) {
+                $token = $this->tokenStorage->getToken();
+                $user = $token?->getUser();
+
+                if ($user instanceof UserInterface) {
+                    $repair->setRepairer($user);
+
+                    $classMetadata = $em->getClassMetadata(ClassUtils::getClass($repair));
+                    $uow->recomputeSingleEntityChangeSet($classMetadata, $repair);
                 }
             }
 
