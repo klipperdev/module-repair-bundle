@@ -362,6 +362,7 @@ class RepairItemSubscriber implements EventSubscriber
                     1,
                     $repair->getProduct(),
                     $repair->getProductCombination(),
+                    null !== $repair->getProduct() ? $repair->getProduct()->getProductFamily() : null,
                     null !== $repair->getProduct() ? $repair->getProduct()->getProductRange() : null
                 );
                 $object->setPrice($price->getPrice());
