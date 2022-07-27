@@ -11,6 +11,8 @@
 
 namespace Klipper\Module\RepairBundle\Model\Traits;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
@@ -47,6 +49,20 @@ trait DeviceRepairableTrait
      */
     protected ?\DateTimeInterface $warrantyEndDate = null;
 
+    /**
+     * @var null|RepairInterface[]|Collection
+     *
+     * @ORM\OneToMany(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface",
+     *     fetch="EXTRA_LAZY",
+     *     mappedBy="device"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\Groups({"Filter"})
+     */
+    protected ?Collection $repairs = null;
+
     public function setLastRepair(?RepairInterface $lastRepair): self
     {
         $this->lastRepair = $lastRepair;
@@ -79,5 +95,10 @@ trait DeviceRepairableTrait
     public function getWarrantyEndDate(): ?\DateTimeInterface
     {
         return $this->warrantyEndDate;
+    }
+
+    public function getRepairs(): Collection
+    {
+        return $this->repairs ?: $this->repairs = new ArrayCollection();
     }
 }

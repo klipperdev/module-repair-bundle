@@ -128,7 +128,8 @@ abstract class AbstractRepair implements RepairInterface
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface"
+     *     targetEntity="Klipper\Module\DeviceBundle\Model\DeviceInterface",
+     *     inversedBy="repairs"
      * )
      *
      * @Serializer\Expose

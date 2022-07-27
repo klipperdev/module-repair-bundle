@@ -11,6 +11,7 @@
 
 namespace Klipper\Module\RepairBundle\Model\Traits;
 
+use Doctrine\Common\Collections\Collection;
 use Klipper\Module\RepairBundle\Model\RepairInterface;
 
 /**
@@ -36,4 +37,9 @@ interface DeviceRepairableInterface
     public function setWarrantyEndDate(?\DateTimeInterface $warrantyEndDate);
 
     public function getWarrantyEndDate(): ?\DateTimeInterface;
+
+    /**
+     * @return RepairInterface[]
+     */
+    public function getRepairs(): Collection;
 }
