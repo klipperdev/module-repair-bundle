@@ -41,6 +41,17 @@ trait DeviceRepairableTrait
     protected ?RepairInterface $lastRepair = null;
 
     /**
+     * @ORM\ManyToOne(
+     *     targetEntity="Klipper\Module\RepairBundle\Model\RepairInterface"
+     * )
+     *
+     * @Serializer\Expose
+     * @Serializer\MaxDepth(1)
+     * @Serializer\ReadOnlyProperty
+     */
+    protected ?RepairInterface $lastSwapRepair = null;
+
+    /**
      * @ORM\Column(type="datetime", nullable=true)
      *
      * @Assert\Type(type="datetime")
@@ -73,6 +84,18 @@ trait DeviceRepairableTrait
     public function getLastRepair(): ?RepairInterface
     {
         return $this->lastRepair;
+    }
+
+    public function setLastSwapRepair(?RepairInterface $lastSwapRepair): self
+    {
+        $this->lastSwapRepair = $lastSwapRepair;
+
+        return $this;
+    }
+
+    public function getLastSwapRepair(): ?RepairInterface
+    {
+        return $this->lastSwapRepair;
     }
 
     /**

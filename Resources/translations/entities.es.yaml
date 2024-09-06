@@ -102,3 +102,4 @@ coupon.associations.new_credited_coupon: Nuevo cupón abonado
 # Device
 device.fields.warranty_end_date: Fecha de fin de garantía
 device.associations.last_repair: Última reparación
+device.associations.last_swap_repair: Última reparación de cambio

@@ -102,3 +102,4 @@ coupon.associations.new_credited_coupon: New credited coupon
 # Device
 device.fields.warranty_end_date: Warranty end date
 device.associations.last_repair: Last repair
+device.associations.last_swap_repair: Last swap repair

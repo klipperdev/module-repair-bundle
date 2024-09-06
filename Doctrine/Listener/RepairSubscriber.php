@@ -280,6 +280,7 @@ class RepairSubscriber implements EventSubscriber
                     ));
                 }
 
+                // Last repair
                 $deviceLastRepair = $device->getLastRepair();
 
                 if ($create || null === $deviceLastRepair) {
@@ -294,6 +295,18 @@ class RepairSubscriber implements EventSubscriber
 
                     $classMetadata = $em->getClassMetadata(ClassUtils::getClass($object));
                     $uow->recomputeSingleEntityChangeSet($classMetadata, $object);
+                }
+
+                // Last swap repair
+                if (null !== $swappedDevice = $object->getSwappedToDevice()) {
+                    $deviceLastSwapRepair = $device->getLastSwapRepair();
+
+                    if ($create || null === $deviceLastSwapRepair) {
+                        $swappedDevice->setLastSwapRepair($object);
+
+                        $classMetadata = $em->getClassMetadata(ClassUtils::getClass($swappedDevice));
+                        $uow->recomputeSingleEntityChangeSet($classMetadata, $swappedDevice);
+                    }
                 }
             }
         }
@@ -557,6 +570,20 @@ class RepairSubscriber implements EventSubscriber
 
                 $classMetadata = $em->getClassMetadata(ClassUtils::getClass($oldDevice));
                 $uow->recomputeSingleEntityChangeSet($classMetadata, $oldDevice);
+            }
+        }
+
+        if (isset($changeSet['swappedToDevice']) && null === $object->getSwappedToDevice()) {
+            $swappedDevice = $changeSet['swappedToDevice'][0];
+
+            if ($swappedDevice instanceof DeviceInterface
+                && $swappedDevice instanceof DeviceRepairableInterface
+                && $object === $swappedDevice->getLastSwapRepair()
+            ) {
+                $swappedDevice->setLastSwapRepair(null);
+
+                $classMetadata = $em->getClassMetadata(ClassUtils::getClass($swappedDevice));
+                $uow->recomputeSingleEntityChangeSet($classMetadata, $swappedDevice);
             }
         }
     }

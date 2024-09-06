@@ -27,6 +27,13 @@ interface DeviceRepairableInterface
     public function getLastRepair(): ?RepairInterface;
 
     /**
+     * @return static
+     */
+    public function setLastSwapRepair(?RepairInterface $lastSwapRepair);
+
+    public function getLastSwapRepair(): ?RepairInterface;
+
+    /**
      * @return null|int|string
      */
     public function getLastRepairId();
